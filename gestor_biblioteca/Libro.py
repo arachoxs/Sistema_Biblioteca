@@ -1,7 +1,7 @@
 from share import pedir_entero
 
 class Libro:
-    def __init__(self, isbn , titulo , edicion , año , editorial, genero , idioma , n_copias,idcategoria, activo=True):
+    def __init__(self, isbn , titulo , edicion , año , editorial, genero , idioma , n_copias, activo=True):
         self.__isbn=isbn
         self.__titulo=titulo
         self.__edicion=edicion
@@ -11,7 +11,6 @@ class Libro:
         self.__idioma=idioma
         self.__n_copias=n_copias
         self.__activo=activo
-        self.__idcategoria=idcategoria
 
     #getters
     def get_isbn(self):
@@ -65,10 +64,4 @@ class Libro:
         idioma = input("Ingrese el idioma del libro: ")
         n_copias = pedir_entero("Ingrese el número de copias del libro: ")
         
-        #registro de categoria - se debe verificar dentro de los objetos categoria si existe el idcategoria
-        
-        print("Registro de categoria")
-        idcategoria = pedir_entero("Ingrese el id de la categoria: ")
-        
-
-        libro=Libro(isbn,titulo,edicion,año,editorial,genero,idioma,n_copias,idcategoria)
+        libro=Libro(isbn,titulo,edicion,año,editorial,genero,idioma,n_copias)
