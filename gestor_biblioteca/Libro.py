@@ -1,4 +1,4 @@
-from share import pedir_entero
+from gestor_biblioteca.share import pedir_entero
 
 class Libro:
     def __init__(self, isbn , titulo , edicion , año , editorial, genero , idioma , n_copias, activo=True):
