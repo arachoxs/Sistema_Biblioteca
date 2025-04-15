@@ -11,6 +11,7 @@ class Libro:
         self.__idioma=idioma
         self.__n_copias=n_copias
         self.__activo=activo
+        self.__categoria_libro=None
 
     #getters
     def get_isbn(self):
@@ -52,7 +53,7 @@ class Libro:
     def set_activo(self, activo):
         self.__activo=activo
     
-    def registra():
+    def registrar():
         print("---Registro de libro---")
 
         isbn = input("Ingrese el ISBN del libro: ")
@@ -65,3 +66,25 @@ class Libro:
         n_copias = pedir_entero("Ingrese el número de copias del libro: ")
         
         libro=Libro(isbn,titulo,edicion,año,editorial,genero,idioma,n_copias)
+        
+    def consultar(self):
+        print("---Consulta de libro---")
+        print("ISBN: ", self.__isbn)
+        print("Titulo: ", self.__titulo)
+        print("Edicion: ", self.__edicion)
+        print("Año: ", self.__año)
+        print("Editorial: ", self.__editorial)
+        print("Genero: ", self.__genero)
+        print("Idioma: ", self.__idioma)
+        print("Numero de copias: ", self.__n_copias)
+        if(self.__activo==True):
+            print("Estado: Activo")
+        else:
+            print("Estado: Inactivo")
+        if(self.__categoria_libro==None):
+            print("Categoria: No asignada")
+        else:
+            print("Categoria: ", self.__categoria_libro.get_nombre_categoria())
+    
+        
+        
