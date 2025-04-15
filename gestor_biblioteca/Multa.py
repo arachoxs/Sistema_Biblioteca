@@ -1,13 +1,18 @@
+from share import *
+from gestor_biblioteca.Prestamo import Prestamo
 class Multa:
-    def __init__(self,id_multa,lector,fecha_entrega_real,dias_retraso,dias_multa,fecha_inicio_multa,fecha_final_multa,activa=True):
+    instancias=[]
+    
+    def __init__(self,id_multa,lector,fecha_entrega_real,dias_multa,fecha_inicio_multa,fecha_final_multa,activa=True):
         self.__id_multa=id_multa
         self.__lector=lector
         self.__fecha_entrega_real=fecha_entrega_real
-        self.__dias_retraso=dias_retraso
+        self.__dias_retraso=None
         self.__dias_multa=dias_multa
         self.__fecha_inicio_multa=fecha_inicio_multa
         self.__fecha_final_multa=fecha_final_multa
         self.__activa=activa
+        Multa.instancias.append(self)
     
     #getters
     def get_id_multa(self):
@@ -45,15 +50,3 @@ class Multa:
     def set_activa(self,activa):
         self.__activa=activa
     
-    def registrar(self):
-        id_multa = input("Ingrese el ID de la multa: ")
-        lector = input("Ingrese el ID del lector: ")
-        fecha_entrega_real = input("Ingrese la fecha de entrega real (YYYY-MM-DD): ")
-        dias_retraso = int(input("Ingrese los días de retraso: "))
-        dias_multa = int(input("Ingrese los días de multa: "))
-        fecha_inicio_multa = input("Ingrese la fecha de inicio de la multa (YYYY-MM-DD): ")
-        fecha_final_multa = input("Ingrese la fecha final de la multa (YYYY-MM-DD): ")
-        activa = True if input("¿La multa está activa? (s/n): ").lower() == 's' else False
-        
-        return Multa(id_multa,lector,fecha_entrega_real,dias_retraso,dias_multa,fecha_inicio_multa,fecha_final_multa,activa)
-        
