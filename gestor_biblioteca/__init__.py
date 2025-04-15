@@ -1,1 +1,1 @@
-__all__=[] #se agregan todas las clases que vayan creando
+__all__=["Libro","Multa"] #se agregan todas las clases que vayan creando

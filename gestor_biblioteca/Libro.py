@@ -1,6 +1,11 @@
 from gestor_biblioteca.share import pedir_entero
 
+
+
 class Libro:
+    instancias=[]
+    
+    
     def __init__(self, isbn , titulo , edicion , año , editorial, genero , idioma , n_copias, activo=True):
         self.__isbn=isbn
         self.__titulo=titulo
@@ -12,6 +17,8 @@ class Libro:
         self.__n_copias=n_copias
         self.__activo=activo
         self.__categoria_libro=None
+        
+        Libro.libros.append(self)
 
     #getters
     def get_isbn(self):
@@ -63,7 +70,7 @@ class Libro:
         idioma = input("Ingrese el idioma del libro: ")
         n_copias = pedir_entero("Ingrese el número de copias del libro: ")
         
-        return Libro(isbn,titulo,edicion,año,editorial,genero,idioma,n_copias)
+        Libro(isbn,titulo,edicion,año,editorial,genero,idioma,n_copias)
         
     def consultar(self):
         print("ISBN: ", self.__isbn)
@@ -85,4 +92,3 @@ class Libro:
     
     def inhabilitar(self):
         self.__activo=False
-        
