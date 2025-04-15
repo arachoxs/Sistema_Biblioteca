@@ -65,7 +65,7 @@ class Libro:
         idioma = input("Ingrese el idioma del libro: ")
         n_copias = pedir_entero("Ingrese el número de copias del libro: ")
         
-        libro=Libro(isbn,titulo,edicion,año,editorial,genero,idioma,n_copias)
+        return Libro(isbn,titulo,edicion,año,editorial,genero,idioma,n_copias)
         
     def consultar(self):
         print("---Consulta de libro---")
