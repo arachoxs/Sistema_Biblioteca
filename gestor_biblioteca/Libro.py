@@ -54,8 +54,6 @@ class Libro:
         self.__activo=activo
     
     def registrar():
-        print("---Registro de libro---")
-
         isbn = input("Ingrese el ISBN del libro: ")
         titulo = input("Ingrese el titulo del libro: ")
         edicion = pedir_entero("Ingrese la edicion del libro: ")
@@ -68,7 +66,6 @@ class Libro:
         return Libro(isbn,titulo,edicion,año,editorial,genero,idioma,n_copias)
         
     def consultar(self):
-        print("---Consulta de libro---")
         print("ISBN: ", self.__isbn)
         print("Titulo: ", self.__titulo)
         print("Edicion: ", self.__edicion)
