@@ -86,5 +86,6 @@ class Libro:
         else:
             print("Categoria: ", self.__categoria_libro.get_nombre_categoria())
     
-        
+    def inhabilitar(self):
+        self.__activo=False
         
