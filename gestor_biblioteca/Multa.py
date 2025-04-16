@@ -1,5 +1,6 @@
 from share import *
 from gestor_biblioteca.Prestamo import Prestamo
+from gestor_biblioteca.Lector import Lector
 class Multa:
     instancias=[]
     
@@ -50,3 +51,29 @@ class Multa:
     def set_activa(self,activa):
         self.__activa=activa
     
+    def generar_multa(prestamo,fecha_entrega_estimado,fecha_entrega_real):
+        print("hola")
+        
+    def levantar_multa(self):
+        self.__activa=False
+        
+        
+    def buscar_lector_por_id(id_lector): #se debe pasar a la clase lector 
+        for lector in Lector.instancias:
+            if lector.get_id_lector() == id_lector:
+                return lector
+        return None
+    
+    def consultar_multas(id_lector):
+        lector = Lector.buscar_lector_por_id(id_lector)
+        if not lector:
+            print("Lector no encontrado")
+            return
+
+        print(f"---Préstamos realizados por: {lector.get_nombre()}")
+
+        for prestamo in Prestamo.instancias:
+            if prestamo.get_id_lector() == id_lector:
+                prestamo.consultar()
+
+        

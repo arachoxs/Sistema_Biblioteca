@@ -93,6 +93,9 @@ class Libro:
                 
     def modificar(self):
         print("---Libro seleccionado---")
+        if(self.__activo!=True):
+            print("El libro no se encuentra activo, no se puede modificar")
+            return
         self.consultar()
         band=True
         while(band):
@@ -157,6 +160,12 @@ class Libro:
         
     def asignar_categoria(self):
         band=True
+        if self.__activo!=True:
+            print("El libro no se encuentra activo, no se puede asignar categoria")
+            return
+        if len(Categoria.instancias)==0:
+            print("No hay categorias disponibles para asignar")
+            return
         while(band):
             print("Categorias disponibles:")
             for index in range(len(Categoria.instancias)):
