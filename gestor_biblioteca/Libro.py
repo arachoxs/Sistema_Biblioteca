@@ -88,8 +88,8 @@ class Libro:
         if(self.__categoria_libro==None):
             print("Categoria: No asignada")
         else:
-            print("Categoria: ", self.__categoria_libro.get_nombre_categoria())
-            
+            print("Categoria: ", self.__categoria_libro.get_nombre())
+                
     def modificar(self):
         print("---Libro seleccionado---")
         self.consultar()
@@ -159,9 +159,10 @@ class Libro:
         while(band):
             print("Categorias disponibles:")
             for index in range(len(Categoria.instancias)):
-                print(index+1,". ", Categoria.instancias[index].get_nombre_categoria())
+                print(index+1,". ", Categoria.instancias[index].get_nombre())
             
             opcion=pedir_entero("Seleccione una categoria: ")
+            opcion-=1
             if(opcion>=0 and opcion<len(Categoria.instancias)):
                 self.__categoria_libro=Categoria.instancias[opcion]
                 print("Categoria asignada correctamente")
