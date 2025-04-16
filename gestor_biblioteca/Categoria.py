@@ -1,10 +1,13 @@
 from gestor_biblioteca.share import pedir_entero
 
 class Categoria:
+    instancias=[]
+    
     def __init__(self,idCategoria,nombre,descripcion):
         self.__idCategoria=idCategoria
         self.__nombre=nombre
         self.__descripcion=descripcion
+        Categoria.instancias.append(self)
 
     #getters
     def get_idCategoria(self):
@@ -28,7 +31,7 @@ class Categoria:
         nombre=input("Ingrese el nombre de la categoria: ")
         descripcion=input("Ingrese la descripcion de la categoria: ")
     
-        categoria=Categoria(idCategoria,nombre,descripcion)
+        Categoria(idCategoria,nombre,descripcion)
 
     def consultar(self):
         print("ID Categoria: ", self.__idCategoria)
