@@ -1,4 +1,5 @@
 from gestor_biblioteca.share import pedir_entero
+from gestor_biblioteca.Categoria import Categoria
 
 class Libro:
     instancias=[]
@@ -88,6 +89,91 @@ class Libro:
             print("Categoria: No asignada")
         else:
             print("Categoria: ", self.__categoria_libro.get_nombre_categoria())
-    
+            
+    def modificar(self):
+        print("---Libro seleccionado---")
+        self.consultar()
+        band=True
+        while(band):
+            print("\n\nQue desea modificar?")
+            print("1. ISBN")
+            print("2. Titulo")
+            print("3. Edicion")
+            print("4. Año")
+            print("5. Editorial")
+            print("6. Genero")
+            print("7. Idioma")
+            print("8. Numero de copias")
+            print("9. Categoria")
+            print("0. Salir")
+            
+            opcion=pedir_entero("Seleccione una opcion: ")
+            
+            if(opcion==1):
+                isbn = input("Ingrese el nuevo ISBN del libro: ")
+                self.set_isbn(isbn)
+                
+            elif(opcion==2):
+                titulo = input("Ingrese el nuevo titulo del libro: ")
+                self.set_titulo(titulo)
+                
+            elif(opcion==3):
+                edicion = pedir_entero("Ingrese la nueva edicion del libro: ")
+                self.set_edicion(edicion)
+                
+            elif(opcion==4):
+                año = pedir_entero("Ingrese el nuevo año del libro: ")
+                self.set_año(año)
+                
+            elif(opcion==5):
+                editorial = input("Ingrese la nueva editorial del libro: ")
+                self.set_editorial(editorial)
+                
+            elif(opcion==6):
+                genero = input("Ingrese el nuevo genero del libro: ")
+                self.set_genero(genero)
+                
+            elif(opcion==7):
+                idioma = input("Ingrese el nuevo idioma del libro: ")
+                self.set_idioma(idioma)
+                
+            elif(opcion==8):
+                n_copias = pedir_entero("Ingrese el nuevo numero de copias del libro: ")
+                self.set_n_copias(n_copias)
+
+            elif(opcion==9):
+                categoria_libro=input("Ingrese la nueva categoria del libro: ") #cambiar por la funcion asignar categoria
+                
+            elif(opcion==0):
+                band=False
+                print("Saliendo de la modificacion del libro...")
+            else:   
+                print("Opcion no valida, intente nuevamente")
+                
+        
     def inhabilitar(self):
         self.__activo=False
+        
+    def asignar_categoria(self):
+        band=True
+        while(band):
+            print("Categorias disponibles:")
+            for(index in range (0, len(Categoria.instancias))):
+                print(index, Categoria.instancias[index].get_nombre_categoria())
+            
+            opcion=pedir_entero("Seleccione una categoria: ")
+            if(opcion>=0 and opcion<len(Categoria.instancias)):
+                self.__categoria_libro=Categoria.instancias[opcion]
+                print("Categoria asignada correctamente")
+                band=False
+            else:
+                print("Opcion no valida, intente nuevamente")
+    
+        
+        
+        
+        
+        
+        
+        print("Categoria no encontrada")
+        return False
