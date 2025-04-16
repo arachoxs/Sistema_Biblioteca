@@ -158,8 +158,8 @@ class Libro:
         band=True
         while(band):
             print("Categorias disponibles:")
-            for(index in range (0, len(Categoria.instancias))):
-                print(index, Categoria.instancias[index].get_nombre_categoria())
+            for index in range(len(Categoria.instancias)):
+                print(index+1,". ", Categoria.instancias[index].get_nombre_categoria())
             
             opcion=pedir_entero("Seleccione una categoria: ")
             if(opcion>=0 and opcion<len(Categoria.instancias)):
