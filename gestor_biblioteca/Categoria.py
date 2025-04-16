@@ -56,11 +56,10 @@ class Categoria:
         print("Nombre: ", self.__nombre)
         print("Descripcion: ", self.__descripcion)
         
-        respuesta=input("¿Esta seguro que desea eliminar la categoria? (s/n): ")
+        respuesta = input("¿Está seguro que desea eliminar la categoría? (s/n): ")
         
-        if respuesta=="s":
-            del self
-            print("Categoria eliminada")
+        if respuesta.lower() == "s":
+            Categoria.instancias.remove(self)
+            print("Categoría eliminada")
         else:
-            print("Categoria no eliminada")
-            
+            print("Categoría no eliminada")
