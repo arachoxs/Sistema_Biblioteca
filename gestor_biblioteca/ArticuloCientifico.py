@@ -115,8 +115,9 @@ class ArticuloCientifico:
                 self.set_editor(editor)
                 print("Editor modificado correctamente.")
             elif opcion == 4:
-                fechaPublicacion = date.registrar_fecha()
-                self.set_fechaPublicacion(fechaPublicacion)
+                fechaPublicacion = date(0, 0, 0)
+                fechaPublicacion.registrar_fecha()
+                self.set_fechaPublicacion(str(fechaPublicacion))
                 print("Fecha de Publicacion modificada correctamente.")
             elif opcion == 5:
                 revista = input("Ingrese la nueva revista del articulo: ")
@@ -150,7 +151,7 @@ class ArticuloCientifico:
         
         respuesta = input("¿Está seguro que desea eliminar el artículo? (s/n): ")
         
-        if respuesta == "s":
+        if respuesta.lower == "s":
             ArticuloCientifico.instancias.remove(self)
             print("Artículo eliminado correctamente.")
         else:
