@@ -69,7 +69,8 @@ class Libro:
         idioma = input("Ingrese el idioma del libro: ")
         n_copias = pedir_entero("Ingrese el número de copias del libro: ")
         
-        Libro(isbn,titulo,edicion,año,editorial,genero,idioma,n_copias)
+        Libro(isbn,titulo,edicion,año,editorial,genero,idioma,n_copias).asignar_categoria()
+        print("Libro registrado correctamente")
         
         
     def consultar(self):
@@ -142,7 +143,7 @@ class Libro:
                 self.set_n_copias(n_copias)
 
             elif(opcion==9):
-                categoria_libro=input("Ingrese la nueva categoria del libro: ") #cambiar por la funcion asignar categoria
+                self.asignar_categoria()
                 
             elif(opcion==0):
                 band=False
