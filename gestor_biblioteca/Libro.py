@@ -168,12 +168,3 @@ class Libro:
                 band=False
             else:
                 print("Opcion no valida, intente nuevamente")
-    
-        
-        
-        
-        
-        
-        
-        print("Categoria no encontrada")
-        return False
