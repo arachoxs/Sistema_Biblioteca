@@ -58,6 +58,12 @@ class Libro:
         self.__n_copias=n_copias
     def set_activo(self, activo):
         self.__activo=activo
+
+    def buscar_libro(isbn):
+        for libro in Libro._instancias:
+            if libro.get_isbn() == isbn:
+                return libro
+        return None
     
     def registrar():
         isbn = input("Ingrese el ISBN del libro: ")

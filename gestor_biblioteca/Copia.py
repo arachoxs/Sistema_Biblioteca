@@ -14,6 +14,10 @@ class Copia:
         Copia._instancias.append(self)
 
     def asociar_libro(self, libro):
+        # Se verifica que el libro sea una instancia de la clase Libro
+        if not isinstance(libro, Libro):
+            raise TypeError("El objeto asociado no es un libro.")
+        # Se asocia el libro a la copia
         self.libro = libro
         
     # Getters
@@ -33,6 +37,7 @@ class Copia:
         self.libro = libro
 
     # Métodos de la clase
+    @classmethod
     def buscar_copia(cls, id_copia):
         for copia in cls._instancias:
             if copia.get_id_copia() == id_copia:
@@ -47,8 +52,7 @@ class Copia:
             return
         estado = "Disponible"
 
-        Copia(id_copia, estado)
-        self.asociar_libro(libro)
+        Copia(id_copia, estado).asociar_libro(libro)
         libro.set_n_copias(libro.get_n_copias() + 1)
         libro.set_activo(True)
 
