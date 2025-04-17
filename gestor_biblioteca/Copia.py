@@ -46,11 +46,21 @@ class Copia:
         return None
     
     def registrar(self):
-        while True:
-            id_copia = input("Ingrese el ID de la copia: ")
-            if Copia.buscar_copia(id_copia) is None:
-                break
-            print("ID ya registrado. Intente nuevamente.")
+        while True: 
+            id_copia = input("Ingrese el ID de la copia (deje en blanco para una asignación automática): ")
+            ids_existentes = {copia.get_id_copia() for copia in Copia._instancias}
+            if id_copia == "":
+                # Generar ID aleatorio de 7 dígitos
+                id_copia = random.randint(1000000, 9999999)
+                # Verificar si el ID ya existe
+                if id_copia not in ids_existentes:
+                        break
+            else:
+                if id_copia in ids_existentes:
+                    print("ID ya registrado. Pruebe con otro valor.")
+                else:
+                    break
+
         libro = Libro.buscar_libro(input("Ingrese el ISBN del libro asociado: "))
         if libro is None:
             print("No se pudo registrar la copia: Libro no encontrado.")

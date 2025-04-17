@@ -118,7 +118,7 @@ class Prestamo:
         
         # Se solicita al usuario la información del préstamo
         while True:
-            id_prestamo = input("Ingrese el ID del prestamo (déjelo en blanco para una asignación automática): ")
+            id_prestamo = input("Ingrese el ID del prestamo (deje en blanco para una asignación automática): ")
             ids_existentes = {prestamo.get_id_prestamo() for prestamo in Prestamo._instancias} # Conjunto de IDs existentes para evitar duplicados
             if id_prestamo == "":
                 while True:

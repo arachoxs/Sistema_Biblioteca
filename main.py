@@ -8,9 +8,5 @@ if __name__=="__main__":
     
     Libro.registrar()
     Libro._instancias[0].consultar()
-    obj=Libro.buscar_id("123")
-    obj.asignar_categoria()
-    print("---------------------")
-    Libro._instancias[0].consultar()
-    
+
     

@@ -66,6 +66,8 @@ class Libro:
         return None
     
     def registrar():
+        from gestor_biblioteca.Copia import Copia  # Importación dentro del método
+
         isbn = input("Ingrese el ISBN del libro: ")
         titulo = input("Ingrese el titulo del libro: ")
         edicion = pedir_entero("Ingrese la edicion del libro: ")
@@ -75,7 +77,9 @@ class Libro:
         idioma = input("Ingrese el idioma del libro: ")
         n_copias = pedir_entero("Ingrese el número de copias del libro: ")
         
-        Libro(isbn,titulo,edicion,año,editorial,genero,idioma,n_copias).asignar_categoria()
+        libro = Libro(isbn, titulo, edicion, año, editorial, genero, idioma, n_copias)
+        libro.asignar_categoria()
+        Copia.generar_copias(n_copias, libro)  # Corrige el orden de los parámetros
         
         print("Libro registrado correctamente")
         
