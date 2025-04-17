@@ -98,6 +98,11 @@ class Prestamo:
         if prestamos_activos_lector >= MAX_PRESTAMOS_POR_LECTOR:
             print(f"No se pudo registrar el préstamo: El lector {lector.get_id_lector()} ya tiene {MAX_PRESTAMOS_POR_LECTOR} préstamos activos.")
             return
+        
+        # Se verifica que el lector esté en estado normal
+        if lector.get_estado() != "Normal":
+            print("No se pudo registrar el préstamo: El lector no está en estado normal.")
+            return
 
         # Se busca la copia asociada al préstamo        
         copia = Copia.buscar_copia(input("Ingrese el ID de la copia asociada: "))
