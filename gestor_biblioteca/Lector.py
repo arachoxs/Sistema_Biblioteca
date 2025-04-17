@@ -36,9 +36,14 @@ class Lector:
         self.estado = estado
 
     # Métodos de la clase
-
     @classmethod
-    def registrar(cls):
+    def buscar_lector(cls, id_lector):
+        for lector in cls._instancias:
+            if lector.get_id_lector() == id_lector:
+                return lector
+        return None
+
+    def registrar():
         id_lector = input("Ingrese el ID del lector: ")
         nombre = input("Ingrese el nombre del lector: ")
         telefono = input("Ingrese el telefono del lector: ")

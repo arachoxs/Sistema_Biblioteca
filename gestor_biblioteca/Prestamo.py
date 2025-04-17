@@ -54,3 +54,11 @@ class Prestamo:
         self.copia = copia
     def set_lector(self, lector):
         self.lector = lector
+
+    # Métodos de la clase
+    @classmethod
+    def buscar_prestamo(cls, id_prestamo):
+        for prestamo in cls._instancias:
+            if prestamo.get_id_prestamo() == id_prestamo:
+                return prestamo
+        return None
