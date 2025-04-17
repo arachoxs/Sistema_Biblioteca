@@ -70,6 +70,7 @@ class Libro:
         n_copias = pedir_entero("Ingrese el número de copias del libro: ")
         
         Libro(isbn,titulo,edicion,año,editorial,genero,idioma,n_copias).asignar_categoria()
+        
         print("Libro registrado correctamente")
         
         
@@ -90,6 +91,7 @@ class Libro:
             print("Categoria: No asignada")
         else:
             print("Categoria: ", self.__categoria_libro.get_nombre())
+            
                 
     def modificar(self):
         print("---Libro seleccionado---")
@@ -173,9 +175,17 @@ class Libro:
             
             opcion=pedir_entero("Seleccione una categoria: ")
             opcion-=1
+            
             if(opcion>=0 and opcion<len(Categoria.instancias)):
                 self.__categoria_libro=Categoria.instancias[opcion]
                 print("Categoria asignada correctamente")
                 band=False
             else:
                 print("Opcion no valida, intente nuevamente")
+                
+    
+    def buscar_id(isbn):
+        for libro in Libro._instancias:
+            if libro.get_isbn() == isbn:
+                return libro
+        return None
