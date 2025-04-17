@@ -1,4 +1,5 @@
 from gestor_biblioteca.Libro import Libro
+import random
 
 class Copia:
     _instancias = []
@@ -45,7 +46,11 @@ class Copia:
         return None
     
     def registrar(self):
-        id_copia = input("Ingrese el ID de la copia: ")
+        while True:
+            id_copia = input("Ingrese el ID de la copia: ")
+            if Copia.buscar_copia(id_copia) is None:
+                break
+            print("ID ya registrado. Intente nuevamente.")
         libro = Libro.buscar_libro(input("Ingrese el ISBN del libro asociado: "))
         if libro is None:
             print("No se pudo registrar la copia: Libro no encontrado.")
@@ -96,3 +101,25 @@ class Copia:
             return
         print(f"Estado de la copia con ID {self.id_copia} actualizado a {self.estado}.")
 
+    @classmethod
+    def generar_copias(cls, n_copias, libro):
+        ids_existentes = {copia.get_id_copia() for copia in cls._instancias}
+        
+        for _ in range(n_copias):
+            while True:
+                # Generar ID aleatorio de 7 dígitos
+                id_copia = random.randint(1000000, 9999999)
+                # Verificar si el ID ya existe
+                if id_copia not in ids_existentes:
+                    ids_existentes.add(id_copia) # Añadir el nuevo ID al conjunto para futuras comprobaciones
+                    break
+            
+            # Crear nueva instancia de Copia
+            nueva_copia = cls(id_copia) # El estado por defecto es "Disponible"
+            # Asociar el libro a la nueva copia
+            nueva_copia.asociar_libro(libro)
+            # Incrementar el contador de copias en el libro (asumiendo que existe un método para ello)
+            # libro.incrementar_n_copias() # O similar, dependiendo de la implementación de Libro
+            print(f"Copia con ID {id_copia} generada y asociada al libro '{libro.get_titulo()}'.")
+
+            
