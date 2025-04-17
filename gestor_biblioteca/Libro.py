@@ -111,7 +111,7 @@ class Libro:
         self.consultar()
         band=True
         while(band):
-            print("\n\nQue desea modificar?")
+            print("\n\n---Que desea modificar?---")
             print("1. ISBN")
             print("2. Titulo")
             print("3. Edicion")
@@ -175,13 +175,13 @@ class Libro:
         if self.__activo!=True:
             print("El libro no se encuentra activo, no se puede asignar categoria")
             return
-        if len(Categoria.instancias)==0:
+        if len(Categoria._instancias)==0:
             print("No hay categorias disponibles para asignar")
             return
         while(band):
             print("Categorias disponibles:")
-            for index in range(len(Categoria.instancias)):
-                print(index+1,". ", Categoria.instancias[index].get_nombre())
+            for index in range(len(Categoria._instancias)):
+                print(index+1,". ", Categoria._instancias[index].get_nombre())
             
             opcion=pedir_entero("Seleccione una categoria: ")
             opcion-=1
