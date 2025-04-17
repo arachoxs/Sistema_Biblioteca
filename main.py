@@ -1,5 +1,6 @@
 from gestor_biblioteca.Libro import Libro
 from gestor_biblioteca.Categoria import Categoria
+from gestor_biblioteca.Copia import Copia
 
 
 if __name__=="__main__":
@@ -8,5 +9,9 @@ if __name__=="__main__":
     
     Libro.registrar()
     Libro._instancias[0].consultar()
+
+    for copia in Copia._instancias:
+        copia.consultar()
+        
 
     

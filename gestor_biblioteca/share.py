@@ -5,7 +5,7 @@ def pedir_entero(mensaje):
             return valor
         except ValueError:
             print("Entrada inválida. Por favor, ingrese un número entero.")
-# --- Clase date ---
+# --- Clase Date ---
 # Esta clase representa una fecha y permite operaciones como sumar días y validar fechas.
 class Date:
     def __init__(self, dia, mes, año):
@@ -13,7 +13,7 @@ class Date:
         self.mes = mes
         self.año = año
 
-    #setters
+    # Setters
     def set_dia(self, dia):
         """Establece el día de la fecha."""
         self.dia = dia
@@ -24,7 +24,7 @@ class Date:
         """Establece el año de la fecha."""
         self.año = año
         
-    #getters
+    # Getters
     def get_dia(self):
         """Devuelve el día de la fecha."""
         return self.dia
@@ -35,12 +35,10 @@ class Date:
         """Devuelve el año de la fecha."""
         return self.año
     
-    # --- Métodos de la clase date ---
+    # --- Métodos de la clase Date ---
 
     def registrar_fecha():
         """Pide al usuario día, mes y año hasta que ingrese una fecha válida."""
-        # Esta función ahora depende de una función externa `pedir_entero`
-        # que no está definida aquí. Se mantiene la lógica original.
         band = False
         print("--- Registrando nueva fecha ---")
         while(band == False):
@@ -58,9 +56,8 @@ class Date:
         
         return fecha
 
-    def _es_bisiesto(self, año):
+    def _es_bisiesto(año):
         """Comprueba si un año es bisiesto."""
-        # No necesita 'self' si pasamos el año como argumento
         return (año % 4 == 0 and año % 100 != 0) or (año % 400 == 0)
 
     def _dias_en_mes(self):
@@ -225,6 +222,5 @@ def diferencia_fechas(fecha1, fecha2):
         # Medida de seguridad para evitar bucles infinitos si algo falla
         if contador_dias > 365 * 300: # Límite arbitrario (aprox 300 años)
             raise OverflowError("La diferencia de fechas es demasiado grande o hay un bucle infinito.")
-
 
     return contador_dias

@@ -128,8 +128,10 @@ class Copia:
             nueva_copia = cls(id_copia) # El estado por defecto es "Disponible"
             # Asociar el libro a la nueva copia
             nueva_copia.asociar_libro(libro)
-            # Incrementar el contador de copias en el libro (asumiendo que existe un método para ello)
-            # libro.incrementar_n_copias() # O similar, dependiendo de la implementación de Libro
-            print(f"Copia con ID {id_copia} generada y asociada al libro '{libro.get_titulo()}'.")
+            # print(f"Copia con ID {id_copia} generada y asociada al libro '{libro.get_titulo()}'.")
+        if n_copias == 1:
+            print(f"Una copia generada y asociada con éxito al libro '{libro.get_titulo()}'.")
+        else:
+            print(f"{n_copias} copias generadas y asociadas con éxito al libro '{libro.get_titulo()}'.")
 
             
