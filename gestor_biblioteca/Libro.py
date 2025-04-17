@@ -1,7 +1,6 @@
-from gestor_biblioteca.share import *
-from gestor_biblioteca.Categoria import Categoria
-from gestor_biblioteca.Autor import Autor
-from gestor_biblioteca.AutorLibro import AutorLibro
+from share import *
+from Categoria import Categoria
+from Autor import Autor
 
 class Libro:
     _instancias=[]
@@ -78,7 +77,7 @@ class Libro:
         
         libro = Libro(isbn, titulo, edicion, año, editorial, genero, idioma, n_copias)
         libro.asignar_categoria() # Asignar categoría al libro
-        libro.relacionar_autor() # Relacionar autor al libro
+        #libro.relacionar_autor() # Relacionar autor al libro
         # Crear copias del libro
         Copia.generar_copias(n_copias, libro)  # Corrige el orden de los parámetros
         
@@ -195,29 +194,32 @@ class Libro:
                 print("Opcion no valida, intente nuevamente")
                         
     def relacionar_autor(self):
-        while(True):
-            print("---Autores disponibles---\n")
-            print(0,". ", "Agregar nuevo autor")
-            
-            for index in range(len(Autor._instancias)):
-                print(index+1,". ", Autor._instancias[index].get_nombre())
-            
-            opcion=pedir_entero("Seleccione una opcion: ")
-            
-            opcion-=1
-            autor=None
-            
-            if(opcion==-1):
+    # Importaciones aquí para evitar circular imports
+        from gestor_biblioteca.Autor import Autor
+        from gestor_biblioteca.AutorLibro import AutorLibro
+
+        while True:
+            print("\n--- Autores disponibles ---")
+            print("0. Agregar nuevo autor")
+            for idx, autor_inst in enumerate(Autor._instancias, start=1):
+                print(f"{idx}. {autor_inst.get_nombre()}")
+
+            opcion = pedir_entero("Seleccione una opción: ") - 1
+
+            # Registrar nuevo autor
+            if opcion == -1:
                 Autor.registrar()
-                autor=Autor._instancias[-1] #accedo al ultimo elemento 
-            elif(opcion>=0 and opcion<len(Autor._instancias)):
-                autor=Autor._instancias[opcion]
+                autor_sel = Autor._instancias[-1]
+
+            # Seleccionar autor existente
+            elif 0 <= opcion < len(Autor._instancias):
+                autor_sel = Autor._instancias[opcion]
+
             else:
-                print("Opcion no valida, intente nuevamente")
-            if(autor!=None):
-                AutorLibro(self, autor)
-                print("Autor relacionado correctamente")
-                return 
-                
-libro1=Libro("978-3-16-148410-0", "Ejemplo de Libro", 1, 2023, "Editorial Ejemplo", "Ficción", "Español", 5)
-libro1.relacionar_autor()
+                print("Opción no válida, intente nuevamente.")
+                continue
+
+            # Crear la relación autor–libro
+            AutorLibro(autor_sel, self)
+            print(f"Autor «{autor_sel.get_nombre()}» relacionado correctamente con «{self.get_titulo()}».")
+            break

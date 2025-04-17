@@ -1,4 +1,4 @@
-from gestor_biblioteca.share import pedir_entero, date
+from share import pedir_entero, date
 
 class Tesis:
     isinstancees = []

@@ -1,11 +1,11 @@
 from share import pedir_entero
-from gestor_biblioteca.Autor import Autor
-from gestor_biblioteca.Libro import Libro
+from Autor import Autor
 
 class AutorLibro:
     _instancias = []
 
     def __init__(self, libro, autor):
+        from Libro import Libro    
         self.__autor = autor
         self.__libro = libro
 
