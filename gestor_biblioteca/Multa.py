@@ -3,6 +3,8 @@ from gestor_biblioteca.Prestamo import Prestamo
 from gestor_biblioteca.Lector import Lector
 class Multa:
     instancias=[]
+    MULTA_DIAS=3
+    
     
     def __init__(self,id_multa,lector,fecha_entrega_real,dias_multa,fecha_inicio_multa,fecha_final_multa,activa=True):
         self.__id_multa=id_multa
@@ -52,7 +54,15 @@ class Multa:
         self.__activa=activa
     
     def generar_multa(prestamo,fecha_entrega_estimado,fecha_entrega_real):
-        print("hola")
+        dias_retraso=Date.diferencia_fechas(fecha_entrega_estimado, fecha_entrega_real)
+        dias_multa=Multa.calcular_multa(dias_retraso)
+        fecha_inicio_multa=Date.sum_dias_fecha(fecha_entrega_real,1)
+        fecha_fin_multa=Date.sum_dias_fecha(fecha_inicio_multa,dias_multa)
+        
+        
+        
+    def calcular_multa(dias_retraso):
+        return dias_retraso*Multa.MULTA_DIAS
         
     def levantar_multa(self):
         self.__activa=False
