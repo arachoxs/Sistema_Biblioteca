@@ -2,12 +2,13 @@ class Lector:
     _instancias = []
 
     def __init__(self, id_lector, nombre, telefono, direccion, estado = "Normal"):
+        # Atributos del lector
         self.id_lecto = id_lector
         self.nombre = nombre
         self.telefono = telefono
         self.direccion = direccion
         self.estado = estado
-
+        # Se agrega la instancia a la lista de lectores
         Lector._instancias.append(self)
 
     # Getters
@@ -60,6 +61,18 @@ class Lector:
         nombre = input(f"Nombre ({self.nombre}): ")
         telefono = input(f"Telefono ({self.telefono}): ")
         direccion = input(f"Direccion ({self.direccion}): ")
+        print("Estado (seleccione una opción):\n1. Normal\n2. Sancionado\n3. Suspendido\n4. Inactivo")
+        estado = input(f"Estado ({self.estado}): ")
+        if estado == "1":
+            estado = "Normal"
+        elif estado == "2":
+            estado = "Sancionado"
+        elif estado == "3":
+            estado = "Suspendido"
+        elif estado == "4":
+            estado = "Inactivo"
+        else:
+            estado = self.estado
 
         if id_lector:
             self.set_id_lector(id_lector)
@@ -69,6 +82,8 @@ class Lector:
             self.set_telefono(telefono)
         if direccion:
             self.set_direccion(direccion)
+        if estado:
+            self.set_estado(estado)
 
         print("Lector modificado con exito.")
 
