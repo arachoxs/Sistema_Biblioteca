@@ -1,6 +1,6 @@
-from share import *
-from Copia import Copia
-from Lector import Lector
+from gestor_biblioteca.share import *
+from gestor_biblioteca.Copia import Copia
+from gestor_biblioteca.Lector import Lector
 import random
 
 class Prestamo:

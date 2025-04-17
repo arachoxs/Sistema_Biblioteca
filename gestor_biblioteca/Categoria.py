@@ -1,4 +1,4 @@
-from share import pedir_entero
+from gestor_biblioteca.share import pedir_entero
 
 class Categoria:
     instancias=[]

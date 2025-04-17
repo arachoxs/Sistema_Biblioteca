@@ -1,4 +1,4 @@
-from Libro import Libro
+from gestor_biblioteca.Libro import Libro
 import random
 
 class Copia:

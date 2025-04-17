@@ -1,4 +1,4 @@
-from share import *
+from gestor_biblioteca.share import *
 
 class Autor:
     _instancias=[]

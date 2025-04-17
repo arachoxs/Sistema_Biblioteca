@@ -1,6 +1,7 @@
-from share import *
-from Categoria import Categoria
-from Autor import Autor
+from gestor_biblioteca.share import pedir_entero
+from gestor_biblioteca.Categoria import Categoria
+from gestor_biblioteca.Autor import Autor
+from gestor_biblioteca.AutorLibro import AutorLibro
 
 class Libro:
     _instancias=[]
@@ -77,7 +78,7 @@ class Libro:
         
         libro = Libro(isbn, titulo, edicion, año, editorial, genero, idioma, n_copias)
         libro.asignar_categoria() # Asignar categoría al libro
-        #libro.relacionar_autor() # Relacionar autor al libro
+        AutorLibro.relacionar_autor_libro(libro) # Relacionar autor al libro
         # Crear copias del libro
         Copia.generar_copias(n_copias, libro)  # Corrige el orden de los parámetros
         
@@ -193,33 +194,3 @@ class Libro:
             else:
                 print("Opcion no valida, intente nuevamente")
                         
-    def relacionar_autor(self):
-    # Importaciones aquí para evitar circular imports
-        from gestor_biblioteca.Autor import Autor
-        from gestor_biblioteca.AutorLibro import AutorLibro
-
-        while True:
-            print("\n--- Autores disponibles ---")
-            print("0. Agregar nuevo autor")
-            for idx, autor_inst in enumerate(Autor._instancias, start=1):
-                print(f"{idx}. {autor_inst.get_nombre()}")
-
-            opcion = pedir_entero("Seleccione una opción: ") - 1
-
-            # Registrar nuevo autor
-            if opcion == -1:
-                Autor.registrar()
-                autor_sel = Autor._instancias[-1]
-
-            # Seleccionar autor existente
-            elif 0 <= opcion < len(Autor._instancias):
-                autor_sel = Autor._instancias[opcion]
-
-            else:
-                print("Opción no válida, intente nuevamente.")
-                continue
-
-            # Crear la relación autor–libro
-            AutorLibro(autor_sel, self)
-            print(f"Autor «{autor_sel.get_nombre()}» relacionado correctamente con «{self.get_titulo()}».")
-            break

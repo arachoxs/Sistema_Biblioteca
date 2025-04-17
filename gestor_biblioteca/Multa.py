@@ -1,6 +1,6 @@
-from share import *
-from Prestamo import Prestamo
-from Lector import Lector
+from gestor_biblioteca.share import *
+from gestor_biblioteca.Prestamo import Prestamo
+from gestor_biblioteca.Lector import Lector
 class Multa:
     _instancias=[]
     MULTA_DIAS=3
