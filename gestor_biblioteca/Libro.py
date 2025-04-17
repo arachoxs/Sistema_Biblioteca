@@ -1,5 +1,7 @@
-from gestor_biblioteca.share import pedir_entero
+from gestor_biblioteca.share import *
 from gestor_biblioteca.Categoria import Categoria
+from gestor_biblioteca.Autor import Autor
+from gestor_biblioteca.AutorLibro import AutorLibro
 
 class Libro:
     _instancias=[]
@@ -18,7 +20,6 @@ class Libro:
         self.__categoria_libro=None
         
         Libro._instancias.append(self)
-
     #getters
     def get_isbn(self):
         return self.__isbn
@@ -58,7 +59,6 @@ class Libro:
         self.__n_copias=n_copias
     def set_activo(self, activo):
         self.__activo=activo
-
     def buscar_libro(isbn):
         for libro in Libro._instancias:
             if libro.get_isbn() == isbn:
@@ -67,7 +67,6 @@ class Libro:
     
     def registrar():
         from gestor_biblioteca.Copia import Copia  # Importación dentro del método
-
         isbn = input("Ingrese el ISBN del libro: ")
         titulo = input("Ingrese el titulo del libro: ")
         edicion = pedir_entero("Ingrese la edicion del libro: ")
@@ -78,7 +77,9 @@ class Libro:
         n_copias = pedir_entero("Ingrese el número de copias del libro: ")
         
         libro = Libro(isbn, titulo, edicion, año, editorial, genero, idioma, n_copias)
-        libro.asignar_categoria()
+        libro.asignar_categoria() # Asignar categoría al libro
+        libro.relacionar_autor() # Relacionar autor al libro
+        # Crear copias del libro
         Copia.generar_copias(n_copias, libro)  # Corrige el orden de los parámetros
         
         print("Libro registrado correctamente")
@@ -192,10 +193,31 @@ class Libro:
                 band=False
             else:
                 print("Opcion no valida, intente nuevamente")
+                        
+    def relacionar_autor(self):
+        while(True):
+            print("---Autores disponibles---\n")
+            print(0,". ", "Agregar nuevo autor")
+            
+            for index in range(len(Autor._instancias)):
+                print(index+1,". ", Autor._instancias[index].get_nombre())
+            
+            opcion=pedir_entero("Seleccione una opcion: ")
+            
+            opcion-=1
+            autor=None
+            
+            if(opcion==-1):
+                Autor.registrar()
+                autor=Autor._instancias[-1] #accedo al ultimo elemento 
+            elif(opcion>=0 and opcion<len(Autor._instancias)):
+                autor=Autor._instancias[opcion]
+            else:
+                print("Opcion no valida, intente nuevamente")
+            if(autor!=None):
+                AutorLibro(self, autor)
+                print("Autor relacionado correctamente")
+                return 
                 
-    
-    def buscar_id(isbn):
-        for libro in Libro._instancias:
-            if libro.get_isbn() == isbn:
-                return libro
-        return None
+libro1=Libro("978-3-16-148410-0", "Ejemplo de Libro", 1, 2023, "Editorial Ejemplo", "Ficción", "Español", 5)
+libro1.relacionar_autor()
