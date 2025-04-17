@@ -62,8 +62,7 @@ class ArticuloCientifico:
         titulo = input("Ingrese el titulo del articulo: ")
         editor = input("Ingrese el editor del articulo: ")
         
-        fecha = date(0, 0, 0)  
-        fecha.registrar_fecha()
+        fecha = fecha.registrar_fecha()
         
         revista = input("Ingrese la revista del articulo: ")
         periodicidad = input("Ingrese la periodicidad del articulo: ")

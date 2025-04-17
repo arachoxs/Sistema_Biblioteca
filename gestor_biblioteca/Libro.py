@@ -2,7 +2,7 @@ from gestor_biblioteca.share import pedir_entero
 from gestor_biblioteca.Categoria import Categoria
 
 class Libro:
-    instancias=[]
+    _instancias=[]
     
     
     def __init__(self, isbn , titulo , edicion , año , editorial, genero , idioma , n_copias, activo=True):
@@ -17,7 +17,7 @@ class Libro:
         self.__activo=activo
         self.__categoria_libro=None
         
-        Libro.instancias.append(self)
+        Libro._instancias.append(self)
 
     #getters
     def get_isbn(self):
@@ -144,7 +144,7 @@ class Libro:
             elif(opcion==8):
                 n_copias = pedir_entero("Ingrese el nuevo numero de copias del libro: ")
                 self.set_n_copias(n_copias)
-
+                
             elif(opcion==9):
                 self.asignar_categoria()
                 

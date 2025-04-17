@@ -7,21 +7,11 @@ def pedir_entero(mensaje):
             print("Entrada inválida. Por favor, ingrese un número entero.")
 # --- Clase date ---
 # Esta clase representa una fecha y permite operaciones como sumar días y validar fechas.
-class date:
+class Date:
     def __init__(self, dia, mes, año):
-        # Validamos la fecha inicial en el constructor también
-        # Nota: Esto requiere que validar_fecha no dependa de registrar_fecha
-        temp_dia = dia
-        temp_mes = mes
-        temp_año = año
-        self.dia = temp_dia
-        self.mes = temp_mes
-        self.año = temp_año
-        if not self.validar_fecha():
-            # Lanza un error si la fecha inicial no es válida
-            # Podrías manejar esto de otra forma si prefieres (ej. poner valores por defecto)
-            raise ValueError(f"Fecha inválida proporcionada al constructor: {dia}/{mes}/{año}")
-        # Si es válida, los atributos ya están asignados
+        self.dia = dia
+        self.mes = mes
+        self.año = año
 
     #setters
     def set_dia(self, dia):
@@ -47,36 +37,40 @@ class date:
     
     # --- Métodos de la clase date ---
 
-    def registrar_fecha(self):
+    def registrar_fecha():
         """Pide al usuario día, mes y año hasta que ingrese una fecha válida."""
         # Esta función ahora depende de una función externa `pedir_entero`
         # que no está definida aquí. Se mantiene la lógica original.
         band = False
         print("--- Registrando nueva fecha ---")
         while(band == False):
-            self.dia = pedir_entero("Ingrese el dia: ")
-            self.mes = pedir_entero("Ingrese el mes: ")
-            self.año = pedir_entero("Ingrese el año: ")
+            dia = pedir_entero("Ingrese el dia: ")
+            mes = pedir_entero("Ingrese el mes: ")
+            año = pedir_entero("Ingrese el año: ")
+            
+            fecha=Date(dia,mes,año)
 
-            if self.validar_fecha():
-                print(f"Fecha registrada: {self.dia}/{self.mes}/{self.año}")
+            if fecha.validar_fecha():
+                print(f"Fecha registrada: {fecha.dia}/{fecha.mes}/{fecha.año}")
                 band = True
             else:
                 print("Fecha inválida. Intente nuevamente.")
+        
+        return fecha
 
     def _es_bisiesto(self, año):
         """Comprueba si un año es bisiesto."""
         # No necesita 'self' si pasamos el año como argumento
         return (año % 4 == 0 and año % 100 != 0) or (año % 400 == 0)
 
-    def _dias_en_mes(self, mes, año):
+    def _dias_en_mes(self):
         """Devuelve el número de días en un mes/año específico."""
-        if mes < 1 or mes > 12:
+        if self.mes < 1 or self.mes > 12:
             return 0 # Mes inválido
 
-        if mes == 2:
-            return 29 if self._es_bisiesto(año) else 28
-        elif mes in [4, 6, 9, 11]:
+        if self.mes == 2:
+            return 29 if self._es_bisiesto(self.año) else 28
+        elif self.mes in [4, 6, 9, 11]:
             return 30
         else: # Meses 1, 3, 5, 7, 8, 10, 12
             return 31
@@ -87,7 +81,7 @@ class date:
             # print(f"Error: Mes inválido ({self.mes})") # Debug
             return False
 
-        dias_del_mes = self._dias_en_mes(self.mes, self.año)
+        dias_del_mes = self._dias_en_mes()
 
         if self.dia < 1 or self.dia > dias_del_mes:
             # print(f"Error: Día inválido ({self.dia}) para el mes {self.mes}/{self.año} (max {dias_del_mes} días)") # Debug
@@ -101,7 +95,6 @@ class date:
         return True
 
     # --- Nuevas funciones ---
-
     def sumar_dias(self, dias_a_sumar):
         """
         Suma una cantidad de días a la fecha actual.
@@ -110,10 +103,10 @@ class date:
         Permite sumar días negativos (restar días).
         """
         if dias_a_sumar == 0:
-            return date(self.dia, self.mes, self.año) # Devuelve una copia
+            return Date(self.dia, self.mes, self.año) # Devuelve una copia
 
         # Crear una copia para no modificar el original
-        nueva_fecha = date(self.dia, self.mes, self.año)
+        nueva_fecha = Date(self.dia, self.mes, self.año)
 
         if dias_a_sumar > 0:
             for _ in range(dias_a_sumar):
@@ -149,14 +142,15 @@ class date:
 
     # --- Métodos de comparación útiles para diferencia_fechas ---
     def __eq__(self, other):
+        
         """Comprueba si dos fechas son iguales."""
-        if not isinstance(other, date):
+        if not isinstance(other, Date):
             return NotImplemented # No comparar con tipos diferentes
         return self.año == other.año and self.mes == other.mes and self.dia == other.dia
 
     def __lt__(self, other):
         """Comprueba si esta fecha es anterior a otra."""
-        if not isinstance(other, date):
+        if not isinstance(other, Date):
             return NotImplemented
         if self.año < other.año:
             return True
@@ -192,6 +186,7 @@ class date:
 # --- Nueva función externa ---
 
 def diferencia_fechas(fecha1, fecha2):
+    
     """
     Calcula la diferencia en días entre dos objetos date.
     Devuelve un entero positivo que representa el número de días entre las fechas.
@@ -199,12 +194,12 @@ def diferencia_fechas(fecha1, fecha2):
     # Asegurarse de que fecha1 sea la más temprana
     if fecha1 > fecha2:
         fecha1, fecha2 = fecha2, fecha1 # Intercambiar si fecha1 es posterior
-
+        
     if fecha1 == fecha2:
         return 0
 
     # Copiamos la fecha menor para no modificarla
-    fecha_temp = date(fecha1.dia, fecha1.mes, fecha1.año)
+    fecha_temp = Date(fecha1.dia, fecha1.mes, fecha1.año)
     contador_dias = 0
 
     # Iteramos día por día desde fecha_temp hasta alcanzar fecha2
@@ -233,4 +228,3 @@ def diferencia_fechas(fecha1, fecha2):
 
 
     return contador_dias
-
