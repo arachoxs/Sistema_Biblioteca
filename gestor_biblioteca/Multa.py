@@ -70,10 +70,10 @@ class Multa:
         
         if not prestamo:
             print("Prestamo no encontrado")
-            return
+            return False
         if prestamo.get_activo()==False:
             print("El prestamo ya fue entregado")
-            return
+            return False
         
 
         lector=prestamo.get_lector()
@@ -86,6 +86,8 @@ class Multa:
         Multa=(id_multa,lector,fecha_entrega_real,dias_retraso,fecha_inicio_multa,fecha_fin_multa).asociar_prestamo(prestamo)
         prestamo.set_activo(False)
         #se debe pasar el lector a estado sancionado
+        
+        return True
         
         
     def asociar_prestamo(self,prestamo):
