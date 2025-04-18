@@ -1,7 +1,8 @@
-from gestor_biblioteca.share import pedir_entero, date
+from gestor_biblioteca.share import *
+from gestor_biblioteca.Categoria import Categoria
 
 class Tesis:
-    isinstancees = []
+    _instancias = []
 
     def __init__(self, idTesis, nombre, institucion, fechaInvestigacion, fechaPrestacion, campoEstudio, nPaginas, estado = "Disponible"):
         self.__idTesis = idTesis
@@ -13,7 +14,9 @@ class Tesis:
         self.__nPaginas = nPaginas
         self.__estado = estado
 
-        Tesis.isinstancees.append(self)
+        self.__categoria_tesis = None
+
+        Tesis._instancias.append(self)
 
     #getters
     def get_idTesis(self):
@@ -32,6 +35,8 @@ class Tesis:
         return self.__nPaginas
     def get_estado(self):
         return self.__estado
+    def get_categoria_tesis(self):
+        return self.__categoria_tesis
     
     #setters
     def set_idTesis(self, idTesis):
@@ -52,22 +57,19 @@ class Tesis:
         self.__estado = estado
 
     #metodos
-
     def registrar():
         idTesis = pedir_entero("Ingrese el id de la tesis: ")
         nombre = input("Ingrese el nombre de la tesis: ")   
         institucion = input("Ingrese la institucion de la tesis: ")
 
-        fechaInvestigacion = date(0, 0, 0)
-        fechaInvestigacion.registrar_fecha()
-
-        fechaPrestacion = date(0, 0, 0)
-        fechaPrestacion.registrar_fecha()
+        fechaInvestigacion = Date.registrar_fecha()
+        fechaPrestacion = Date.registrar_fecha()
 
         campoEstudio = input("Ingrese el campo de estudio de la tesis: ")
         nPaginas = pedir_entero("Ingrese el numero de paginas de la tesis: ")
 
-        Tesis(idTesis, nombre, institucion, str(fechaInvestigacion), str(fechaPrestacion), campoEstudio, nPaginas)
+        Tesis(idTesis, nombre, institucion, fechaInvestigacion, fechaPrestacion, campoEstudio, nPaginas)
+        Tesis.asignar_categoria()
     
     def consultar(self):
         print("ID Tesis: ", self.__idTesis)
@@ -79,12 +81,18 @@ class Tesis:
         print("Numero de paginas: ", self.__nPaginas)
         print("Estado: ", self.__estado)
 
+        if (self.__categoria_tesis == None):
+            print("No se ha asignado categoria a la tesis.")
+        else:
+            print("Categoria de la tesis: ", self.__categoria_tesis.get_nombre())
+
     def modificar(self):
         print("---Tesis seleccionada---")
         self.consultar()
         band=True
         while band:
             print("¿Qué desea modificar?")
+            print("0. Salir")
             print("1. ID Tesis")
             print("2. Nombre")
             print("3. Institucion")
@@ -93,7 +101,8 @@ class Tesis:
             print("6. Campo de estudio")
             print("7. Numero de paginas")
             print("8. Estado")
-            print("0. Salir")
+            print("9. Categoria")
+
 
             opcion = pedir_entero("Ingrese la opcion: ")
 
@@ -110,14 +119,12 @@ class Tesis:
                 self.set_institucion(institucion)
                 print("Institucion modificada con exito.")
             elif opcion == 4:
-                fechaInvestigacion = date(0, 0, 0)
-                fechaInvestigacion.registrar_fecha()
-                self.set_fechaInvestigacion(str(fechaInvestigacion))
+                fechaInvestigacion = Date.registrar_fecha()
+                self.set_fechaInvestigacion(fechaInvestigacion)
                 print("Fecha de investigación modificada con exito.")
             elif opcion == 5:
-                fechaPrestacion = date(0, 0, 0)
-                fechaPrestacion.registrar_fecha()
-                self.set_fechaPrestacion(str(fechaPrestacion))
+                fechaPrestacion= Date.registrar_fecha()
+                self.set_fechaPrestacion(fechaPrestacion)
                 print("Fecha de prestación modificada con exito.")	
             elif opcion == 6:
                 campoEstudio = input("Ingrese el nuevo campo de estudio de la tesis: ")
@@ -128,9 +135,32 @@ class Tesis:
                 self.set_nPaginas(nPaginas)
                 print("Numero de paginas modificado con exito.")
             elif opcion == 8:
-                estado = input("Ingrese el nuevo estado de la tesis: ")
+                print("Seleccione el estado de la Tesis:")
+                print("1. Disponible")
+                print("2. Prestado")
+                print("3. En revisión")
+                print("4. En reparación")
+                print("5. No disponible")
+                
+                opcionEstado = pedir_entero("Ingrese la opción: ")
+                
+                if opcionEstado == 1:
+                    estado = "Disponible"
+                elif opcionEstado == 2:
+                    estado = "Prestado"
+                elif opcionEstado == 3:
+                    estado = "En revisión"
+                elif opcionEstado == 4:
+                    estado = "En reparación"
+                elif opcionEstado == 5:
+                    estado = "No disponible"
+                else:
+                    print("Opción inválida. No se modificó el estado.")
+                    return
                 self.set_estado(estado)
                 print("Estado modificado con exito.")
+            elif opcion == 9:
+                self.asignar_categoria()
             elif opcion == 0:
                 band = False
                 print("Saliendo de la modificación de la Tesis...")
@@ -144,9 +174,31 @@ class Tesis:
         respuesta = input("¿Está seguro de que desea eliminar la tesis? (s/n): ")
 
         if respuesta.lower() == "s":
-            Tesis.isinstancees.remove(self)
+            Tesis._instancias.remove(self)
             print("Tesis eliminada con exito.")
         else:
             print("Eliminacion cancelada.")
        
-# def asignar_categoria(int):
+def asignar_categoria(self):
+    band = True
+    if self.__estado == "No disponible":
+        print("No se puede asignar categoria a una tesis No disponible.")
+        return
+    if len(Categoria.obtener_instancias()) == 0:
+        print("No hay categorias disponibles para asignar.")
+        return
+    while band:
+        print("Categorias disponibles:")
+        for index in range(len(Categoria.obtener_instancias())):
+            print(index + 1, ". ", Categoria.obtener_instancias()[index].get_nombre())
+
+        opcion = pedir_entero("Seleccione una categoria: ")
+        opcion -= 1
+
+        if opcion >= 0 and opcion < len(Categoria.obtener_instancias()):
+            self.__categoria_tesis = Categoria.obtener_instancias()[opcion]
+            print("Categoria asignada con exito.")
+            band = False
+        else:
+            print("Opcion no valida, intente nuevamente.")
+
