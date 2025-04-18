@@ -6,7 +6,7 @@ def pedir_entero(mensaje):
         except ValueError:
             print("Entrada inválida. Por favor, ingrese un número entero.")
             
-def pedir_cadena(mensaje):
+def pedir_nombre(mensaje):
     #funcion usada mayormente para pedir nombres de cosas
     
     while True:

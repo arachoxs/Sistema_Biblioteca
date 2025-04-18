@@ -1,4 +1,4 @@
-from gestor_biblioteca.share import pedir_entero , pedir_cadena
+from gestor_biblioteca.share import pedir_entero , pedir_nombre
 from gestor_biblioteca.Categoria import Categoria
 from gestor_biblioteca.Autor import Autor
 from gestor_biblioteca.AutorLibro import AutorLibro
@@ -82,7 +82,7 @@ class Libro:
         año = pedir_entero("Ingrese el año del libro: ")
         editorial = input("Ingrese la editorial del libro: ")
         genero = input("Ingrese el genero del libro: ")
-        idioma = pedir_cadena("Ingrese el idioma del libro: ")
+        idioma = pedir_nombre("Ingrese el idioma del libro: ")
         n_copias = pedir_entero("Ingrese el número de copias del libro: ")
         
         #numero copias mayor o igual a 1
