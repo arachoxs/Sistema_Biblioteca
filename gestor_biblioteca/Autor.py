@@ -30,14 +30,25 @@ class Autor:
     def set_fecha_nacimiento(self,fecha_nacimiento):
         self.__fecha_nacimiento=fecha_nacimiento
         
+    #metodos de instancias    
+        
     def buscar_autor(id_autor):
         for autor in Autor._instancias:
             if autor.get_id_autor() == id_autor:
                 return autor
         return None
     
+    def mostrar_autores():
+        if len(Autor._instancias) == 0:
+            print("No hay autores registrados")
+        else:
+            for i in range(len(Autor._instancias)):
+                print(i+1,". ",Autor._instancias[i].get_nombre())
+    
+    def get_instancia_index(index):
+        return Autor._instancias[index]
+    
     def registrar():
-        
         band=False
         while(not band):
             id_autor= pedir_entero("Ingrese el id del autor: ")
@@ -49,9 +60,10 @@ class Autor:
         nombre= input("Ingrese el nombre del autor: ")
         nacionalidad= input("Ingrese la nacionalidad del autor: ")
         print("--- ingrese fecha nacimiento autor ---")
-        fecha_nacimiento= Date.registrar_fecha()
+        fecha_nacimiento = Date.registrar_fecha()
        
         Autor(id_autor,nombre,nacionalidad,fecha_nacimiento)         
+        print("Autor registrado correctamente")
         
     def consultar(self):
         print("ID Autor: ", self.__id_autor)

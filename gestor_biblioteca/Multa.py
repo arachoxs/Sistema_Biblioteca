@@ -6,17 +6,17 @@ class Multa:
     MULTA_DIAS=3
     
     
-    def __init__(self,id_multa,lector,fecha_entrega_real,dias_multa,fecha_inicio_multa,fecha_final_multa,activa=True):
+    def __init__(self,id_multa,lector,fecha_entrega_real,dias_retraso,dias_multa,fecha_inicio_multa,fecha_final_multa,activa=True):
         self.__id_multa=id_multa
         self.__lector=lector
         self.__prestamo=None
         self.__fecha_entrega_real=fecha_entrega_real
-        self.__dias_retraso=None
+        self.__dias_retraso=dias_retraso
         self.__dias_multa=dias_multa
         self.__fecha_inicio_multa=fecha_inicio_multa
         self.__fecha_final_multa=fecha_final_multa
         self.__activa=activa
-        Multa.instancias.append(self)
+        Multa._instancias.append(self)
     
     #getters
     def get_id_multa(self):
@@ -63,9 +63,9 @@ class Multa:
         for multa in Multa._instancias:
             if multa.get_prestamo().get_id_prestamo() == id_prestamo:
                 print("Ya existe una multa asociada a este préstamo.")
-                return
+                return False
         
-        id_multa=len(Multa.instancias)+1
+        id_multa=len(Multa.instancias)+1    
         prestamo=Prestamo.buscar_prestamo(id_prestamo)
         
         if not prestamo:
@@ -77,13 +77,19 @@ class Multa:
         
 
         lector=prestamo.get_lector()
-        dias_retraso=diferencia_fechas(fecha_entrega_estimado, fecha_entrega_real)
+        
+        dias_retraso = max(0, diferencia_fechas(fecha_entrega_estimado, fecha_entrega_real) - 1)
+        if dias_retraso == 0:
+            print("No hay retraso; no se genera multa.")
+            return False
+        
         dias_multa=Multa.calcular_multa(dias_retraso)
         fecha_inicio_multa=fecha_entrega_real.sumar_dias(1)
         fecha_fin_multa=fecha_inicio_multa.sumar_dias(dias_multa)
         
         #se crea la multa
-        Multa=(id_multa,lector,fecha_entrega_real,dias_retraso,fecha_inicio_multa,fecha_fin_multa).asociar_prestamo(prestamo)
+        Multa=(id_multa,lector,fecha_entrega_real,dias_retraso,dias_multa,fecha_inicio_multa,fecha_fin_multa)
+        Multa.asociar_prestamo(prestamo)
         prestamo.set_activo(False)
         #se debe pasar el lector a estado sancionado
         
@@ -102,8 +108,14 @@ class Multa:
         
     def levantar_multa(self):
         self.__activa=False
+        #se debe pasar el lector a estado normal
+        
     
-    
+    def levantar_multas_auto(date):
+        for multa in Multa._instancias:
+            if multa.get_activa() and date >= multa.get_fecha_final_multa():
+                multa.levantar_multa()
+                print(f"Multa {multa.get_id_multa()} levantada automáticamente.")
     
     def consultar_multas(id_lector):
         lector = Lector.buscar_lector_por_id(id_lector)

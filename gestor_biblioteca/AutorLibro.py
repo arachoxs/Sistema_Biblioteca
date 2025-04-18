@@ -30,20 +30,18 @@ class AutorLibro:
         while True:
             print("\n--- Autores disponibles ---")
             print("0. Agregar nuevo autor")
-            for idx, autor_inst in enumerate(Autor._instancias, start=1):
-                print(f"{idx}. {autor_inst.get_nombre()}")
-
+            Autor.mostrar_autores() # Mostrar autores existentes
             opcion = pedir_entero("Seleccione una opción: ") - 1
 
             # Registrar nuevo autor
             if opcion == -1:
-                Autor.registrar()
-                autor_sel = Autor._instancias[-1]
+                Autor.registrar() # Agregar nuevo autor
+                autor_sel = Autor._instancias[-1] # Seleccionar el último autor agregado
 
             # Seleccionar autor existente
             elif 0 <= opcion < len(Autor._instancias):
-                autor_sel = Autor._instancias[opcion]
-
+                autor_sel = Autor.get_instancia_index(opcion) # Obtener el autor seleccionado
+                
             else:
                 print("Opción no válida, intente nuevamente.")
                 continue
@@ -51,7 +49,21 @@ class AutorLibro:
             # Crear la relación autor–libro
             AutorLibro(libro,autor_sel)
             print(f"Autor «{autor_sel.get_nombre()}» relacionado correctamente con «{libro.get_titulo()}».")
-            break
+            
+            while True:
+                print("\n¿Desea relacionar otro autor?")
+                print("1. Sí")
+                print("2. No")
+                continuar = pedir_entero("Seleccione una opción: ")
+
+                if continuar == 1:
+                    break  # Vuelve al inicio del bucle principal
+                elif continuar == 2:
+                    print("Saliendo de la relación de autores...")
+                    return
+                else:
+                    print("Opción no válida, intente nuevamente.")          
+
     
     def buscar_libros(autor):
         libros = []
@@ -59,12 +71,23 @@ class AutorLibro:
             if autor_libro.get_autor() == autor:
                 print(autor_libro.get_libro().get_titulo())
                 
-        return libros
+        if len(libros) == 0:
+            print("No hay libros registrados para este autor.")
+        else:
+            print("Libros registrados para este autor:")
+            for libro in libros:
+                print(libro.get_titulo())
 
     def buscar_autores(libro):
         autores = []
         for autor_libro in AutorLibro._instancias:
             if autor_libro.get_libro() == libro:
                 autores.append(autor_libro.get_autor())
-        return autores
+        
+        if len(autores) == 0:
+            print("No hay autores registrados para este libro.")
+        else:
+            print("Autores registrados para este libro:")
+            for autor in autores:
+                print(autor.get_nombre())
     

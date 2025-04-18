@@ -94,6 +94,18 @@ class Categoria:
     def obtener_instancias(cls):
         return cls._instancias.copy()
     
+    #metodos para las instacias
+    def mostrar_instancias(cls):
+        if len(cls._instancias) == 0:
+            print("No hay categorias registradas")
+            return 
+        else:
+            for i in range(len(cls._instancias)):
+                print(i+1,". ",cls._instancias[i].get_nombre())
+            
+    def get_instancia_index(cls,index):
+        return cls._instancias[index]
+    
 # -------------------- EJEMPLO DE USO SUBCATEGORÍAS --------------------
     
 # categoria_principal = Categoria(1, "Ciencia", "Libros de ciencia")
