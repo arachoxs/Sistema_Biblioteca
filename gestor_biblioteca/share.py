@@ -5,8 +5,22 @@ def pedir_entero(mensaje):
             return valor
         except ValueError:
             print("Entrada inválida. Por favor, ingrese un número entero.")
+            
+def pedir_cadena(mensaje):
+    #funcion usada mayormente para pedir nombres de cosas
+    
+    while True:
+        valor = input(mensaje)
+        if valor.strip() and valor.isalpha():  # Verifica que no esté vacío o solo contenga espacios
+            return valor
+        else:
+            print("Entrada inválida. Por favor, ingrese una cadena no vacía.")  
+    
+
+    
 # --- Clase Date ---
 # Esta clase representa una fecha y permite operaciones como sumar días y validar fechas.
+
 class Date:
     def __init__(self, dia, mes, año):
         self.dia = dia
@@ -66,7 +80,7 @@ class Date:
             return 0 # Mes inválido
 
         if self.mes == 2:
-            return 29 if self._es_bisiesto(self.año) else 28
+            return 29 if Date._es_bisiesto(self.año) else 28
         elif self.mes in [4, 6, 9, 11]:
             return 30
         else: # Meses 1, 3, 5, 7, 8, 10, 12
@@ -85,7 +99,7 @@ class Date:
             return False
 
         # No necesitamos validar el año aquí a menos que haya restricciones (ej. año > 0)
-        if self.año <= 0:
+        if self.año <= 1200:
              # print(f"Error: Año inválido ({self.año})") # Debug
              return False
 
