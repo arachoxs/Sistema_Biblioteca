@@ -92,7 +92,7 @@ class Categoria:
 
     @classmethod
     def obtener_instancias(cls):
-        return cls._instancias.copy()
+        return cls._instancias.deepcopy()  # Retorna una copia de la lista de instancias
     
     #metodos para las instacias
     def mostrar_instancias(cls):
