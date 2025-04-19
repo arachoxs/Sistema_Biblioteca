@@ -27,6 +27,7 @@ def menu_libro():
                     libro.consultar()
                 else:
                     print("El libro no existe")
+                    esperar()
                     
             elif(opcion==3):
                 isbn = input("Ingrese el ISBN del libro a modificar: ")
@@ -35,6 +36,7 @@ def menu_libro():
                     libro.modificar()
                 else:
                     print("El libro no existe")
+                    esperar()
                     
             elif(opcion==4):
                 isbn = input("Ingrese el ISBN del libro a inhabilitar: ")
@@ -42,12 +44,15 @@ def menu_libro():
                 if(libro!=None):
                     libro.inhabilitar()
                     print("Libro inhabilitado correctamente")
+                    esperar()
                 else:
                     print("El libro no existe")
+                    esperar()
                     
             elif(opcion==0):
                 band=False
                 print("Saliendo del menu de libros...")
+                esperar()
                 
             else:
                 print("Opcion no valida, intente nuevamente")
@@ -148,6 +153,7 @@ class Libro:
         Copia.generar_copias(n_copias, libro)  # Corrige el orden de los parámetros
         
         print("Libro registrado correctamente")
+        esperar()
         
         
     def consultar(self):
@@ -169,10 +175,12 @@ class Libro:
             print("Categoria: ", self.__categoria_libro.get_nombre())
         print("--Autores libro--")
         AutorLibro.buscar_autores(self)
+        esperar()
                 
     def modificar(self):
         if(self.__activo!=True):
             print("El libro no se encuentra activo, no se puede modificar")
+            esperar()
             return
         
         print("---Libro seleccionado---")
@@ -228,10 +236,12 @@ class Libro:
             elif(opcion==9):
                 self.inhabilitar()
                 print("Libro desactivado correctamente")
+                esperar()
                 
             elif(opcion==0):
                 band=False
                 print("Saliendo de la modificacion del libro...")
+                esperar()
             else:   
                 print("Opcion no valida, intente nuevamente")
                 
@@ -243,9 +253,11 @@ class Libro:
         band=True
         if self.__activo!=True:
             print("El libro no se encuentra activo, no se puede asignar categoria")
+            esperar()
             return
         if len(Categoria._instancias)==0:
             print("No hay categorias disponibles para asignar")
+            esperar()
             return
         while(band):
             print("Categorias disponibles:")
@@ -258,10 +270,12 @@ class Libro:
             if(opcion>=0 and opcion<len(Categoria._instancias)):
                 self.__categoria_libro=Categoria.get_instancia_index(opcion)
                 print("Categoria asignada correctamente")
+                esperar()
                 band=False
             elif(opcion==-1):
                 band=False
                 print("Saliendo de la asignacion de categoria...")
+                esperar()
             else:
                 print("Opcion no valida, intente nuevamente")
                 

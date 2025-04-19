@@ -1,7 +1,4 @@
 
-
-
-
 def pedir_entero(mensaje):
     while True:
         try:

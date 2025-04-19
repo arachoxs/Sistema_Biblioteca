@@ -1,5 +1,45 @@
 from gestor_biblioteca.share import *
 
+def menu_autor():
+    band=False
+    while(not band):
+        clear_console()
+        print("\n\n---Menu Autor---")
+        print("1. Registrar Autor")
+        print("2. Consultar Autor")
+        print("3. Modificar Autor")
+        print("0. Salir")
+        
+        opcion=pedir_entero("Seleccione una opcion: ")
+        
+        if(opcion==1):
+            Autor.registrar()
+            
+        elif(opcion==2):
+            id=pedir_entero("Ingrese el id del autor a consultar: ")
+            autor=Autor.buscar_autor(id)
+            if autor == None:
+                print("No se encontro el autor")
+                esperar()
+                continue
+            Autor.consultar(autor)
+            
+        elif(opcion==3):
+            id=pedir_entero("Ingrese el id del autor a modificar: ")
+            autor=Autor.buscar_autor(id)
+            if autor == None:
+                print("No se encontro el autor")
+                esperar()
+                continue
+            Autor.modificar(autor)
+                
+        elif(opcion==0):
+            band=True
+            print("Saliendo del menu de autores")
+            esperar()
+            
+        else:
+            print("Opcion no valida, pruebe nuevamente")
 class Autor:
     _instancias=[]
     
@@ -64,13 +104,14 @@ class Autor:
        
         Autor(id_autor,nombre,nacionalidad,fecha_nacimiento)         
         print("Autor registrado correctamente")
+        esperar()
         
     def consultar(self):
         print("ID Autor: ", self.__id_autor)
         print("Nombre: ", self.__nombre)
         print("Nacionalidad: ", self.__nacionalidad)
         print("Fecha de Nacimiento: ", self.__fecha_nacimiento)
-        
+        esperar()
         
     def modificar(self):
         band=False

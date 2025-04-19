@@ -48,6 +48,7 @@ class AutorArticulo:
             #crear la relación autor-articulo
             AutorArticulo(articulo, autor_sel)
             print(f"Autor «{autor_sel.get_nombre()}» relacionado correctamente con «{articulo.get_titulo()}».")
+            esperar()
 
             while True:
                 print("\n¿Desea relacionar otro autor?")
@@ -59,6 +60,7 @@ class AutorArticulo:
                     break
                 elif continuar == 2:
                     print("Saliendo de la relacion de autores...")
+                    esperar()
                     return
                 else:
                     print("Opción no válida, intente nuevamente.")
@@ -76,6 +78,8 @@ class AutorArticulo:
             print("Articulos registrados para este autor:")
             for articulo in articulos:
                 print(articulo.get_titulo())
+            
+        esperar()
 
     def buscar_autores(articulo):
         autores = []
@@ -89,3 +93,5 @@ class AutorArticulo:
             print("Autores registrados para este articulo:")
             for autor in autores:
                 print(autor.get_nombre())
+                
+        esperar()
