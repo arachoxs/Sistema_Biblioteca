@@ -104,3 +104,16 @@ class Lector:
     def habilitar(self):
         self.set_estado("Normal")
         print(f"Lector con ID {self.id_lector} habilitado.")
+
+    def sancionar(self):
+        self.set_estado("Sancionado")
+        print(f"Lector con ID {self.id_lector} sancionado.")
+    
+    def suspender(self):
+        self.set_estado("Suspendido")
+        print(f"Lector con ID {self.id_lector} suspendido.")
+
+    def obtener_lectores():
+        return Lector._instancias.deepcopy()
+    
+    
