@@ -1,4 +1,4 @@
-from gestor_biblioteca.share import pedir_entero , pedir_nombre , clear_console
+from gestor_biblioteca.share import pedir_entero , pedir_nombre , clear_console , esperar
 from gestor_biblioteca.Categoria import Categoria
 from gestor_biblioteca.Autor import Autor
 from gestor_biblioteca.AutorLibro import AutorLibro
@@ -223,6 +223,7 @@ class Libro:
             elif(opcion==8):
                 AutorLibro.relacionar_autor_libro(self)
                 print("Autor relacionado correctamente.")
+                esperar()
                 
             elif(opcion==9):
                 self.inhabilitar()

@@ -1,4 +1,5 @@
-import os
+
+
 
 
 def pedir_entero(mensaje):
@@ -10,6 +11,7 @@ def pedir_entero(mensaje):
             print("Entrada inválida. Por favor, ingrese un número entero.")
             
 def clear_console():
+    import os
     os.system('cls' if os.name == 'nt' else 'clear')
     
 # --- Clase Date ---

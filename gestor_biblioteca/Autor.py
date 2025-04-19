@@ -57,8 +57,8 @@ class Autor:
             else:
                 print("El id ya existe, pruebe con otro valor")
 
-        nombre= pedir_nombre("Ingrese el nombre del autor: ")
-        nacionalidad= pedir_nombre("Ingrese la nacionalidad del autor: ")
+        nombre= input("Ingrese el nombre del autor: ")
+        nacionalidad= input("Ingrese la nacionalidad del autor: ")
         print("--- ingrese fecha nacimiento autor ---")
         fecha_nacimiento = Date.registrar_fecha()
        
