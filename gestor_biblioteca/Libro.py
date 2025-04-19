@@ -7,7 +7,7 @@ def menu_libro():
         band=True
         while(band):
             clear_console()
-            print("\n\n---Menu libro---")
+            print("---Menu libro---")
             print("1. Registrar libro")
             print("2. Consultar libro")
             print("3. Modificar libro")
@@ -22,6 +22,7 @@ def menu_libro():
                 Libro.registrar()
                 
             elif(opcion==2):
+                print("---Consultar libro---")
                 isbn = input("Ingrese el ISBN del libro a consultar: ")
                 libro=Libro.buscar_libro(isbn)
                 if(libro!=None):
@@ -31,6 +32,7 @@ def menu_libro():
                     esperar()
                     
             elif(opcion==3):
+                print("---Modificar libro---")
                 isbn = input("Ingrese el ISBN del libro a modificar: ")
                 libro=Libro.buscar_libro(isbn)
                 if(libro!=None):
@@ -40,6 +42,7 @@ def menu_libro():
                     esperar()
                     
             elif(opcion==4):
+                print("---Inhabilitar libro---")
                 isbn = input("Ingrese el ISBN del libro a inhabilitar: ")
                 libro=Libro.buscar_libro(isbn)
                 if(libro!=None):
