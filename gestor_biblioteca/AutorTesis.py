@@ -1,32 +1,33 @@
-from gestor_biblioteca.share import pedir_entero
+from gestor_biblioteca.share import *
 from gestor_biblioteca.Autor import Autor
 
-class AutorLibro:
+class AutorTesis:
     _instancias = []
 
-    def __init__(self, libro, autor):
+    def __init__(self, tesis, autor):
         self.__autor = autor
-        self.__libro = libro
+        self.__tesis = tesis
 
-        AutorLibro._instancias.append(self)
+        AutorTesis._instancias.append(self)
 
     # getters
     def get_autor(self):
         return self.__autor
 
-    def get_libro(self):
-        return self.__libro
+    def get_tesis(self):
+        return self.__tesis
     
     # setters
     def set_autor(self, autor):
         self.__autor = autor
     
-    def set_libro(self, libro):
-        self.__libro = libro
-        
-    def relacionar_autor_libro(libro):
-        from gestor_biblioteca.Libro import Libro
-        
+    def set_tesis(self, tesis):
+        self.__tesis = tesis
+    
+
+    def relacionar_autor_tesis(tesis):
+        from gestor_biblioteca.Tesis import Tesis
+
         while True:
             print("\n--- Autores disponibles ---")
             print("0. Agregar nuevo autor")
@@ -47,8 +48,8 @@ class AutorLibro:
                 continue
 
             # Crear la relación autor–libro
-            AutorLibro(libro,autor_sel)
-            print(f"Autor «{autor_sel.get_nombre()}» relacionado correctamente con «{libro.get_titulo()}».")
+            AutorTesis(tesis,autor_sel)
+            print(f"Autor «{autor_sel.get_nombre()}» relacionado correctamente con «{tesis.get_nombre()}».")
             
             while True:
                 print("\n¿Desea relacionar otro autor?")
@@ -64,30 +65,28 @@ class AutorLibro:
                 else:
                     print("Opción no válida, intente nuevamente.")          
 
-    
-    def buscar_libros(autor):
-        libros = []
-        for autor_libro in AutorLibro._instancias:
-            if autor_libro.get_autor() == autor:
-                print(autor_libro.get_libro().get_titulo())
-                
-        if len(libros) == 0:
-            print("No hay libros registrados para este autor.")
-        else:
-            print("Libros registrados para este autor:")
-            for libro in libros:
-                print(libro.get_titulo())
+    def buscar_tesis(autor):
+        tesis=[]
+        for autor_tesis in AutorTesis._instancias:
+            if autor_tesis.get_autor() == autor:
+                print (autor_tesis.get_tesis().get_nombre())
 
-    def buscar_autores(libro):
-        autores = []
-        for autor_libro in AutorLibro._instancias:
-            if autor_libro.get_libro() == libro:
-                print(autor_libro.get_autor().get_nombre())
-        
-        if len(autores) == 0:
-            print("No hay autores registrados para este libro.")
+        if len(tesis)==0:
+            print("No se encontraron tesis relacionadas con el autor seleccionado.")
         else:
-            print("Autores registrados para este libro:")
+            print("Tesis relacionadas con el autor seleccionado:")
+            for tesis in tesis:
+                print(tesis.get_nombre())
+
+    def buscar_autores(tesis):
+        autores=[]
+        for autor_tesis in AutorTesis._instancias:
+            if autor_tesis.get_tesis() == tesis:
+                print (autor_tesis.get_autor().get_nombre())
+
+        if len(autores)==0:
+            print("No se encontraron autores relacionados con la tesis seleccionada.")
+        else:
+            print("Autores relacionados con la tesis seleccionada:")
             for autor in autores:
                 print(autor.get_nombre())
-    

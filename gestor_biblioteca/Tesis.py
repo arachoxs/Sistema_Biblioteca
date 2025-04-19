@@ -1,5 +1,7 @@
 from gestor_biblioteca.share import *
 from gestor_biblioteca.Categoria import Categoria
+from gestor_biblioteca.Autor import Autor
+from gestor_biblioteca.AutorTesis import AutorTesis
 
 class Tesis:
     _instancias = []
@@ -56,9 +58,21 @@ class Tesis:
     def set_estado(self, estado):
         self.__estado = estado
 
+    #metodos para instancias
+    def buscar_tesis(idTesis):
+        for tesis in Tesis._instancias:
+            if tesis.get_idTesis() == idTesis:
+                return tesis
+        return None
+
     #metodos
     def registrar():
         idTesis = pedir_entero("Ingrese el id de la tesis: ")
+
+        while Tesis.buscar_tesis(idTesis) != None:
+            print("El id de la tesis ya existe.")
+            idTesis = pedir_entero("Ingrese el id de la tesis: ")
+
         nombre = input("Ingrese el nombre de la tesis: ")   
         institucion = input("Ingrese la institucion de la tesis: ")
 
@@ -68,8 +82,11 @@ class Tesis:
         campoEstudio = input("Ingrese el campo de estudio de la tesis: ")
         nPaginas = pedir_entero("Ingrese el numero de paginas de la tesis: ")
 
-        Tesis(idTesis, nombre, institucion, fechaInvestigacion, fechaPrestacion, campoEstudio, nPaginas)
-        Tesis.asignar_categoria()
+        tesis = Tesis(idTesis, nombre, institucion, fechaInvestigacion, fechaPrestacion, campoEstudio, nPaginas)
+        tesis.asignar_categoria()
+
+        AutorTesis.relacionar_autor_tesis(tesis) # Relacionar autor con la tesis
+        print("Tesis registrada con exito.")
     
     def consultar(self):
         print("ID Tesis: ", self.__idTesis)
@@ -80,6 +97,8 @@ class Tesis:
         print("Campo de estudio: ", self.__campoEstudio)
         print("Numero de paginas: ", self.__nPaginas)
         print("Estado: ", self.__estado)
+        print("Autores: ")
+        AutorTesis.mostrar_autores_tesis(self) # Mostrar autores relacionados con la tesis
 
         if (self.__categoria_tesis == None):
             print("No se ha asignado categoria a la tesis.")
@@ -102,6 +121,7 @@ class Tesis:
             print("7. Numero de paginas")
             print("8. Estado")
             print("9. Categoria")
+            print("10. Agregar nuevo autor")
 
 
             opcion = pedir_entero("Ingrese la opcion: ")
@@ -161,6 +181,8 @@ class Tesis:
                 print("Estado modificado con exito.")
             elif opcion == 9:
                 self.asignar_categoria()
+            elif opcion == 10:
+                AutorTesis.relacionar_autor_tesis(self)
             elif opcion == 0:
                 band = False
                 print("Saliendo de la modificación de la Tesis...")
@@ -181,24 +203,22 @@ class Tesis:
        
 def asignar_categoria(self):
     band = True
-    if self.__estado == "No disponible":
-        print("No se puede asignar categoria a una tesis No disponible.")
+    if self.__categoria_tesis != None:
+        print("La tesis ya tiene una categoria asignada.")
         return
-    if len(Categoria.obtener_instancias()) == 0:
-        print("No hay categorias disponibles para asignar.")
+    if len(Categoria._instancias) == 0:
+        print("No hay categorias disponibles.")
         return
     while band:
-        print("Categorias disponibles:")
-        for index in range(len(Categoria.obtener_instancias())):
-            print(index + 1, ". ", Categoria.obtener_instancias()[index].get_nombre())
-
+        print("\n--- Categorias disponibles ---")
+        Categoria.mostrar_categorias()
+        print("0. Salir")
         opcion = pedir_entero("Seleccione una categoria: ")
         opcion -= 1
 
-        if opcion >= 0 and opcion < len(Categoria.obtener_instancias()):
-            self.__categoria_tesis = Categoria.obtener_instancias()[opcion]
-            print("Categoria asignada con exito.")
+        if (opcion>=0 and opcion < len(Categoria._instancias)):
+            self.__categoria_tesis = Categoria.get_instancia_index(opcion)
+            print("Categoria asignada correctamente.")
             band = False
         else:
             print("Opcion no valida, intente nuevamente.")
-

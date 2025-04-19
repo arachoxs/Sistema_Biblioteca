@@ -179,7 +179,7 @@ class Libro:
                 
             elif(opcion==10):
                 AutorLibro.relacionar_autor_libro(self)
-                
+                print("Autor relacionado correctamente.")
             elif(opcion==0):
                 band=False
                 print("Saliendo de la modificacion del libro...")
@@ -206,7 +206,7 @@ class Libro:
             opcion=pedir_entero("Seleccione una categoria: ")
             opcion-=1
             
-            if(opcion>=0 and opcion<len(Categoria.instancias)):
+            if(opcion>=0 and opcion<len(Categoria._instancias)):
                 self.__categoria_libro=Categoria.get_instancia_index(opcion)
                 print("Categoria asignada correctamente")
                 band=False

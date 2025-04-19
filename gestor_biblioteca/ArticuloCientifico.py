@@ -1,5 +1,7 @@
 from gestor_biblioteca.share import *
 from gestor_biblioteca.Categoria import Categoria
+from gestor_biblioteca.Autor import Autor
+from gestor_biblioteca.AutorArticulo import AutorArticulo
 
 class ArticuloCientifico:
     _instancias = []
@@ -61,9 +63,21 @@ class ArticuloCientifico:
     def set_estado(self,estado):
         self.__estado = estado
 
+    #metodos para instancias
+    def buscar_articulo(doi):
+        for articulo in ArticuloCientifico._instancias:
+            if articulo.get_doi() == doi:
+                return articulo
+        return None
+
     #metodos
     def registrar():
         doi = input("Ingrese el DOI del articulo: ")
+
+        while ArticuloCientifico.buscar_articulo(doi) != None:
+            print("El DOI ya existe. Por favor, ingrese uno diferente.")
+            doi = input("Ingrese el DOI del articulo: ")
+
         titulo = input("Ingrese el titulo del articulo: ")
         editor = input("Ingrese el editor del articulo: ")
         
@@ -74,8 +88,11 @@ class ArticuloCientifico:
         nVolumen = pedir_entero(input("Ingrese el volumen del articulo: "))
         campoInteres = input("Ingrese el campo de interes del articulo: ")
 
-        ArticuloCientifico(doi, titulo, editor, fechaPublicacion, revista, periodicidad, nVolumen, campoInteres)
-        ArticuloCientifico.asignar_categoria()
+        articulo = ArticuloCientifico(doi, titulo, editor, fechaPublicacion, revista, periodicidad, nVolumen, campoInteres)
+        articulo.asignar_categoria()
+        AutorArticulo.relacionar_autor_articulo(articulo)
+        print("Artículo registrado correctamente.")
+        
 
 
     def consultar(self):
@@ -88,6 +105,8 @@ class ArticuloCientifico:
         print("Volumen: ", self.__nVolumen)
         print("Campo de Interes: ", self.__campoInteres)
         print("Estado: ", self.__estado)
+        print("Autores: ")
+        AutorArticulo.buscar_autores(self)
 
         if (self.__categoria_articulo == None):
             print("No se ha asignado una categoría al artículo.")
@@ -95,6 +114,10 @@ class ArticuloCientifico:
             print("Categoría del artículo: ", self.__categoria_articulo.get_nombre())
 
     def modificar(self):
+        if(self.__estado == "No Disponible"):
+            print("No se puede modificar un artículo no disponible.")
+            return
+
         print("---Artículo Científico seleccionado---")
         self.consultar()
         band=True
@@ -111,6 +134,7 @@ class ArticuloCientifico:
             print("8. Campo de Interes")
             print("9. Estado")
             print("10. Categoría")
+            print("11. Agregar nuevo autor")
 
 
             opcion = pedir_entero(input("Seleccione una opción: "))
@@ -174,6 +198,9 @@ class ArticuloCientifico:
                 print("Estado modificado correctamente.")
             elif opcion == 10:
                 self.asignar_categoria()
+            elif opcion == 11:
+                AutorArticulo.relacionar_autor_articulo(self)
+                print("Autor relacionado correctamente.")
             elif opcion == 0:
                 band = False
                 print("Saliendo de la modificación de el artículo...")
@@ -186,7 +213,7 @@ class ArticuloCientifico:
         
         respuesta = input("¿Está seguro que desea eliminar el artículo? (s/n): ")
         
-        if respuesta.lower == "s":
+        if respuesta.lower() == "s":
             ArticuloCientifico._instancias.remove(self)
             print("Artículo eliminado correctamente.")
         else:
@@ -198,20 +225,20 @@ class ArticuloCientifico:
         if self.__estado == "No Disponible":
             print("No se puede asignar una categoría a un artículo no disponible.")
             return
-        if len(Categoria.obtener_instancias()) == 0:
-            print("No hay categorías disponibles.")
+        if len(Categoria._instancias) == 0:
+            print("No hay categorías disponibles para asignar.")
             return
         while band:
-            print("Categorías disponibles:")
-            for index in range(len(Categoria.obtener_instancias())):
-                print(index + 1, ". ", Categoria.obtener_instancias()[index].get_nombre_categoria())
+            print("Categorias disponibles:")
+            Categoria.mostrar_categorias()
+            print("0. Salir")
 
-            opcion = pedir_entero(input("Seleccione una categoría: "))
+            opcion = pedir_entero("Seleccione una categoria: ")
             opcion -= 1
 
-            if opcion >= 0 and opcion < len(Categoria.obtener_instancias()):
-                self.__categoria_articulo = Categoria.obtener_instancias()[opcion]
+            if (opcion>=0 and opcion < len(Categoria._instancias)):
+                self.__categoria_articulo = Categoria.get_instancia_index(opcion)
                 print("Categoría asignada correctamente.")
                 band = False
             else:
-                print("Opción no válida. Intente nuevamente.")
+                print("Opción no válida, intente nuevamente.")

@@ -31,8 +31,14 @@ class Categoria:
     # Métodos para manejar subcategorías
     def agregar_subcategoria(self, subcategoria):
         if isinstance(subcategoria, Categoria):
-            self.__subcategorias.append(subcategoria)
-            print(f"Subcategoría '{subcategoria.get_nombre()}' agregada a '{self.__nombre}'.")
+            if subcategoria == self:
+                print("Error: Una categoría no puede ser subcategoría de sí misma.")
+                return
+            if subcategoria not in self.__subcategorias:
+                self.__subcategorias.append(subcategoria)
+                print(f"Subcategoría '{subcategoria.get_nombre()}' agregada a '{self.__nombre}'.")
+            else:
+                print(f"Error: La subcategoría '{subcategoria.get_nombre()}' ya está asociada a '{self.__nombre}'.")
         else:
             print("Error: La subcategoría debe ser una instancia de la clase Categoria.")
 
@@ -41,19 +47,24 @@ class Categoria:
             self.__subcategorias.remove(subcategoria)
             print(f"Subcategoría '{subcategoria.get_nombre()}' eliminada de '{self.__nombre}'.")
         else:
-            print("Error: La subcategoría no está asociada a esta categoría.")
+            print(f"Error: La subcategoría '{subcategoria.get_nombre()}' no está asociada a '{self.__nombre}'.")
 
     def listar_subcategorias(self):
         if self.__subcategorias:
             print(f"Subcategorías de '{self.__nombre}':")
-            for subcategoria in self.__subcategorias:
-                print(f"- {subcategoria.get_nombre()}")
+            for index, subcategoria in enumerate(self.__subcategorias, start=1):
+                print(f"{index}. {subcategoria.get_nombre()}")
         else:
             print(f"La categoría '{self.__nombre}' no tiene subcategorías.")
 
     #methods
     def crear():
         idCategoria=pedir_entero(input("Ingrese el id de la categoria: "))
+
+        while Categoria.buscar_categoria(idCategoria) != None:
+            print("El id de la categoria ya existe.")
+            idCategoria=pedir_entero("Ingrese el id de la categoria: ")
+
         nombre=input("Ingrese el nombre de la categoria: ")
         descripcion=input("Ingrese la descripcion de la categoria: ")
     
@@ -63,19 +74,72 @@ class Categoria:
         print("ID Categoria: ", self.__idCategoria)
         print("Nombre: ", self.__nombre)
         print("Descripcion: ", self.__descripcion)
+        print("Subcategorías:")
+        if self.__subcategorias:
+            self.listar_subcategorias()
+
 
     def modificar(self):
         print("ID Categoria: ", self.__idCategoria)
         print("Nombre: ", self.__nombre)
         print("Descripcion: ", self.__descripcion)
         
-        idCategoria=pedir_entero(input("Ingrese el nuevo id de la categoria: "))
-        nombre=input("Ingrese el nuevo nombre de la categoria: ")
-        descripcion=input("Ingrese la nueva descripcion de la categoria: ")
+        # Modificar atributos de la categoría principal
+        idCategoria = pedir_entero(input("Ingrese el nuevo id de la categoria: "))
+        nombre = input("Ingrese el nuevo nombre de la categoria: ")
+        descripcion = input("Ingrese la nueva descripcion de la categoria: ")
         
         self.set_idCategoria(idCategoria)
         self.set_nombre(nombre)
         self.set_descripcion(descripcion)
+        
+        # Modificar subcategorías
+        while True:
+            print("\nOpciones para subcategorías:")
+            print("1. Listar subcategorías")
+            print("2. Modificar una subcategoría")
+            print("3. Agregar una nueva subcategoría")
+            print("4. Eliminar una subcategoría")
+            print("5. Salir")
+            
+            opcion = pedir_entero(input("Seleccione una opción: "))
+            
+            if opcion == 1:
+                self.listar_subcategorias()
+            elif opcion == 2:
+                if not self.__subcategorias:
+                    print("No hay subcategorías para modificar.")
+                    continue
+                self.listar_subcategorias()
+                index = pedir_entero("Seleccione el número de la subcategoría a modificar: ") - 1
+                if 0 <= index < len(self.__subcategorias):
+                    subcategoria = self.__subcategorias[index]
+                    print(f"Modificando subcategoría '{subcategoria.get_nombre()}':")
+                    subcategoria.modificar()
+                else:
+                    print("Opción inválida.")
+            elif opcion == 3:
+                idSubcategoria = pedir_entero("Ingrese el id de la nueva subcategoría: ")
+                nombreSubcategoria = input("Ingrese el nombre de la nueva subcategoría: ")
+                descripcionSubcategoria = input("Ingrese la descripción de la nueva subcategoría: ")
+                nueva_subcategoria = Categoria(idSubcategoria, nombreSubcategoria, descripcionSubcategoria)
+                self.agregar_subcategoria(nueva_subcategoria)
+            elif opcion == 4:
+                if not self.__subcategorias:
+                    print("No hay subcategorías para eliminar.")
+                    continue
+                self.listar_subcategorias()
+                index = pedir_entero(input("Seleccione el número de la subcategoría a eliminar: ")) - 1
+                if 0 <= index < len(self.__subcategorias):
+                    subcategoria = self.__subcategorias[index]
+                    self.eliminar_subcategoria(subcategoria)
+                else:
+                    print("Opción inválida.")
+            elif opcion == 5:
+                print("Saliendo de la modificación de subcategorías.")
+                break
+            else:
+                print("Opción inválida. Intente nuevamente.")
 
     def eliminar(self):
         print("ID Categoria: ", self.__idCategoria)
