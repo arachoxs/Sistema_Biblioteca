@@ -78,30 +78,57 @@ class Prestamo:
                 return prestamo
         return None
     
-    def registrar(self):
-        # Se busca el lector asociado al préstamo
-        lector = Lector.buscar_lector(input("Ingrese el ID del lector asociado: "))
+    def obtener_prestamos_activos(lector):
+        """Devuelve una lista de préstamos activos asociados a un lector."""
+        prestamos_activos = []
+        for prestamo in Prestamo._instancias:
+            if prestamo.get_lector() == lector and prestamo.get_activo():
+                prestamos_activos.append(prestamo)
+        return prestamos_activos
+    
+    def verificar_lector_elegible(self, lector):
+        """Verifica si un lector es elegible para un préstamo."""
         # Se verifica que el lector sea una instancia de la clase Lector
         if lector is None:
-            print("No se pudo registrar el préstamo: Lector no encontrado.")
+            print("Lector no encontrado.")
             return
-        # Verificar que el lector no tenga más del máximo de préstamos activos permitido
-        prestamos_activos_lector = 0
+        
+        # Se verifica que el lector no esté inactivo
+        if lector.get_estado() == "Inactivo":
+            print("El lector está inactivo y no puede realizar préstamos.")
+            return False
+        
+        # Se verifica que el lector no esté suspendido
+        if lector.get_estado() == "Suspendido":
+            print("El lector está suspendido y no puede realizar préstamos.")
+            return False
+        
+        # Se verifica que el lector no esté sancionado (con multa activa)
+        if lector.get_estado() == "Sancionado":
+            print("El lector está sancionado y no puede realizar préstamos.")
+            return False
+        
+        # Se verifica que el lector no tenga más del máximo de préstamos activos permitido
+        prestamos_activos_lector = len(self.obtener_prestamos_activos(lector))
+        
         # Se define el máximo de préstamos por lector
         # (Este valor puede ser ajustado según las políticas de la biblioteca)
         MAX_PRESTAMOS_POR_LECTOR = 3
-        for prestamo_existente in Prestamo._instancias:
-            # Verificar si el préstamo está activo y pertenece al lector
-            if prestamo_existente.get_lector() == lector and prestamo_existente.get_activo():
-                prestamos_activos_lector += 1
         
         if prestamos_activos_lector >= MAX_PRESTAMOS_POR_LECTOR:
-            print(f"No se pudo registrar el préstamo: El lector {lector.get_id_lector()} ya tiene {MAX_PRESTAMOS_POR_LECTOR} préstamos activos.")
-            return
+            print(f"El lector ya tiene {MAX_PRESTAMOS_POR_LECTOR} préstamos activos.")
+            return False
         
-        # Se verifica que el lector esté en estado normal
-        if lector.get_estado() != "Normal":
-            print("No se pudo registrar el préstamo: El lector no está en estado normal.")
+        return True
+
+    
+    def registrar(self):
+        # Se busca el lector asociado al préstamo
+        lector = Lector.buscar_lector(input("Ingrese el ID del lector asociado: "))
+        
+        # Se verifica que el lector sea elegible para el préstamo
+        if not self.verificar_lector_elegible(lector):
+            print("No se pudo registrar el préstamo: Lector no elegible.")
             return
 
         # Se busca la copia asociada al préstamo        
@@ -180,15 +207,14 @@ class Prestamo:
             print(f"ID de lector asociado: {self.lector.get_id_lector()}")
         print(f"Estado del lector: {self.lector.get_estado() if self.lector else 'No asociado'}")
         print(f"Estado de la copia: {self.copia.get_estado() if self.copia else 'No asociado'}")
-
+        
     def cancelar(self):
         """Cancela el préstamo y actualiza el estado de la copia y el lector."""
         if self.copia is not None:
             self.copia.set_estado("Disponible")
             self.copia = None
         if self.lector is not None:
-            self.lector.set_estado("Normal")
-            self.lector = None
+            self.actualizar_estado_lector()
         self.activo = False
         print(f"Préstamo con ID {self.id_prestamo} cancelado con éxito.")
 
