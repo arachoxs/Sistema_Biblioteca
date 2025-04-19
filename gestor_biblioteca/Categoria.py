@@ -203,8 +203,7 @@ class Categoria:
             print(f"{i}. {instancia.get_nombre()}")
             
     def get_instancia_index(cls,index):
-        return cls._instancias[index]
-    
+        return cls._instancias[index] 
 # -------------------- EJEMPLO DE USO SUBCATEGORÍAS --------------------
     
 # categoria_principal = Categoria(1, "Ciencia", "Libros de ciencia")

@@ -65,7 +65,7 @@ class Multa:
                 print("Ya existe una multa asociada a este préstamo.")
                 return False
         
-        id_multa=len(Multa.instancias)+1    
+        id_multa=len(Multa.instancias)+1
         prestamo=Prestamo.buscar_prestamo(id_prestamo)
         
         if not prestamo:
@@ -92,6 +92,7 @@ class Multa:
         Multa.asociar_prestamo(prestamo)
         prestamo.set_activo(False)
         #se debe pasar el lector a estado sancionado
+        
         
         return True
         

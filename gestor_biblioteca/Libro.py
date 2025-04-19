@@ -1,7 +1,58 @@
-from gestor_biblioteca.share import pedir_entero , pedir_nombre
+from gestor_biblioteca.share import pedir_entero , pedir_nombre , clear_console , esperar
 from gestor_biblioteca.Categoria import Categoria
 from gestor_biblioteca.Autor import Autor
 from gestor_biblioteca.AutorLibro import AutorLibro
+
+def menu_libro():
+        band=True
+        while(band):
+            clear_console()
+            print("\n\n---Menu libro---")
+            print("1. Registrar libro")
+            print("2. Consultar libro")
+            print("3. Modificar libro")
+            print("4. Inhabilitar libro")
+            print("0. Salir")
+            
+            opcion=pedir_entero("Seleccione una opcion: ")
+            
+            if(opcion==1):
+                print("---Registrar libro---")
+                Libro.registrar()
+                
+            elif(opcion==2):
+                isbn = input("Ingrese el ISBN del libro a consultar: ")
+                libro=Libro.buscar_libro(isbn)
+                if(libro!=None):
+                    libro.consultar()
+                else:
+                    print("El libro no existe")
+                    
+            elif(opcion==3):
+                isbn = input("Ingrese el ISBN del libro a modificar: ")
+                libro=Libro.buscar_libro(isbn)
+                if(libro!=None):
+                    libro.modificar()
+                else:
+                    print("El libro no existe")
+                    
+            elif(opcion==4):
+                isbn = input("Ingrese el ISBN del libro a inhabilitar: ")
+                libro=Libro.buscar_libro(isbn)
+                if(libro!=None):
+                    libro.inhabilitar()
+                    print("Libro inhabilitado correctamente")
+                else:
+                    print("El libro no existe")
+                    
+            elif(opcion==0):
+                band=False
+                print("Saliendo del menu de libros...")
+                
+            else:
+                print("Opcion no valida, intente nuevamente")
+                
+            
 
 class Libro:
     _instancias=[]
@@ -135,10 +186,9 @@ class Libro:
             print("4. Editorial")
             print("5. Genero")
             print("6. Idioma")
-            print("7. Numero de copias")
-            print("8. Categoria")
+            print("7. Asignar nueva Categoria")
+            print("8. Asignar nuevo autor")
             print("9. Desactivar libro")
-            print("10. Agregar nuevo autor")
             print("0. Salir")
             
             opcion=pedir_entero("Seleccione una opcion: ")
@@ -168,19 +218,17 @@ class Libro:
                 self.set_idioma(idioma)
                 
             elif(opcion==7):
-                n_copias = pedir_entero("Ingrese el nuevo numero de copias del libro: ")
-                self.set_n_copias(n_copias)
+                self.asignar_categoria()
                 
             elif(opcion==8):
-                self.asignar_categoria()
+                AutorLibro.relacionar_autor_libro(self)
+                print("Autor relacionado correctamente.")
+                esperar()
                 
             elif(opcion==9):
                 self.inhabilitar()
                 print("Libro desactivado correctamente")
                 
-            elif(opcion==10):
-                AutorLibro.relacionar_autor_libro(self)
-                print("Autor relacionado correctamente.")
             elif(opcion==0):
                 band=False
                 print("Saliendo de la modificacion del libro...")
@@ -211,5 +259,10 @@ class Libro:
                 self.__categoria_libro=Categoria.get_instancia_index(opcion)
                 print("Categoria asignada correctamente")
                 band=False
+            elif(opcion==-1):
+                band=False
+                print("Saliendo de la asignacion de categoria...")
             else:
                 print("Opcion no valida, intente nuevamente")
+                
+    
