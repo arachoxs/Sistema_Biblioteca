@@ -16,6 +16,7 @@ def menu_libro():
             
             opcion=pedir_entero("Seleccione una opcion: ")
             
+            clear_console()
             if(opcion==1):
                 print("---Registrar libro---")
                 Libro.registrar()

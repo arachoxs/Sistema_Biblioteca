@@ -11,6 +11,7 @@ def menu_autor():
         print("0. Salir")
         
         opcion=pedir_entero("Seleccione una opcion: ")
+        clear_console()
         
         if(opcion==1):
             Autor.registrar()

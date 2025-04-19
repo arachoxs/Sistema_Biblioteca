@@ -95,7 +95,7 @@ class Date:
             return False
 
         # No necesitamos validar el año aquí a menos que haya restricciones (ej. año > 0)
-        if self.año <= 1200:
+        if self.año <= 0 or self.año > 2025:
              # print(f"Error: Año inválido ({self.año})") # Debug
              return False
 
