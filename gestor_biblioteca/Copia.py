@@ -133,5 +133,3 @@ class Copia:
             print(f"Una copia generada y asociada con éxito al libro '{libro.get_titulo()}'.")
         else:
             print(f"{n_copias} copias generadas y asociadas con éxito al libro '{libro.get_titulo()}'.")
-
-            
