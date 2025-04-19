@@ -82,7 +82,7 @@ class Libro:
         año = pedir_entero("Ingrese el año del libro: ")
         editorial = input("Ingrese la editorial del libro: ")
         genero = input("Ingrese el genero del libro: ")
-        idioma = pedir_nombre("Ingrese el idioma del libro: ")
+        idioma = input("Ingrese el idioma del libro: ")
         n_copias = pedir_entero("Ingrese el número de copias del libro: ")
         
         #numero copias mayor o igual a 1
@@ -116,7 +116,8 @@ class Libro:
             print("Categoria: No asignada")
         else:
             print("Categoria: ", self.__categoria_libro.get_nombre())
-            
+        print("--Autores libro--")
+        AutorLibro.buscar_autores(self)
                 
     def modificar(self):
         if(self.__activo!=True):
