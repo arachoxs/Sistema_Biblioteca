@@ -93,6 +93,7 @@ class Multa:
         prestamo.set_activo(False)
         #se debe pasar el lector a estado sancionado
         
+        
         return True
         
         

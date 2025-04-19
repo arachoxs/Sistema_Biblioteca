@@ -1,3 +1,6 @@
+import os
+
+
 def pedir_entero(mensaje):
     while True:
         try:
@@ -16,7 +19,8 @@ def pedir_nombre(mensaje):
         else:
             print("Entrada inválida. Por favor, ingrese una cadena no vacía.")  
     
-
+def clear_console():
+    os.system('cls' if os.name == 'nt' else 'clear')
     
 # --- Clase Date ---
 # Esta clase representa una fecha y permite operaciones como sumar días y validar fechas.
