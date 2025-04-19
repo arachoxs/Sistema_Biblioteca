@@ -1,4 +1,4 @@
-from gestor_biblioteca.share import pedir_entero , pedir_nombre , clear_console , esperar
+from gestor_biblioteca.share import pedir_entero , clear_console , esperar
 from gestor_biblioteca.Categoria import Categoria
 from gestor_biblioteca.Autor import Autor
 from gestor_biblioteca.AutorLibro import AutorLibro
