@@ -4,7 +4,7 @@ def menu_autor():
     band=False
     while(not band):
         clear_console()
-        print("\n\n---Menu Autor---")
+        print("---Menu Autor---")
         print("1. Registrar Autor")
         print("2. Consultar Autor")
         print("3. Modificar Autor")
@@ -14,9 +14,11 @@ def menu_autor():
         clear_console()
         
         if(opcion==1):
+            print("---Registrar Autor---")
             Autor.registrar()
             
         elif(opcion==2):
+            print("---Consultar Autor---")
             id=pedir_entero("Ingrese el id del autor a consultar: ")
             autor=Autor.buscar_autor(id)
             if autor == None:
@@ -26,6 +28,7 @@ def menu_autor():
             Autor.consultar(autor)
             
         elif(opcion==3):
+            print("---Modificar Autor---")
             id=pedir_entero("Ingrese el id del autor a modificar: ")
             autor=Autor.buscar_autor(id)
             if autor == None:
