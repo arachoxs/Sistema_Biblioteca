@@ -190,5 +190,29 @@ class Prestamo:
             self.lector.set_estado("Normal")
             self.lector = None
         self.activo = False
-        Prestamo._instancias.remove(self)
         print(f"Préstamo con ID {self.id_prestamo} cancelado con éxito.")
+
+    def finalizar(self):
+        """Finaliza el préstamo y actualiza el estado de la copia y el lector."""
+        if self.copia is not None:
+            self.copia.set_estado("Disponible")
+            self.copia = None
+        if self.lector is not None:
+            self.lector.set_estado("Normal")
+            self.lector = None
+        self.activo = False
+        print(f"Préstamo con ID {self.id_prestamo} finalizado con éxito.")
+
+    def consultar_productos_en_prestamo(id_lector):
+        """Consulta los productos en préstamo de un lector."""
+        lector = Lector.buscar_lector(id_lector)
+        if lector is None:
+            print("Lector no encontrado.")
+            return
+        prestamos = [prestamo for prestamo in Prestamo._instancias if prestamo.get_lector() == lector and prestamo.get_activo()]
+        if prestamos:
+            print(f"Productos en préstamo del lector {lector.get_id_lector()}:")
+            for prestamo in prestamos:
+                prestamo.consultar()
+        else:
+            print(f"No hay productos en préstamo para el lector {lector.get_id_lector()}.")
