@@ -1,4 +1,4 @@
-from gestor_biblioteca.share import pedir_entero , pedir_nombre
+from gestor_biblioteca.share import pedir_entero , pedir_nombre , clear_console
 from gestor_biblioteca.Categoria import Categoria
 from gestor_biblioteca.Autor import Autor
 from gestor_biblioteca.AutorLibro import AutorLibro
@@ -6,6 +6,7 @@ from gestor_biblioteca.AutorLibro import AutorLibro
 def menu_libro():
         band=True
         while(band):
+            clear_console()
             print("\n\n---Menu libro---")
             print("1. Registrar libro")
             print("2. Consultar libro")
@@ -50,6 +51,8 @@ def menu_libro():
                 
             else:
                 print("Opcion no valida, intente nuevamente")
+                
+            
 
 class Libro:
     _instancias=[]
@@ -255,6 +258,9 @@ class Libro:
                 self.__categoria_libro=Categoria.get_instancia_index(opcion)
                 print("Categoria asignada correctamente")
                 band=False
+            elif(opcion==-1):
+                band=False
+                print("Saliendo de la asignacion de categoria...")
             else:
                 print("Opcion no valida, intente nuevamente")
                 

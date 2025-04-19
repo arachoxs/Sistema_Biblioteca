@@ -9,21 +9,14 @@ def pedir_entero(mensaje):
         except ValueError:
             print("Entrada inválida. Por favor, ingrese un número entero.")
             
-def pedir_nombre(mensaje):
-    #funcion usada mayormente para pedir nombres de cosas
-    
-    while True:
-        valor = input(mensaje)
-        if valor.strip() and valor.isalpha():  # Verifica que no esté vacío o solo contenga espacios
-            return valor
-        else:
-            print("Entrada inválida. Por favor, ingrese una cadena no vacía.")  
-    
 def clear_console():
     os.system('cls' if os.name == 'nt' else 'clear')
     
 # --- Clase Date ---
 # Esta clase representa una fecha y permite operaciones como sumar días y validar fechas.
+def esperar():
+    input("Presioná Enter para continuar...")
+
 
 class Date:
     def __init__(self, dia, mes, año):
