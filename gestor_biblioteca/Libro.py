@@ -60,6 +60,7 @@ def menu_libro():
                 
             else:
                 print("Opcion no valida, intente nuevamente")
+                esperar()
                 
             
 

@@ -233,6 +233,5 @@ class Lector:
         print(f"Lector con ID {self.id_lector} suspendido.")
         esperar()
 
-
     
     

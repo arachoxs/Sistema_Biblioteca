@@ -3,6 +3,59 @@ from gestor_biblioteca.Categoria import Categoria
 from gestor_biblioteca.Autor import Autor
 from gestor_biblioteca.AutorTesis import AutorTesis
 
+def menu_tesis():
+    band = True
+    while band:
+        clear_console()
+        print("--- Menu Tesis ---")
+        print("0. Salir")
+        print("1. Registrar Tesis")
+        print("2. Consultar Tesis")
+        print("3. Modificar Tesis")
+        print("4. Eliminar Tesis")
+
+        opcion = pedir_entero("Seleccione una opción: ")
+
+        clear_console()
+        if opcion == 1:
+            print("--- Registrar Tesis ---")
+            Tesis.registrar()
+        elif opcion == 2:
+            print("--- Consultar Tesis ---")
+            idTesis = pedir_entero("Ingrese el id de la tesis: ")
+            tesis = Tesis.buscar_tesis(idTesis)
+            if tesis != None:
+                tesis.consultar()
+            else:
+                print("No se encontró la tesis.")
+                esperar()
+        elif opcion == 3:
+            print("--- Modificar Tesis ---")
+            idTesis = pedir_entero("Ingrese el id de la tesis: ")
+            tesis = Tesis.buscar_tesis(idTesis)
+            if tesis != None:
+                tesis.modificar()
+            else:
+                print("No se encontró la tesis.")
+                esperar()
+        elif opcion == 4:
+            print("--- Eliminar Tesis ---")
+            idTesis = pedir_entero("Ingrese el id de la tesis: ")
+            tesis = Tesis.buscar_tesis(idTesis)
+            if tesis != None:
+                tesis.eliminar()
+            else:
+                print("No se encontró la tesis.")
+                esperar()
+        elif opcion == 0:
+            band = False
+            print("Saliendo del menu de tesis...")
+        else:
+            print("Opcion no valida, intente nuevamente")
+            esperar()
+    esperar()
+
+
 class Tesis:
     _instancias = []
 
@@ -120,7 +173,7 @@ class Tesis:
             print("6. Campo de estudio")
             print("7. Numero de paginas")
             print("8. Estado")
-            print("9. Categoria")
+            print("9. Categoría")
             print("10. Agregar nuevo autor")
 
 
@@ -211,7 +264,7 @@ def asignar_categoria(self):
         return
     while band:
         print("\n--- Categorias disponibles ---")
-        Categoria.mostrar_categorias()
+        Categoria.mostrar_instancias()
         print("0. Salir")
         opcion = pedir_entero("Seleccione una categoria: ")
         opcion -= 1
@@ -232,8 +285,6 @@ def asignar_categoria(self):
                         print(f"Subcategoría '{self.__categoria_tesis.get_nombre()}' asignada correctamente.")
                     else:
                         print("Índice de subcategoría inválido. Intente nuevamente.")
-                    self.__categoria_tesis = categoria_seleccionada.get_subcategoria_index(opcion_sub)
-                    print(f"Subcategoria ' {categoria_seleccionada.get_subcategoria_index(opcion_sub).get_nombre()} ' asignada correctamente")
                 elif opcion_subcategoria == 2:
                     self.__categoria_tesis = categoria_seleccionada
                     print(f"Categoría '{categoria_seleccionada.get_nombre()}' asignada correctamente.")
