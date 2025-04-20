@@ -1,287 +1,267 @@
-from gestor_biblioteca.share import pedir_entero , clear_console , esperar
+from gestor_biblioteca.share import pedir_entero, clear_console, esperar
 from gestor_biblioteca.Categoria import Categoria
 from gestor_biblioteca.Autor import Autor
 from gestor_biblioteca.AutorLibro import AutorLibro
 
 def menu_libro():
-        band=True
-        while(band):
-            clear_console()
-            print("---Menu libro---")
-            print("1. Registrar libro")
-            print("2. Consultar libro")
-            print("3. Modificar libro")
-            print("4. Inhabilitar libro")
-            print("0. Salir")
-            
-            opcion=pedir_entero("Seleccione una opcion: ")
-            
-            clear_console()
-            if(opcion==1):
-                print("---Registrar libro---")
-                Libro.registrar()
-                
-            elif(opcion==2):
-                print("---Consultar libro---")
-                isbn = input("Ingrese el ISBN del libro a consultar: ")
-                libro=Libro.buscar_libro(isbn)
-                if(libro!=None):
-                    libro.consultar()
-                else:
-                    print("El libro no existe")
-                    esperar()
-                    
-            elif(opcion==3):
-                print("---Modificar libro---")
-                isbn = input("Ingrese el ISBN del libro a modificar: ")
-                libro=Libro.buscar_libro(isbn)
-                if(libro!=None):
-                    libro.modificar()
-                else:
-                    print("El libro no existe")
-                    esperar()
-                    
-            elif(opcion==4):
-                print("---Inhabilitar libro---")
-                isbn = input("Ingrese el ISBN del libro a inhabilitar: ")
-                libro=Libro.buscar_libro(isbn)
-                if(libro!=None):
-                    libro.inhabilitar()
-                    print("Libro inhabilitado correctamente")
-                    esperar()
-                else:
-                    print("El libro no existe")
-                    esperar()
-                    
-            elif(opcion==0):
-                band=False
-                print("Saliendo del menu de libros...")
-                esperar()
-                
+    """Menú principal para gestionar libros."""
+    while True:
+        clear_console()
+        opcion = pedir_entero("--- Menú Libro ---\n\n1) Registrar libro\n2) Consultar libro\n3) Modificar libro\n4) Inhabilitar libro\n0) Salir\n\nSeleccione una opción: ", True)
+        clear_console()
+        if opcion == 1:
+            print("--- Registrar libro ---")
+            Libro.registrar()
+
+        elif opcion == 2:
+            print("--- Consultar libro ---")
+            isbn = input("Ingrese el ISBN del libro a consultar: ").strip()
+            libro = Libro.buscar_libro(isbn)
+            if libro:
+                libro.consultar()
             else:
-                print("Opcion no valida, intente nuevamente")
+                print("El libro no existe.")
                 esperar()
-                
-            
+
+        elif opcion == 3:
+            print("--- Modificar libro ---")
+            isbn = input("Ingrese el ISBN del libro a modificar: ").strip()
+            libro = Libro.buscar_libro(isbn)
+            if libro:
+                libro.modificar()
+            else:
+                print("El libro no existe.")
+                esperar()
+
+        elif opcion == 4:
+            print("--- Inhabilitar libro ---")
+            isbn = input("Ingrese el ISBN del libro a inhabilitar: ").strip()
+            libro = Libro.buscar_libro(isbn)
+            if libro:
+                libro.inhabilitar()
+                print("Libro inhabilitado correctamente.")
+                esperar()
+            else:
+                print("El libro no existe.")
+                esperar()
+
+        elif opcion == 0:
+            print("Saliendo del menú de libros...")
+            esperar()
+            break
+
+        else:
+            print("Opción no válida, intente nuevamente.")
+            esperar()
+
 
 class Libro:
-    _instancias=[]
-    
-    
-    def __init__(self, isbn , titulo , edicion , año , editorial, genero , idioma , n_copias, activo=True):
-        self.__isbn=isbn
-        self.__titulo=titulo
-        self.__edicion=edicion
-        self.__año=año
-        self.__editorial=editorial
-        self.__genero=genero
-        self.__idioma=idioma
-        self.__n_copias=n_copias
-        self.__activo=activo
-        self.__categoria_libro=None
-        
+    _instancias = []
+
+    def __init__(self, isbn, titulo, edicion, año, editorial, genero, idioma, n_copias, activo=True):
+        self.__isbn = isbn
+        self.__titulo = titulo
+        self.__edicion = edicion
+        self.__año = año
+        self.__editorial = editorial
+        self.__genero = genero
+        self.__idioma = idioma
+        self.__n_copias = n_copias
+        self.__activo = activo
+        self.__categoria_libro = None
+
         Libro._instancias.append(self)
-    #getters
+
+    # Getters
     def get_isbn(self):
         return self.__isbn
+
     def get_titulo(self):
         return self.__titulo
+
     def get_edicion(self):
         return self.__edicion
+
     def get_año(self):
         return self.__año
+
     def get_editorial(self):
         return self.__editorial
+
     def get_genero(self):
         return self.__genero
+
     def get_idioma(self):
         return self.__idioma
+
     def get_n_copias(self):
         return self.__n_copias
+
     def get_activo(self):
         return self.__activo
-    
-    #setters
-    def set_isbn(self, isbn):
-        self.__isbn=isbn
+
+    # Setters
     def set_titulo(self, titulo):
-        self.__titulo=titulo
+        self.__titulo = titulo
+
     def set_edicion(self, edicion):
-        self.__edicion=edicion
+        self.__edicion = edicion
+
     def set_año(self, año):
-        self.__año=año
+        self.__año = año
+
     def set_editorial(self, editorial):
-        self.__editorial=editorial
+        self.__editorial = editorial
+
     def set_genero(self, genero):
-        self.__genero=genero
+        self.__genero = genero
+
     def set_idioma(self, idioma):
-        self.__idioma=idioma
-    def set_n_copias(self, n_copias):
-        self.__n_copias=n_copias
+        self.__idioma = idioma
+
     def set_activo(self, activo):
-        self.__activo=activo
-        
-    #metodos de instancias    
+        self.__activo = activo
+
+    # Métodos de clase
+    @staticmethod
     def buscar_libro(isbn):
+        """Busca un libro por su ISBN."""
         for libro in Libro._instancias:
             if libro.get_isbn() == isbn:
                 return libro
         return None
-    
+
+    @staticmethod
     def registrar():
+        """Registra un nuevo libro."""
         from gestor_biblioteca.Copia import Copia  # Importación dentro del método
-        
-        isbn = input("Ingrese el ISBN del libro: ")
-        
-        #veificar unicidad del isbn
-        while Libro.buscar_libro(isbn) != None:
-            print("El ISBN ya existe, pruebe con otro valor")
-            isbn = input("Ingrese el ISBN del libro: ")
-        
-        titulo = input("Ingrese el titulo del libro: ")
-        edicion = pedir_entero("Ingrese la edicion del libro: ")
+
+        isbn = input("Ingrese el ISBN del libro: ").strip()
+
+        # Verificar unicidad del ISBN
+        while Libro.buscar_libro(isbn):
+            print("El ISBN ya existe, pruebe con otro valor.")
+            isbn = input("Ingrese el ISBN del libro: ").strip()
+
+        titulo = input("Ingrese el título del libro: ").strip()
+        edicion = pedir_entero("Ingrese la edición del libro: ")
         año = pedir_entero("Ingrese el año del libro: ")
-        editorial = input("Ingrese la editorial del libro: ")
-        genero = input("Ingrese el genero del libro: ")
-        idioma = input("Ingrese el idioma del libro: ")
+        editorial = input("Ingrese la editorial del libro: ").strip()
+        genero = input("Ingrese el género del libro: ").strip()
+        idioma = input("Ingrese el idioma del libro: ").strip()
         n_copias = pedir_entero("Ingrese el número de copias del libro: ")
-        
-        #numero copias mayor o igual a 1
+
+        # Validar que el número de copias sea mayor o igual a 1
         while n_copias < 1:
-            print("El número de copias debe ser mayor o igual a 1")
+            print("El número de copias debe ser mayor o igual a 1.")
             n_copias = pedir_entero("Ingrese el número de copias del libro: ")
-        
-        libro = Libro(isbn, titulo, edicion, año, editorial, genero, idioma, n_copias) #crea libro
-        libro.asignar_categoria() # Asignar categoría al libro
-        AutorLibro.relacionar_autor_libro(libro) # Relacionar autor al libro
+
+        # Crear el libro
+        libro = Libro(isbn, titulo, edicion, año, editorial, genero, idioma, n_copias)
+        libro.asignar_categoria()  # Asignar categoría al libro
+        AutorLibro.relacionar_autor_libro(libro)  # Relacionar autor al libro
+
         # Crear copias del libro
-        Copia.generar_copias(n_copias, libro)  # Corrige el orden de los parámetros
-        
-        print("Libro registrado correctamente")
+        Copia.generar_copias(n_copias, libro)
+
+        print("Libro registrado correctamente.")
         esperar()
-        
-        
+
     def consultar(self):
-        print("ISBN: ", self.__isbn)
-        print("Titulo: ", self.__titulo)
-        print("Edicion: ", self.__edicion)
-        print("Año: ", self.__año)
-        print("Editorial: ", self.__editorial)
-        print("Genero: ", self.__genero)
-        print("Idioma: ", self.__idioma)
-        print("Numero de copias: ", self.__n_copias)
-        if(self.__activo==True):
-            print("Estado: Activo")
-        else:
-            print("Estado: Inactivo")
-        if(self.__categoria_libro==None):
-            print("Categoria: No asignada")
-        else:
-            print("Categoria: ", self.__categoria_libro.get_nombre())
-        print("--Autores libro--")
+        """Muestra la información del libro."""
+        print(f"ISBN: {self.__isbn}")
+        print(f"Título: {self.__titulo}")
+        print(f"Edición: {self.__edicion}")
+        print(f"Año: {self.__año}")
+        print(f"Editorial: {self.__editorial}")
+        print(f"Género: {self.__genero}")
+        print(f"Idioma: {self.__idioma}")
+        print(f"Número de copias: {self.__n_copias}")
+        print(f"Estado: {'Activo' if self.__activo else 'Inactivo'}")
+        print(f"Categoría: {self.__categoria_libro.get_nombre() if self.__categoria_libro else 'No asignada'}")
+        print("-- Autores del libro --")
         AutorLibro.buscar_autores(self)
         esperar()
-                
+
     def modificar(self):
-        if(self.__activo!=True):
-            print("El libro no se encuentra activo, no se puede modificar")
+        """Permite modificar los datos del libro."""
+        if not self.__activo:
+            print("El libro no se encuentra activo, no se puede modificar.")
             esperar()
             return
-        
-        print("---Libro seleccionado---")
-        self.consultar()
-        band=True
-        while(band):
-            print("\n\n---Que desea modificar?---")
-            print("1. Titulo")
-            print("2. Edicion")
+
+        while True:
+            print("\n--- Modificar Libro ---")
+            print("1. Título")
+            print("2. Edición")
             print("3. Año")
             print("4. Editorial")
-            print("5. Genero")
+            print("5. Género")
             print("6. Idioma")
-            print("7. Asignar nueva Categoria")
-            print("8. Asignar nuevo autor")
-            print("9. Desactivar libro")
+            print("7. Asignar nueva categoría")
+            print("8. Relacionar nuevo autor")
             print("0. Salir")
-            
-            opcion=pedir_entero("Seleccione una opcion: ")
-               
-            if(opcion==1):
-                titulo = input("Ingrese el nuevo titulo del libro: ")
-                self.set_titulo(titulo)
-                
-            elif(opcion==2):
-                edicion = pedir_entero("Ingrese la nueva edicion del libro: ")
-                self.set_edicion(edicion)
-                
-            elif(opcion==3):
-                año = pedir_entero("Ingrese el nuevo año del libro: ")
-                self.set_año(año)
-                
-            elif(opcion==4):
-                editorial = input("Ingrese la nueva editorial del libro: ")
-                self.set_editorial(editorial)
-                
-            elif(opcion==5):
-                genero = input("Ingrese el nuevo genero del libro: ")
-                self.set_genero(genero)
-                
-            elif(opcion==6):
-                idioma = input("Ingrese el nuevo idioma del libro: ")
-                self.set_idioma(idioma)
-                
-            elif(opcion==7):
+
+            opcion = pedir_entero("Seleccione una opción: ")
+
+            if opcion == 1:
+                self.set_titulo(input("Ingrese el nuevo título del libro: ").strip())
+            elif opcion == 2:
+                self.set_edicion(pedir_entero("Ingrese la nueva edición del libro: "))
+            elif opcion == 3:
+                self.set_año(pedir_entero("Ingrese el nuevo año del libro: "))
+            elif opcion == 4:
+                self.set_editorial(input("Ingrese la nueva editorial del libro: ").strip())
+            elif opcion == 5:
+                self.set_genero(input("Ingrese el nuevo género del libro: ").strip())
+            elif opcion == 6:
+                self.set_idioma(input("Ingrese el nuevo idioma del libro: ").strip())
+            elif opcion == 7:
                 self.asignar_categoria()
-                
-            elif(opcion==8):
+            elif opcion == 8:
                 AutorLibro.relacionar_autor_libro(self)
                 print("Autor relacionado correctamente.")
                 esperar()
-                
-            elif(opcion==9):
-                self.inhabilitar()
-                print("Libro desactivado correctamente")
+            elif opcion == 0:
+                print("Saliendo de la modificación del libro...")
                 esperar()
-                
-            elif(opcion==0):
-                band=False
-                print("Saliendo de la modificacion del libro...")
-                esperar()
-            else:   
-                print("Opcion no valida, intente nuevamente")
-                
-        
+                break
+            else:
+                print("Opción no válida, intente nuevamente.")
+
     def inhabilitar(self):
-        self.__activo=False
-        
+        """Inhabilita el libro."""
+        self.__activo = False
+        print("El libro ha sido inhabilitado.")
+
     def asignar_categoria(self):
-        band=True
-        if self.__activo!=True:
-            print("El libro no se encuentra activo, no se puede asignar categoria")
+        """Asigna una categoría al libro."""
+        if not self.__activo:
+            print("El libro no se encuentra activo, no se puede asignar categoría.")
             esperar()
             return
-        if len(Categoria._instancias)==0:
-            print("No hay categorias disponibles para asignar")
+
+        if not Categoria._instancias:
+            print("No hay categorías disponibles para asignar.")
             esperar()
             return
-        while(band):
-            print("Categorias disponibles:")
+
+        while True:
+            print("Categorías disponibles:")
             Categoria.mostrar_instancias()
             print("0. Salir")
-            
-            opcion=pedir_entero("Seleccione una categoria: ")
-            opcion-=1
-            
-            if(opcion>=0 and opcion<len(Categoria._instancias)):
-                self.__categoria_libro=Categoria.get_instancia_index(opcion)
-                print("Categoria asignada correctamente")
+
+            opcion = pedir_entero("Seleccione una categoría: ") - 1
+
+            if 0 <= opcion < len(Categoria._instancias):
+                self.__categoria_libro = Categoria.get_instancia_index(opcion)
+                print("Categoría asignada correctamente.")
                 esperar()
-                band=False
-            elif(opcion==-1):
-                band=False
-                print("Saliendo de la asignacion de categoria...")
+                break
+            elif opcion == -1:
+                print("Saliendo de la asignación de categoría...")
                 esperar()
+                break
             else:
-                print("Opcion no valida, intente nuevamente")
-                
-    
+                print("Opción no válida, intente nuevamente.")
+
