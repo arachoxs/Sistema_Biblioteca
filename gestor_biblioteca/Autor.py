@@ -4,13 +4,8 @@ def menu_autor():
     band=False
     while(not band):
         clear_console()
-        print("--- Menú Autor ---\n")
-        print("1. Registrar Autor")
-        print("2. Consultar Autor")
-        print("3. Modificar Autor")
-        print("0. Salir\n")
         
-        opcion=pedir_entero("Seleccione una opción: ")
+        opcion=pedir_entero("--- Menú Autor ---\n\n1) Registrar Autor\n2) Consultar Autor\n3) Modificar Autor\n0) Salir\n\nSeleccione una opción: ", True)
         clear_console()
         
         if(opcion==1):
@@ -18,23 +13,19 @@ def menu_autor():
             Autor.registrar()
             
         elif(opcion==2):
-            print("--- Consultar Autor ---\n")
-            print("1) Ver lista de autores")
-            print("2) Consultar autor por ID")
-            print("0) Salir\n")
+            opcion2=pedir_entero("--- Consultar Autor ---\n\n1) Ver lista de autores\n2) Consultar autor por ID\n0) Salir\n\nSeleccione una opción: ", True)
+            clear_console()
 
-            opcion2=pedir_entero("Seleccione una opción: ")
             if opcion2 == 1:
-                clear_console()
                 print("--- Lista de autores registrados ---\n")
                 Autor.mostrar_autores()
+
             elif opcion2 == 2:
-                clear_console()
-                print("--- Consultar Autor por ID ---\n")
-                id=pedir_entero("Ingrese el ID del autor a consultar: ")
+                id=pedir_entero("--- Consultar Autor por ID ---\n\nIngrese el ID del autor a consultar: ", True)
                 autor=Autor.buscar_autor(id)
                 if autor == None:
-                    print("No se encontró el autor.")
+                    clear_console()
+                    print(f"No se encontró el autor con ID {id}.")
                     esperar()
                     continue
                 clear_console()
@@ -42,11 +33,11 @@ def menu_autor():
                 Autor.consultar(autor)
             
         elif(opcion==3):
-            print("--- Modificar Autor ---\n")
-            id=pedir_entero("Ingrese el ID del autor a modificar: ")
+            id=pedir_entero("--- Modificar Autor ---\n\nIngrese el ID del autor a modificar: ", True)
             autor=Autor.buscar_autor(id)
             if autor == None:
-                print("No se encontró el autor.")
+                clear_console()
+                print(f"No se encontró el autor con ID {id}.")
                 esperar()
                 continue
             clear_console()
@@ -54,11 +45,9 @@ def menu_autor():
                 
         elif(opcion==0):
             band=True
-            print("Saliendo del menú de autores.")
-            esperar()
             
         else:
-            print("Opción no válida, intente nuevamente.")
+            print("Opción no válida. Por favor intente nuevamente.")
             esperar()
 class Autor:
     _instancias=[]
@@ -104,7 +93,7 @@ class Autor:
             esperar()
         else:
             for i in range(len(Autor._instancias)):
-                print(f" - ID: {Autor._instancias[i].get_id_autor()} - Nombre: {Autor._instancias[i].get_nombre()}")
+                print(f" - ID: {Autor._instancias[i].get_id_autor()} - Nombre: \"{Autor._instancias[i].get_nombre()}\"")
             esperar()
     
     def get_instancia_index(index):
@@ -117,15 +106,15 @@ class Autor:
             if Autor.buscar_autor(id_autor) == None:
                 band=True
             else:
-                print("El ID ya existe, intente con otro valor.\n")
+                print("\nEl ID ingresado ya existe, intente con otro valor.\n")
 
         nombre= input("Ingrese el nombre del autor: ")
         nacionalidad= input("Ingrese la nacionalidad del autor: ")
-        print("Ingrese la fecha nacimiento del autor:\n")
+        print("A continuación ingrese la fecha nacimiento del autor.")
         fecha_nacimiento = Date.registrar_fecha()
        
         Autor(id_autor,nombre,nacionalidad,fecha_nacimiento)         
-        print("Autor registrado correctamente.")
+        print(f"\nAutor con ID {id_autor} registrado correctamente.")
         esperar()
         
     def consultar(self):
@@ -142,10 +131,10 @@ class Autor:
             print("--- Autor seleccionado ---\n")
             self.consultar()
             print("\n--- ¿Qué desea modificar? ---\n")
-            print("1. Nombre")
-            print("2. Nacionalidad")
-            print("3. Fecha de Nacimiento")
-            print("0. Salir\n")
+            print("1) Nombre")
+            print("2) Nacionalidad")
+            print("3) Fecha de Nacimiento")
+            print("0) Salir\n")
             
             opcion=pedir_entero("Seleccione una opcion: ")
             
@@ -158,7 +147,7 @@ class Autor:
                 self.set_nacionalidad(nacionalidad)
                 
             elif(opcion==3):
-                print("Ingrese la nueva fecha nacimiento del autor:\n")
+                print("A continuación ingrese la nueva fecha nacimiento del autor:")
                 fecha_nacimiento= Date.registrar_fecha()
                 self.set_fecha_nacimiento(fecha_nacimiento)
                 
@@ -166,5 +155,7 @@ class Autor:
                 band=True
             else:
                 print("Opción no válida, intente nuevamente.")
-        
-        
+
+        clear_console()
+        print("Autor modificado correctamente.")
+        esperar()

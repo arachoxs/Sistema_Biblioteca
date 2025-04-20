@@ -1,15 +1,27 @@
+def clear_console():
+    import os
+    os.system('cls' if os.name == 'nt' else 'clear')
 
-def pedir_entero(mensaje):
+def pedir_entero(mensaje, clear_and_wait=False):
+    """
+    Pide un número entero al usuario y lo devuelve.
+    Si el usuario ingresa un valor no válido, se le pide nuevamente.
+    Si clear_and_wait es True, limpia la consola y espera a que el usuario presione Enter antes de volver a pedir el número.
+    Se recomienda el uso de clear_and_wait para la implementación de menús.
+    """
     while True:
         try:
             valor = int(input(mensaje))
             return valor
         except ValueError:
-            print("Entrada inválida. Por favor, ingrese un número entero.")
-            
-def clear_console():
-    import os
-    os.system('cls' if os.name == 'nt' else 'clear')
+            if clear_and_wait:
+                clear_console()
+                print("Valor no válido. Por favor, ingrese un número entero.")
+                esperar()
+                clear_console()
+            else:
+                print("\nValor no válido. Por favor, ingrese un número entero.\n")
+                
     
 # --- Clase Date ---
 # Esta clase representa una fecha y permite operaciones como sumar días y validar fechas.
@@ -50,7 +62,7 @@ class Date:
     def registrar_fecha():
         """Pide al usuario día, mes y año hasta que ingrese una fecha válida."""
         band = False
-        print("--- Registrando nueva fecha ---\n")
+        # print("--- Registrando nueva fecha ---\n")
         while(band == False):
             dia = pedir_entero("Ingrese el día: ")
             mes = pedir_entero("Ingrese el mes: ")
@@ -59,7 +71,7 @@ class Date:
             fecha=Date(dia,mes,año)
 
             if fecha.validar_fecha():
-                print(f"\nFecha registrada: {fecha.dia}/{fecha.mes}/{fecha.año}\n")
+                # print(f"\nFecha registrada: {fecha.dia}/{fecha.mes}/{fecha.año}\n")
                 band = True
             else:
                 print("\nFecha inválida. Intente nuevamente.\n")
