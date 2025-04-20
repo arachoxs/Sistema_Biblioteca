@@ -1,6 +1,7 @@
 from gestor_biblioteca.share import *
 from gestor_biblioteca.Copia import Copia
 from gestor_biblioteca.Lector import Lector
+from gestor_biblioteca.Multa import Multa
 import random
 
 class Prestamo:
@@ -19,6 +20,42 @@ class Prestamo:
         self.lector = None
         # Se agrega la instancia a la lista de préstamos
         Prestamo._instancias.append(self)
+    
+    def devolucion(id_lector):
+        """Realiza la devolución de un préstamo."""
+        lector = Lector.buscar_lector(id_lector)
+        if lector is None:
+            print("Lector no encontrado.")
+            return
+        
+        # Se busca el préstamo asociado al lector
+        prestamos_activos = Prestamo.obtener_prestamos_activos(lector)
+        if prestamos_activos:
+            while True:
+                print(f"---Prestamos activos para el lector: {lector.get_nombre()}---")
+                print("0.salir")
+                for i in range(len(prestamos_activos)):
+                    print(f"{i+1}. id: {prestamos_activos[i].get_id_prestamo()} Nombre_libro: {prestamos_activos[i].get_copia().get_libro().get_titulo()}")
+                
+                opcion = pedir_entero("Seleccione el préstamo a devolver: ")-1
+                if opcion == -1:
+                    break
+                elif 0 <= opcion < len(prestamos_activos):
+                    prestamo = prestamos_activos[opcion]
+                    # Se verifica que el préstamo esté activo
+                    if prestamo.get_activo():
+                        print("Ingrese la fecha de entrega real:")
+                        fecha_entrega_real = Date.registrar_fecha()
+                        Multa.generar_multa(prestamo.get_id_prestamo(), prestamo.get_fecha_entrega_estimada(), fecha_entrega_real)
+                        prestamo.finalizar()
+                        esperar()
+                    else:
+                        print("El préstamo ya ha sido finalizado.")
+                else:
+                    print("Opción no válida. Intente nuevamente.")
+                    esperar()
+        else:
+            print("No hay préstamos activos asociados al lector.")
 
     def asociar_lector(self, lector):
         # Se verifica que el lector sea una instancia de la clase Lector
