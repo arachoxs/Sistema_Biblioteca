@@ -112,7 +112,3 @@ class Lector:
     def suspender(self):
         self.set_estado("Suspendido")
         print(f"Lector con ID {self.id_lector} suspendido.")
-
-
-    
-    

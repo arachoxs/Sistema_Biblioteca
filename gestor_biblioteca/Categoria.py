@@ -1,5 +1,152 @@
 from gestor_biblioteca.share import *
 
+def menu_categoria():
+    band = True
+    while band:
+        print("--- MENÚ CATEGORÍA ---")
+        print("1. Crear categoría")
+        print("2. Consultar categoría")
+        print("3. Modificar categoría")
+        print("4. Eliminar categoría")
+        print("0. Salir")
+
+        opcion = pedir_entero("Seleccione una opción: ")
+
+        if opcion == 1:
+            print("---- Crear Categoría ----")
+            print("1. Crear categoria")
+            print("2. Crear subcategoria")
+            print("0. Salir")
+
+            opcion = pedir_entero("Seleccione una opción: ")
+            if opcion == 1:
+                Categoria.crear()
+            elif opcion == 2:
+                Categoria.mostrar_instancias()
+                op= pedir_entero("Seleccione la categoría para crear una subcategoría: ")
+                categoria = Categoria.get_instancia_index(op-1)
+                if categoria is not None:
+                    subcategoria = Categoria.crear()
+                    clear_console()
+                    categoria.agregar_subcategoria(subcategoria)
+            elif opcion == 0:
+                print("Saliendo de la creación de categoría...")
+                esperar()
+                return
+        elif opcion == 2:
+            print("---- Consultar Categoría ----")
+            print("1. Consultar categoría")
+            print("2. Consultar subcategoría")
+            print("0. Salir")
+            opcion = pedir_entero("Seleccione una opción: ")
+            if opcion == 1:
+                idCategoria = pedir_entero("Ingrese el ID de la categoría a consultar: ")
+                categoria = Categoria.buscar_categoria(idCategoria)
+                if categoria is not None:
+                    categoria.consultar()
+                else:
+                    print("Categoría no encontrada.")
+                    esperar()
+            elif opcion == 2:
+                Categoria.mostrar_instancias()
+                op = pedir_entero("Seleccione la categoría para consultar sus subcategorías: ")
+                categoria = Categoria.get_instancia_index(op-1)
+                if categoria is not None:
+                    if len(categoria.get_subcategorias()) == 0:
+                        print("No hay subcategorías registradas.")
+                    else:
+                        print("Subcategorías registradas:")
+                        categoria.listar_subcategorias()
+                        subcategoria_index = pedir_entero("Seleccione el número de la subcategoría a consultar: ")
+                        if 1 <= subcategoria_index < len(categoria.get_subcategorias()):
+                            subcategoria = categoria.get_subcategoria_index(subcategoria_index - 1)
+                            subcategoria.consultar()
+                        else:
+                            print("Opción inválida.")
+                            esperar()
+                else:
+                    print("Categoría no encontrada.")
+                    esperar()
+            elif opcion == 0:
+                print("Saliendo de la consulta de categoría...")
+                esperar()
+                return
+        elif opcion == 3:
+            print ("---- Modificar Categoría ----")
+            print ("1. Modificar categoría")
+            print ("2. Modificar subcategoría")
+            print ("0. Salir")
+            opcion = pedir_entero("Seleccione una opción: ")
+            if opcion == 1:
+                op = pedir_entero("Ingrese el ID de la categoría a modificar: ")
+                categoria = Categoria.buscar_categoria(idCategoria)
+                if categoria is not None:
+                    categoria.modificar()
+                else:
+                    print("Categoría no encontrada.")
+                    esperar()
+            elif opcion == 2:
+                Categoria.mostrar_instancias()
+                op = pedir_entero("Seleccione la categoría para modificar sus subcategorías: ")
+                categoria = Categoria.get_instancia_index(op-1)
+                if categoria is not None:
+                    if len(categoria.get_subcategorias()) == 0:
+                        print("No hay subcategorías registradas.")
+                    else:
+                        print("Subcategorías registradas:")
+                        categoria.listar_subcategorias()
+                        subcategoria_index = pedir_entero("Seleccione el número de la subcategoría a modificar: ")
+                        if 1 <= subcategoria_index < len(categoria.get_subcategorias()):
+                            subcategoria = categoria.get_subcategoria_index(subcategoria_index - 1)
+                            subcategoria.modificar()
+                        else:
+                            print("Opción inválida.")
+                            esperar()
+                else:
+                    print("Categoría no encontrada.")
+                    esperar()
+        elif opcion == 4:
+            print("---- Eliminar Categoría ----")
+            print("1. Eliminar categoría")
+            print("2. Eliminar subcategoría")
+            print("0. Salir")
+            opcion = pedir_entero("Seleccione una opción: ")
+            if opcion == 1:
+                idCategoria = pedir_entero("Ingrese el ID de la categoría a eliminar: ")
+                categoria = Categoria.buscar_categoria(idCategoria)
+                if categoria is not None:
+                    categoria.eliminar()
+                else:
+                    print("Categoría no encontrada.")
+                    esperar()
+            elif opcion == 2:
+                Categoria.mostrar_instancias()
+                op = pedir_entero("Seleccione la categoría para eliminar sus subcategorías: ")
+                categoria = Categoria.get_instancia_index(op-1)
+                if categoria is not None:
+                    if len(categoria.get_subcategorias()) == 0:
+                        print("No hay subcategorías registradas.")
+                    else:
+                        print("Subcategorías registradas:")
+                        categoria.listar_subcategorias()
+                        subcategoria_index = pedir_entero("Seleccione el número de la subcategoría a eliminar: ")
+                        if 1 <= subcategoria_index < len(categoria.get_subcategorias()):
+                            subcategoria = categoria.get_subcategoria_index(subcategoria_index - 1)
+                            subcategoria.eliminar()
+                        else:
+                            print("Opción inválida.")
+                            esperar()
+                else:
+                    print("Categoría no encontrada.")
+                    esperar()
+        elif opcion == 0:
+            band = False
+        else:
+            print("Opción inválida. Intente nuevamente.")
+            esperar()
+    esperar()
+
+# -------------------- CLASE CATEGORIA --------------------
 class Categoria:
     _instancias=[]
     
@@ -114,16 +261,17 @@ class Categoria:
 
     #methods
     def crear():
-        idCategoria=pedir_entero("Ingrese el id de la categoria: ")
+        idCategoria=pedir_entero("Ingrese el ID de la categoria: ")
 
         while Categoria.buscar_categoria(idCategoria) != None:
-            print("El id de la categoria ya existe.")
-            idCategoria=pedir_entero("Ingrese el id de la categoria: ")
+            print("El ID de la categoria ya existe.")
+            idCategoria=pedir_entero("Ingrese el ID de la categoria: ")
 
         nombre=input("Ingrese el nombre de la categoria: ")
         descripcion=input("Ingrese la descripcion de la categoria: ")
     
         Categoria(idCategoria,nombre,descripcion)
+        print("Categoria creada correctamente.")
 
     def consultar(self):
         print("ID Categoria: ", self.__idCategoria)
@@ -134,7 +282,6 @@ class Categoria:
 
 
     def modificar(self):
-        #Que desea modificar
         print("1. ID Categoria")
         print("2. Nombre")
         print("3. Descripcion")
@@ -184,7 +331,7 @@ class Categoria:
         respuesta = input("¿Está seguro que desea eliminar la categoría? (s/n): ")
         if respuesta.lower() == "s":
             Categoria._instancias.remove(self)
-            print("Categoría eliminada.")
+            print("Categoría eliminada correctamente.")
         else:
             print("Categoría no eliminada.")
 

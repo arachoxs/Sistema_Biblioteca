@@ -167,4 +167,3 @@ class Autor:
             else:
                 print("Opción no válida, intente nuevamente.")
         
-        
