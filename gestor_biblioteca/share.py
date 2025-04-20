@@ -14,7 +14,7 @@ def clear_console():
 # --- Clase Date ---
 # Esta clase representa una fecha y permite operaciones como sumar días y validar fechas.
 def esperar():
-    input("Presioná Enter para continuar...")
+    input("\nPresione Enter para continuar...")
 
 
 class Date:
@@ -50,19 +50,19 @@ class Date:
     def registrar_fecha():
         """Pide al usuario día, mes y año hasta que ingrese una fecha válida."""
         band = False
-        print("--- Registrando nueva fecha ---")
+        print("--- Registrando nueva fecha ---\n")
         while(band == False):
-            dia = pedir_entero("Ingrese el dia: ")
+            dia = pedir_entero("Ingrese el día: ")
             mes = pedir_entero("Ingrese el mes: ")
             año = pedir_entero("Ingrese el año: ")
             
             fecha=Date(dia,mes,año)
 
             if fecha.validar_fecha():
-                print(f"Fecha registrada: {fecha.dia}/{fecha.mes}/{fecha.año}")
+                print(f"\nFecha registrada: {fecha.dia}/{fecha.mes}/{fecha.año}\n")
                 band = True
             else:
-                print("Fecha inválida. Intente nuevamente.")
+                print("\nFecha inválida. Intente nuevamente.\n")
         
         return fecha
 
