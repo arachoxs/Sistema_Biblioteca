@@ -200,7 +200,10 @@ class Copia:
         esperar()
 
     def actualizar_estado(self):
-        print("--- Selección de Estado ---\n\n1) Disponible\n2) Prestada\n3) Con Retraso\n4) En Reparación\n")
+        clear_console()
+        print(f"Copia seleccionada:\n")
+        Copia.consultar(self)
+        print("\n--- Actualización de Estado ---\n\n1) Disponible\n2) Prestada\n3) Con Retraso\n4) En Reparación\n")
         estado = pedir_entero(f"Seleccione una opción: ")
         if estado == 1:
             estado = "Disponible"
@@ -211,9 +214,14 @@ class Copia:
         elif estado == 4:
             estado = "En Reparación"
         else:
-            print("\nOpción no válida. Intente nuevamente.")
+            clear_console()
+            print("Opción no válida. Intente nuevamente.")
             esperar()
+            self.actualizar_estado()
             return
+        
+        # Se actualiza el estado de la copia
+        self.estado = estado
 
         clear_console()
         print(f"Estado de la copia con ID {self.id_copia} actualizado a \"{self.estado}\".")
