@@ -217,8 +217,34 @@ def asignar_categoria(self):
         opcion -= 1
 
         if (opcion>=0 and opcion < len(Categoria._instancias)):
-            self.__categoria_tesis = Categoria.get_instancia_index(opcion)
-            print("Categoria asignada correctamente.")
+            categoria_seleccionada = Categoria.get_instancia_index(opcion)
+            if len(categoria_seleccionada.get_subcategorias()) > 0:
+                print("La categoria seleccionada tiene subcategorias asociadas.")
+                print("¿Desea asignar una subcategoria?")
+                print("1. Si")
+                print("2. No")
+                opcion_subcategoria = pedir_entero("Seleccione una opcion: ")
+                if opcion_subcategoria == 1:
+                    categoria_seleccionada.listar_subcategorias()
+                    opcion_sub = pedir_entero("Selecciona una opcion: ") - 1
+                    if 0 <= opcion_sub < len(categoria_seleccionada.get_subcategorias()):
+                        self.__categoria_tesis = categoria_seleccionada.get_subcategoria_index(opcion_sub)
+                        print(f"Subcategoría '{self.__categoria_tesis.get_nombre()}' asignada correctamente.")
+                    else:
+                        print("Índice de subcategoría inválido. Intente nuevamente.")
+                    self.__categoria_tesis = categoria_seleccionada.get_subcategoria_index(opcion_sub)
+                    print(f"Subcategoria ' {categoria_seleccionada.get_subcategoria_index(opcion_sub).get_nombre()} ' asignada correctamente")
+                elif opcion_subcategoria == 2:
+                    self.__categoria_tesis = categoria_seleccionada
+                    print(f"Categoría '{categoria_seleccionada.get_nombre()}' asignada correctamente.")
+                else:
+                    print("Opción inválida. Intente nuevamente.")
+            else:
+                self.__categoria_tesis = categoria_seleccionada
+                print(f"Categoria ' { categoria_seleccionada.get_nombre()} ' agregada correctamente")
+            band = False
+        elif opcion == -1:
+            print("Saliendo de la asignacion de categoría...")
             band = False
         else:
             print("Opcion no valida, intente nuevamente.")

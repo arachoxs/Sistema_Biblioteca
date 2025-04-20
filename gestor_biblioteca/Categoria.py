@@ -1,4 +1,4 @@
-from gestor_biblioteca.share import pedir_entero
+from gestor_biblioteca.share import *
 
 class Categoria:
     _instancias=[]
@@ -37,7 +37,7 @@ class Categoria:
 
     # Métodos para manejar subcategorías
     def agregar_subcategoria(self, subcategoria):
-        if isinstance(subcategoria, Categoria):
+        if isinstance(subcategoria, Categoria): 
             if subcategoria == self:
                 print("Error: Una categoría no puede ser subcategoría de sí misma.")
                 return
@@ -129,7 +129,6 @@ class Categoria:
         print("ID Categoria: ", self.__idCategoria)
         print("Nombre: ", self.__nombre)
         print("Descripcion: ", self.__descripcion)
-        print("Subcategorías:")
         if self.__subcategorias:
             self.listar_subcategorias()
 
@@ -189,6 +188,9 @@ class Categoria:
         else:
             print("Categoría no eliminada.")
 
+    def get_subcategoria_index(self, index):
+        return self.__subcategorias[index]
+
     @classmethod
     def obtener_instancias(cls):
         return cls._instancias.deepcopy()  # Retorna una copia de la lista de instancias
@@ -210,15 +212,15 @@ class Categoria:
 # subcategoria_1 = Categoria(2, "Física", "Libros de física")
 # subcategoria_2 = Categoria(3, "Química", "Libros de química")
 
-# Agregar subcategorías
+# # Agregar subcategorías
 # categoria_principal.agregar_subcategoria(subcategoria_1)
 # categoria_principal.agregar_subcategoria(subcategoria_2)
 
-# Consultar categoría principal
+# # Consultar categoría principal
 # categoria_principal.consultar()
 
-# Eliminar una subcategoría
-#categoria_principal.eliminar_subcategoria(subcategoria_1)
+# # Eliminar una subcategoría
+# categoria_principal.eliminar_subcategoria(subcategoria_1)
 
-# Consultar nuevamente
+# # Consultar nuevamente
 # categoria_principal.consultar()
