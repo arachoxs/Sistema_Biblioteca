@@ -9,7 +9,7 @@ def menu_lector():
         clear_console()
         
         if(opcion==1):
-            print("--- Registrar Lector ---\n")
+            # print("--- Registrar Lector ---\n")
             Lector.registrar()
             
         elif(opcion==2):
@@ -134,10 +134,13 @@ class Lector:
 
     def registrar():
         while True:
+            clear_console()
+            print("--- Registrar Lector ---\n")
             id_lector = input("Ingrese el ID del lector: ")
             if Lector.buscar_lector(id_lector) is None:
                 break
-            print("\nEl ID ya existe, intente con otro valor.\n")
+            print("ID ya registrado. Pruebe con otro valor.")
+            esperar()
         nombre = input("Ingrese el nombre del lector: ")
         telefono = input("Ingrese el teléfono del lector: ")
         direccion = input("Ingrese la dirección del lector: ")
@@ -189,7 +192,7 @@ class Lector:
 
             elif opcion == 4:
                 print("\n--- Selección de Estado ---\n1) Normal\n2) Sancionado\n3) Suspendido\n")
-                estado = input(f"Seleccione una opción: ")
+                estado = pedir_entero(f"Seleccione una opción: ")
                 if estado == "1":
                     estado = "Normal"
                 elif estado == "2":
@@ -215,22 +218,22 @@ class Lector:
     def inhabilitar(self):
         self.estado_previo = self.estado
         self.set_estado("Inactivo")
-        print(f"Lector con ID {self.id_lector} inhabilitado.")
+        print(f"Lector con ID {self.id_lector} inhabilitado correctamente.")
         esperar()
 
     def habilitar(self):
         self.estado = self.estado_previo
-        print(f"Lector con ID {self.id_lector} habilitado.")
+        print(f"Lector con ID {self.id_lector} habilitado correctamente.")
         esperar()
 
     def sancionar(self):
         self.set_estado("Sancionado")
-        print(f"Lector con ID {self.id_lector} sancionado.")
+        print(f"Lector con ID {self.id_lector} sancionado correctamente.")
         esperar()
     
     def suspender(self):
         self.set_estado("Suspendido")
-        print(f"Lector con ID {self.id_lector} suspendido.")
+        print(f"Lector con ID {self.id_lector} suspendido correctamente.")
         esperar()
 
     

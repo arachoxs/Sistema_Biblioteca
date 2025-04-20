@@ -2,16 +2,20 @@ def clear_console():
     import os
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def pedir_entero(mensaje, clear_and_wait=False):
+def pedir_entero(mensaje, clear_and_wait=False, ignore_empty=False):
     """
     Pide un número entero al usuario y lo devuelve.
     Si el usuario ingresa un valor no válido, se le pide nuevamente.
     Si clear_and_wait es True, limpia la consola y espera a que el usuario presione Enter antes de volver a pedir el número.
     Se recomienda el uso de clear_and_wait para la implementación de menús.
+    Si ignore_empty es True, se permite que el usuario ingrese una cadena vacía, en cuyo caso se devuelve None.
     """
     while True:
         try:
-            valor = int(input(mensaje))
+            valor = input(mensaje)
+            if ignore_empty and valor == "":
+                return None
+            valor = int(valor)
             return valor
         except ValueError:
             if clear_and_wait:

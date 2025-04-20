@@ -1,5 +1,81 @@
 from gestor_biblioteca.Libro import Libro
+from gestor_biblioteca.share import *
 import random
+
+def menu_copia():
+    band=False
+    while(not band):
+        clear_console()
+        
+        opcion=pedir_entero("--- Menú Copia ---\n\n1) Registrar Copia\n2) Consultar Copia\n3) Eliminar Copia\n4) Actualizar Estado de Copia\n5) Generar Copias\n0) Salir\n\nSeleccione una opción: ", True)
+        clear_console()
+        
+        if(opcion==1):
+            # print("--- Registrar Copia ---\n")
+            Copia.registrar()
+            
+        elif(opcion==2):
+            opcion2=pedir_entero("--- Consultar Copia ---\n\n1) Ver lista de copias registradas\n2) Consultar copia por ID\n0) Salir\n\nSeleccione una opción: ", True)
+            clear_console()
+
+            if opcion2 == 1:
+                print("--- Lista de copias registradas ---\n")
+                Copia.mostrar_copias()
+
+            elif opcion2 == 2:
+                id=pedir_entero("--- Consultar Copia por ID ---\n\nIngrese el ID de la copia a consultar: ", True)
+                copia=Copia.buscar_copia(id)
+                if copia == None:
+                    clear_console()
+                    print(f"No se encontró la copia con ID {id}.")
+                    esperar()
+                    continue
+                clear_console()
+                print("Copia seleccionada:\n")
+                Copia.consultar(copia)
+            
+        elif(opcion==3):
+            print("--- Eliminar Copia ---\n")
+            id=pedir_entero("Ingrese el ID de la copia a eliminar: ")
+            copia=Copia.buscar_copia(id)
+            if copia == None:
+                clear_console()
+                print(f"No se encontró la copia con ID {id}.")
+                esperar()
+                continue
+            clear_console()
+            Copia.eliminar(copia)
+
+        elif(opcion==4):
+            print("--- Actualizar Estado de Copia ---\n")
+            id=pedir_entero("Ingrese el ID de la copia a actualizar: ")
+            copia=Copia.buscar_copia(id)
+            if copia == None:
+                clear_console()
+                print(f"No se encontró la copia con ID {id}.")
+                esperar()
+                continue
+            clear_console()
+            Copia.actualizar_estado(copia)
+
+        elif(opcion==5):
+            print("--- Generar Copias ---\n")
+            id=input("Ingrese el ISBN del libro al que desea agregar copias: ")
+            libro=Libro.buscar_libro(id)
+            if libro == None:
+                clear_console()
+                print(f"No se encontró el libro con ISBN \"{id}\".")
+                esperar()
+                continue
+            n_copias=pedir_entero("Ingrese la cantidad de copias a generar: ", True)
+            Copia.generar_copias(n_copias, libro)
+
+        elif(opcion==0):
+            band=True
+        
+        else:
+            print("Opción no válida. Por favor intente nuevamente.")
+            esperar()
 
 class Copia:
     _instancias = []
@@ -45,25 +121,40 @@ class Copia:
                 return copia
         return None
     
-    def registrar(self):
-        while True: 
-            id_copia = input("Ingrese el ID de la copia (deje en blanco para una asignación automática): ")
-            ids_existentes = {copia.get_id_copia() for copia in Copia._instancias}
-            if id_copia == "":
+    @classmethod
+    def mostrar_copias(cls):
+        if len(cls._instancias) == 0:
+            print("No hay copias registradas.")
+            esperar()
+        else:
+            for i in range(len(cls._instancias)):
+                print(f" - ID: {cls._instancias[i].get_id_copia()} - Estado: \"{cls._instancias[i].get_estado()}\"")
+            esperar()
+
+    def registrar():
+        while True:
+            clear_console()
+            print("--- Registrar Copia ---\n")
+            id_copia = pedir_entero("Ingrese el ID de la copia (deje en blanco para una asignación automática): ", False, True)
+            if id_copia is None:
                 # Generar ID aleatorio de 7 dígitos
                 id_copia = random.randint(1000000, 9999999)
                 # Verificar si el ID ya existe
-                if id_copia not in ids_existentes:
-                        break
+                if Copia.buscar_copia(id_copia) is None:
+                    break
             else:
-                if id_copia in ids_existentes:
+                if Copia.buscar_copia(id_copia) is not None:
+                    clear_console()
                     print("ID ya registrado. Pruebe con otro valor.")
+                    esperar()
                 else:
                     break
 
         libro = Libro.buscar_libro(input("Ingrese el ISBN del libro asociado: "))
         if libro is None:
+            clear_console()
             print("No se pudo registrar la copia: Libro no encontrado.")
+            esperar()
             return
         estado = "Disponible"
 
@@ -71,45 +162,62 @@ class Copia:
         libro.set_n_copias(libro.get_n_copias() + 1)
         libro.set_activo(True)
 
-        print(f"Copia con ID {id_copia} registrada con exito.")
+        clear_console()
+        print(f"Copia con ID {id_copia} registrada correctamente.")
+        esperar()
 
     def consultar(self):
-        print(f"ID: {self.id_copia}")
+        print(f"ID Copia: {self.id_copia}")
         print(f"Estado: {self.estado}")
-        print(f"ISBN de libro asociado: {self.libro.get_isbn()}")
+        print(f"ISBN de libro asociado: \"{self.libro.get_isbn()}\"")
+        esperar()
 
     def eliminar(self):
         if self.estado != "Disponible":
+            clear_console()
             print("No se puede eliminar la copia porque no está disponible en la biblioteca.")
+            esperar()
             return
         
+        # Se guarda el ID de la copia para mostrarlo después de eliminarla
+        id = self.get_id_copia()
+        # Se elimina la copia de la lista de instancias
         Copia._instancias.remove(self)
+        # Se actualiza el libro asociado
         self.libro.set_n_copias(self.libro.get_n_copias() - 1)
         if self.libro.get_n_copias() == 0:
             self.libro.set_activo(False)
         if self.libro.get_n_copias() < 0:
             self.libro.set_n_copias(0)
+        
+        # Se eliminan los atributos de la copia
         self.libro = None
         self.estado = None
         self.id_copia = None
 
-        print(f"Copia con ID {self.id_copia} eliminada con exito.")
+        clear_console()
+        print(f"Copia con ID {id} eliminada con exito.")
+        esperar()
 
     def actualizar_estado(self):
-        print("Seleccione una opción:\n1. Disponible\n2. Prestada\n3. Con Retraso\n4. En Reparación")
-        opcion = input("Opción: ")
-        if opcion == "1":
-            self.estado = "Disponible"
-        elif opcion == "2":
-            self.estado = "Prestada"
-        elif opcion == "3":
-            self.estado = "Con Retraso"
-        elif opcion == "4":
-            self.estado = "En Reparación"
+        print("--- Selección de Estado ---\n\n1) Disponible\n2) Prestada\n3) Con Retraso\n4) En Reparación\n")
+        estado = pedir_entero(f"Seleccione una opción: ")
+        if estado == 1:
+            estado = "Disponible"
+        elif estado == 2:
+            estado = "Prestada"
+        elif estado == 3:
+            estado = "Con Retraso"
+        elif estado == 4:
+            estado = "En Reparación"
         else:
-            print("Opción no válida.")
+            print("\nOpción no válida. Intente nuevamente.")
+            esperar()
             return
-        print(f"Estado de la copia con ID {self.id_copia} actualizado a {self.estado}.")
+
+        clear_console()
+        print(f"Estado de la copia con ID {self.id_copia} actualizado a \"{self.estado}\".")
+        esperar()
 
     @classmethod
     def generar_copias(cls, n_copias, libro):
@@ -129,7 +237,11 @@ class Copia:
             # Asociar el libro a la nueva copia
             nueva_copia.asociar_libro(libro)
             # print(f"Copia con ID {id_copia} generada y asociada al libro '{libro.get_titulo()}'.")
+
+        clear_console()
         if n_copias == 1:
             print(f"Una copia generada y asociada con éxito al libro '{libro.get_titulo()}'.")
         else:
             print(f"{n_copias} copias generadas y asociadas con éxito al libro '{libro.get_titulo()}'.")
+
+        esperar()
