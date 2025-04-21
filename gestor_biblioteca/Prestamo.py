@@ -41,7 +41,7 @@ def menu_prestamo():
             
         elif(opcion==3):
             print("--- Devolución de Préstamo ---\n")
-            id_lector = pedir_entero("Ingrese el ID del lector que desea devolver un préstamo: ")
+            id_lector = input("Ingrese el ID del lector que desea devolver un préstamo: ")
             Prestamo.devolucion(id_lector)
 
         elif(opcion==0):
@@ -118,37 +118,52 @@ class Prestamo:
     
         lector = Lector.buscar_lector(id_lector)
         if lector is None:
+            clear_console()
             print("Lector no encontrado.")
+            esperar()
             return
         
         # Se busca el préstamo asociado al lector
         prestamos_activos = Prestamo.obtener_prestamos_activos(lector)
         if prestamos_activos:
             while True:
-                print(f"---Prestamos activos para el lector: {lector.get_nombre()}---")
-                print("0.salir")
+                clear_console()
+                print(f"--- Prestamos activos para el lector con ID {lector.get_id_lector()} ---\n")
+                print("0) Salir")
                 for i in range(len(prestamos_activos)):
-                    print(f"{i+1}. id: {prestamos_activos[i].get_id_prestamo()} Nombre_libro: {prestamos_activos[i].get_copia().get_libro().get_titulo()}")
+                    tipo_producto = prestamos_activos[i].get_tipo_producto()
+                    if tipo_producto == "Copia de libro":
+                        print(f"{i+1}) ID Préstamo: {prestamos_activos[i].get_id_prestamo()} - ID Copia: {prestamos_activos[i].get_producto().get_id_copia()}")
+                    elif tipo_producto == "Artículo científico":
+                        print(f"{i+1}) ID Préstamo: {prestamos_activos[i].get_id_prestamo()} - DOI Artículo: \"{prestamos_activos[i].get_producto().get_doi()}\"")
+                    elif tipo_producto == "Tesis":
+                        print(f"{i+1}) ID Préstamo: {prestamos_activos[i].get_id_prestamo()} - ID Tesis: {prestamos_activos[i].get_producto().get_idTesis()}")
                 
-                opcion = pedir_entero("Seleccione el préstamo a devolver: ")-1
+                opcion = pedir_entero("\nSeleccione el préstamo a devolver: ") - 1
                 if opcion == -1:
                     break
                 elif 0 <= opcion < len(prestamos_activos):
                     prestamo = prestamos_activos[opcion]
                     # Se verifica que el préstamo esté activo
                     if prestamo.get_activo():
-                        print("Ingrese la fecha de entrega real:")
+                        print("A continuación ingrese la fecha de entrega real.")
                         fecha_entrega_real = Date.registrar_fecha()
-                        Multa.generar_multa(prestamo.get_id_prestamo(), prestamo.get_fecha_entrega_estimada(), fecha_entrega_real)
-                        prestamo.finalizar()
+                        if not Multa.generar_multa(prestamo.get_id_prestamo(), prestamo.get_fecha_entrega_estimada(), fecha_entrega_real):
+                            prestamo.finalizar()
                         esperar()
+                        return
                     else:
+                        clear_console()
                         print("El préstamo ya ha sido finalizado.")
+                        esperar()
+                        return
                 else:
+                    clear_console()
                     print("Opción no válida. Intente nuevamente.")
                     esperar()
         else:
             print("No hay préstamos activos asociados al lector.")
+            esperar()
 
     def asociar_lector(self, lector):
         # Se verifica que el lector sea una instancia de la clase Lector
@@ -177,8 +192,8 @@ class Prestamo:
         return self.fecha_entrega_estimada
     def get_activo(self):
         return self.activo
-    def get_copia(self):
-        return self.copia
+    def get_producto(self):
+        return self.producto
     def get_lector(self):
         return self.lector
     
@@ -200,15 +215,6 @@ class Prestamo:
     def set_lector(self, lector):
         self.lector = lector
 
-    """"@classmethod
-    def mostrar_lectores(cls):
-        if len(cls._instancias) == 0:
-            print("No hay lectores registrados.")
-            esperar()
-        else:
-            for i in range(len(cls._instancias)):
-                print(f" - ID: \"{cls._instancias[i].get_id_lector()}\" - Nombre: \"{cls._instancias[i].get_nombre()}\"")
-            esperar()"""
     # Métodos de la clase
     @classmethod
     def mostrar_prestamos(cls):
@@ -382,13 +388,27 @@ class Prestamo:
         if opcion == 1:
             print(f"--- Registrar Préstamo ---\n\nId Préstamo: {id_prestamo}\nID Lector: {lector.get_id_lector()}\nID Copia: {producto.get_id_copia()}\n")
         elif opcion == 2:
-            print(f"--- Registrar Préstamo ---\n\nId Préstamo: {id_prestamo}\nID Lector: {lector.get_id_lector()}\DOI Artículo: \"{producto.get_doi()}\"\n")
+            print(f"--- Registrar Préstamo ---\n\nId Préstamo: {id_prestamo}\nID Lector: {lector.get_id_lector()}\nDOI Artículo: \"{producto.get_doi()}\"\n")
         elif opcion == 3: 
             print(f"--- Registrar Préstamo ---\n\nId Préstamo: {id_prestamo}\nID Lector: {lector.get_id_lector()}\nID Tesis: {producto.get_idTesis()}\n")
         
         print("A continuación ingrese la fecha de préstamo.")
         fecha_prestamo = Date.registrar_fecha()
         dias_prestamo = pedir_entero("Ingrese la cantidad de días de préstamo: ")
+        # Se verifica que los días no sean superiores a 30
+        if dias_prestamo > 30:
+            clear_console()
+            print("No se puede registrar un préstamo por más de 30 días.")
+            esperar()
+            return
+        
+        # Se verifica que los días no sean negativos
+        if dias_prestamo < 0:
+            clear_console()
+            print("No se puede registrar un préstamo por menos de 0 días.")
+            esperar()
+            return
+        
         fecha_entrega_estimada = fecha_prestamo.sumar_dias(dias_prestamo)
         activo = True
 
@@ -431,24 +451,12 @@ class Prestamo:
 
         esperar()
 
-    def cancelar(self):
-        """Cancela el préstamo y actualiza el estado de la copia y el lector."""
-        if self.copia is not None:
-            self.copia.set_estado("Disponible")
-            self.copia = None
-        if self.lector is not None:
-            self.actualizar_estado_lector()
-        self.activo = False
-        print(f"Préstamo con ID {self.id_prestamo} cancelado con éxito.")
-
     def finalizar(self):
         """Finaliza el préstamo y actualiza el estado de la copia y el lector."""
-        if self.copia is not None:
-            self.copia.set_estado("Disponible")
-            self.copia = None
+        if self.producto is not None:
+            self.producto.set_estado("Disponible")
         if self.lector is not None:
             self.lector.set_estado("Normal")
-            self.lector = None
         self.activo = False
         print(f"Préstamo con ID {self.id_prestamo} finalizado con éxito.")
 

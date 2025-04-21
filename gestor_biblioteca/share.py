@@ -209,44 +209,53 @@ class Date:
 # --- Nueva función externa ---
 
 def diferencia_fechas(fecha1, fecha2):
-    
     """
     Calcula la diferencia en días entre dos objetos date.
-    Devuelve un entero positivo que representa el número de días entre las fechas.
+    Devuelve un entero que representa el número de días entre las fechas.
+    Si fecha1 es posterior a fecha2, el resultado será positivo.
+    Si fecha1 es anterior a fecha2, el resultado será negativo.
+    Si las fechas son iguales, el resultado será cero.
     """
-    # Asegurarse de que fecha1 sea la más temprana
-    if fecha1 > fecha2:
-        fecha1, fecha2 = fecha2, fecha1 # Intercambiar si fecha1 es posterior
-        
+    # Determinar el orden de las fechas
     if fecha1 == fecha2:
         return 0
 
-    # Copiamos la fecha menor para no modificarla
+    # Copiamos las fechas para no modificarlas
     fecha_temp = Date(fecha1.dia, fecha1.mes, fecha1.año)
+    fecha_objetivo = Date(fecha2.dia, fecha2.mes, fecha2.año)
     contador_dias = 0
 
-    # Iteramos día por día desde fecha_temp hasta alcanzar fecha2
-    while fecha_temp != fecha2:
-        # Usamos el método sumar_dias(1) para avanzar un día
-        # Nota: Esto crea un nuevo objeto date en cada paso, puede ser ineficiente
-        # para diferencias muy grandes. Una alternativa es modificar fecha_temp in-place.
-        # Modifiquemos in-place para eficiencia:
+    # Determinar la dirección del conteo
+    incremento = 1 if fecha1 < fecha2 else -1
 
-        dias_mes_actual = fecha_temp._dias_en_mes(fecha_temp.mes, fecha_temp.año) # Necesita acceso a _dias_en_mes
+    # Iteramos día por día en la dirección adecuada
+    while fecha_temp != fecha_objetivo:
+        if incremento > 0:  # Avanzar un día
+            dias_mes_actual = fecha_temp._dias_en_mes()
+            if fecha_temp.dia < dias_mes_actual:
+                fecha_temp.dia += 1
+            else:  # Pasar al siguiente mes
+                fecha_temp.dia = 1
+                if fecha_temp.mes < 12:
+                    fecha_temp.mes += 1
+                else:  # Pasar al siguiente año
+                    fecha_temp.mes = 1
+                    fecha_temp.año += 1
+        else:  # Retroceder un día
+            if fecha_temp.dia > 1:
+                fecha_temp.dia -= 1
+            else:  # Retroceder al mes anterior
+                if fecha_temp.mes > 1:
+                    fecha_temp.mes -= 1
+                else:  # Retroceder al año anterior
+                    fecha_temp.mes = 12
+                    fecha_temp.año -= 1
+                fecha_temp.dia = fecha_temp._dias_en_mes()
 
-        if fecha_temp.dia < dias_mes_actual:
-            fecha_temp.dia += 1
-        else: # Pasar al siguiente mes
-            fecha_temp.dia = 1
-            if fecha_temp.mes < 12:
-                fecha_temp.mes += 1
-            else: # Pasar al siguiente año
-                fecha_temp.mes = 1
-                fecha_temp.año += 1
+        contador_dias += incremento
 
-        contador_dias += 1
         # Medida de seguridad para evitar bucles infinitos si algo falla
-        if contador_dias > 365 * 300: # Límite arbitrario (aprox 300 años)
+        if abs(contador_dias) > 365 * 300:  # Límite arbitrario (aprox 300 años)
             raise OverflowError("La diferencia de fechas es demasiado grande o hay un bucle infinito.")
 
     return contador_dias

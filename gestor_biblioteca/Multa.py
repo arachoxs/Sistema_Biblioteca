@@ -120,21 +120,21 @@ class Multa:
             return False
 
         lector = prestamo.get_lector()
-        dias_retraso = max(0, diferencia_fechas(fecha_entrega_estimado, fecha_entrega_real) - 1)
+        diferencia = diferencia_fechas(fecha_entrega_estimado, fecha_entrega_real)
 
-        if dias_retraso == 0:
+        if diferencia <= 0:
             print("No hay retraso; no se genera multa.")
             return False
 
-        dias_multa = Multa.calcular_multa(dias_retraso)
+        dias_multa = Multa.calcular_multa(diferencia)
         fecha_inicio_multa = fecha_entrega_real.sumar_dias(1)
         fecha_fin_multa = fecha_inicio_multa.sumar_dias(dias_multa)
 
         # Crear la multa
         id_multa = len(Multa._instancias) + 1
-        multa = Multa(id_multa, lector, fecha_entrega_real, dias_retraso, dias_multa, fecha_inicio_multa, fecha_fin_multa)
+        multa = Multa(id_multa, lector, fecha_entrega_real, diferencia, dias_multa, fecha_inicio_multa, fecha_fin_multa)
         multa.set_prestamo(prestamo)
-        prestamo.set_activo(False)
+        prestamo.finalizar()
         lector.sancionar()
 
         print(f"Multa generada exitosamente con ID {id_multa}.")
