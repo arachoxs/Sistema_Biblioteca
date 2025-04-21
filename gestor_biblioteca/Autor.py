@@ -94,12 +94,14 @@ class Autor:
             esperar()
         else:
             for i in range(len(Autor._instancias)):
-                print(f"{i+1}. - ID: {Autor._instancias[i].get_id_autor()} - Nombre: \"{Autor._instancias[i].get_nombre()}\"")
+                print(f"{i+1}) - ID: {Autor._instancias[i].get_id_autor()} - Nombre: \"{Autor._instancias[i].get_nombre()}\"")
     
     def get_instancia_index(index):
         return Autor._instancias[index]
     
     def registrar():
+        clear_console()
+        print("--- Registrar Autor ---\n")
         band=False
         while(not band):
             id_autor= pedir_entero("Ingrese el ID del autor: ")
@@ -107,10 +109,13 @@ class Autor:
                 band=True
             else:
                 print("\nEl ID ingresado ya existe, intente con otro valor.\n")
+                esperar()
 
         nombre= input("Ingrese el nombre del autor: ")
         nacionalidad= input("Ingrese la nacionalidad del autor: ")
-        print("A continuación ingrese la fecha nacimiento del autor.")
+        
+        clear_console()
+        print("A continuación ingrese la fecha nacimiento del autor:")
         fecha_nacimiento = Date.registrar_fecha()
        
         Autor(id_autor,nombre,nacionalidad,fecha_nacimiento)         
@@ -139,22 +144,25 @@ class Autor:
             opcion=pedir_entero("Seleccione una opcion: ")
             
             if(opcion==1):
-                nombre = input("Ingrese el nuevo nombre del autor: ")
+                nombre = input("\nIngrese el nuevo nombre del autor: ")
                 self.set_nombre(nombre)
                 
             elif(opcion==2):
-                nacionalidad = input("Ingrese la nueva nacionalidad del autor: ")
+                nacionalidad = input("\nIngrese la nueva nacionalidad del autor: ")
                 self.set_nacionalidad(nacionalidad)
                 
             elif(opcion==3):
-                print("A continuación ingrese la nueva fecha nacimiento del autor:")
+                print("\nA continuación ingrese la nueva fecha nacimiento del autor:")
                 fecha_nacimiento= Date.registrar_fecha()
                 self.set_fecha_nacimiento(fecha_nacimiento)
                 
             elif(opcion==0):
+                print("\nSaliendo del menú de modificación de autor...")
+                esperar()
                 band=True
             else:
                 print("Opción no válida, intente nuevamente.")
+                esperar()
 
         clear_console()
         print("Autor modificado correctamente.")

@@ -1,6 +1,5 @@
 from gestor_biblioteca.share import pedir_entero, clear_console, esperar
 from gestor_biblioteca.Categoria import Categoria
-from gestor_biblioteca.Autor import Autor
 from gestor_biblioteca.AutorLibro import AutorLibro
 
 def menu_libro():
@@ -14,14 +13,25 @@ def menu_libro():
             Libro.registrar()
 
         elif opcion == 2:
-            print("--- Consultar libro ---")
-            isbn = input("Ingrese el ISBN del libro a consultar: ").strip()
-            libro = Libro.buscar_libro(isbn)
-            if libro:
-                libro.consultar()
-            else:
-                print("El libro no existe.")
+            opcion2=pedir_entero("--- Consultar Libro ---\n\n1) Ver lista de libros\n2) Consultar libro por ID\n0) Salir\n\nSeleccione una opción: ", True)
+            clear_console()
+
+            if opcion2 == 1:
+                print("--- Lista de libros registrados ---\n")
+                Libro.mostrar_libros()
                 esperar()
+
+            elif opcion2 == 2:
+                id=input("--- Consultar Libro por ID ---\n\nIngrese el ID del libro a consultar: ")
+                libro = Libro.buscar_libro(id)
+                if libro == None:
+                    clear_console()
+                    print(f"No se encontró el libro con ID \"{id}\".")
+                    esperar()
+                    continue
+                clear_console()
+                print("Libro seleccionado:\n")
+                libro.consultar()
 
         elif opcion == 3:
             print("--- Modificar libro ---")
@@ -125,6 +135,14 @@ class Libro:
     def set_activo(self, activo):
         self.__activo = activo
 
+    def mostrar_libros():
+        """Muestra la lista de libros registrados."""
+        if len(Libro._instancias) == 0:
+            print("No hay libros registrados.")
+            esperar()
+        else:
+            for i in range(len(Libro._instancias)):
+                print(f"{i+1}) - ISBN: {Libro._instancias[i].get_isbn()} - Título: \"{Libro._instancias[i].get_titulo()}\"")
     # Métodos de clase
     @staticmethod
     def buscar_libro(isbn):
@@ -167,7 +185,7 @@ class Libro:
         # Crear copias del libro
         Copia.generar_copias(n_copias, libro)
 
-        print("Libro registrado correctamente.")
+        print("\n---Libro registrado correctamente.---")
         esperar()
 
     def consultar(self):
@@ -194,6 +212,7 @@ class Libro:
             return
 
         while True:
+            clear_console()
             print("\n--- Modificar Libro ---")
             print("1. Título")
             print("2. Edición")
