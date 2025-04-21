@@ -17,12 +17,12 @@ def menu_libro():
             clear_console()
 
             if opcion2 == 1:
-                print("--- Lista de lectores registrados ---\n")
+                print("--- Lista de libros registrados ---\n")
                 Libro.mostrar_libros()
                 esperar()
 
             elif opcion2 == 2:
-                id=input("--- Consultar Lector por ID ---\n\nIngrese el ID del lector a consultar: ")
+                id=input("--- Consultar Libro por ID ---\n\nIngrese el ID del libro a consultar: ")
                 libro = Libro.buscar_libro(id)
                 if libro == None:
                     clear_console()
