@@ -182,6 +182,9 @@ class Categoria:
                 return categoria
         return None
     
+    def get_instancia_index(index):
+        return Categoria._instancias[index] 
+    
     # Métodos para manejar subcategorías
     def agregar_subcategoria(self, subcategoria):
         if isinstance(subcategoria, Categoria): 
@@ -351,8 +354,7 @@ class Categoria:
         for i, instancia in enumerate(cls._instancias, start=1):
             print(f"{i}. {instancia.get_nombre()}")
             
-    def get_instancia_index(cls,index):
-        return cls._instancias[index] 
+    
 # -------------------- EJEMPLO DE USO SUBCATEGORÍAS --------------------
     
 # categoria_principal = Categoria(1, "Ciencia", "Libros de ciencia")
