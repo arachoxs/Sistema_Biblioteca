@@ -22,6 +22,48 @@ class Prestamo:
         Prestamo._instancias.append(self)
     
     def devolucion(id_lector):
+        """
+    Realiza la devolución de un préstamo asociado a un lector.
+
+    Parámetros:
+    -----------
+    id_lector : int
+        El ID del lector que desea devolver un préstamo.
+
+    Descripción:
+    ------------
+    Esta función permite realizar la devolución de un préstamo activo asociado a un lector. 
+    Primero, busca al lector por su ID. Si el lector no existe, muestra un mensaje de error.
+    Luego, busca los préstamos activos asociados al lector. Si hay préstamos activos, 
+    muestra una lista de ellos y permite al usuario seleccionar cuál desea devolver.
+
+    Durante la devolución:
+    - Se solicita la fecha de entrega real.
+    - Se genera una multa si la devolución se realiza después de la fecha estimada de entrega.
+    - Se finaliza el préstamo y se actualizan los estados correspondientes.
+
+    Si no hay préstamos activos asociados al lector, se muestra un mensaje informativo.
+
+    Flujo de la función:
+    --------------------
+    1. Buscar al lector por su ID.
+    2. Verificar si el lector tiene préstamos activos.
+    3. Mostrar una lista de préstamos activos y permitir al usuario seleccionar uno.
+    4. Solicitar la fecha de entrega real.
+    5. Generar una multa si corresponde.
+    6. Finalizar el préstamo y actualizar los estados.
+    7. Mostrar mensajes informativos en caso de errores o acciones completadas.
+
+    Excepciones:
+    ------------
+    - Si el lector no existe, se muestra "Lector no encontrado."
+    - Si no hay préstamos activos, se muestra "No hay préstamos activos asociados al lector."
+    - Si el usuario selecciona una opción inválida, se muestra "Opción no válida. Intente nuevamente."
+
+    Ejemplo de uso:
+    ---------------
+    devolucion(12345)
+    """
         """Realiza la devolución de un préstamo."""
         lector = Lector.buscar_lector(id_lector)
         if lector is None:
