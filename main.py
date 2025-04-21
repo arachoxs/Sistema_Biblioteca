@@ -50,7 +50,7 @@ def menu():
             esperar()
 
 if __name__=="__main__":
-    libro = Libro("1",1,1,1,1,1,1,1)
-    Copia.generar_copias(5, libro)
+    # libro = Libro("1",1,1,1,1,1,1,1)
+    # Copia.generar_copias(5, libro)
     menu()
     
