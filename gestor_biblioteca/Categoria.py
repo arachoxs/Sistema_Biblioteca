@@ -1,8 +1,40 @@
-from gestor_biblioteca.share import *
+#from gestor_biblioteca.share import *
+def esperar():
+    input("\nPresione Enter para continuar...")
+
+def clear_console():
+    import os
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def pedir_entero(mensaje, clear_and_wait=False, ignore_empty=False):
+    """
+    Pide un número entero al usuario y lo devuelve.
+    Si el usuario ingresa un valor no válido, se le pide nuevamente.
+    Si clear_and_wait es True, limpia la consola y espera a que el usuario presione Enter antes de volver a pedir el número.
+    Se recomienda el uso de clear_and_wait para la implementación de menús.
+    Si ignore_empty es True, se permite que el usuario ingrese una cadena vacía, en cuyo caso se devuelve None.
+    """
+    while True:
+        try:
+            valor = input(mensaje)
+            if ignore_empty and valor == "":
+                return None
+            valor = int(valor)
+            return valor
+        except ValueError:
+            if clear_and_wait:
+                clear_console()
+                print("Valor no válido. Por favor, ingrese un número entero.")
+                esperar()
+                clear_console()
+            else:
+                print("\nValor no válido. Por favor, ingrese un número entero.\n")
+                
 
 def menu_categoria():
     band = True
     while band:
+        clear_console()
         print("--- MENÚ CATEGORÍA ---")
         print("1. Crear categoría")
         print("2. Consultar categoría")
@@ -11,6 +43,7 @@ def menu_categoria():
         print("0. Salir")
 
         opcion = pedir_entero("Seleccione una opción: ")
+        clear_console()
 
         if opcion == 1:
             print("---- Crear Categoría ----")
@@ -26,13 +59,12 @@ def menu_categoria():
                 op= pedir_entero("Seleccione la categoría para crear una subcategoría: ")
                 categoria = Categoria.get_instancia_index(op-1)
                 if categoria is not None:
-                    subcategoria = Categoria.crear()
+                    subcategoria = Categoria.crear(False)
                     clear_console()
                     categoria.agregar_subcategoria(subcategoria)
             elif opcion == 0:
                 print("Saliendo de la creación de categoría...")
                 esperar()
-                return
         elif opcion == 2:
             print("---- Consultar Categoría ----")
             print("1. Consultar categoría")
@@ -70,7 +102,6 @@ def menu_categoria():
             elif opcion == 0:
                 print("Saliendo de la consulta de categoría...")
                 esperar()
-                return
         elif opcion == 3:
             print ("---- Modificar Categoría ----")
             print ("1. Modificar categoría")
@@ -144,18 +175,20 @@ def menu_categoria():
         else:
             print("Opción inválida. Intente nuevamente.")
             esperar()
-    esperar()
 
 # -------------------- CLASE CATEGORIA --------------------
 class Categoria:
     _instancias=[]
     
-    def __init__(self,idCategoria,nombre,descripcion):
+    def __init__(self,idCategoria,nombre,descripcion, esPrincipal=True):
         self.__idCategoria=idCategoria
         self.__nombre=nombre
         self.__descripcion=descripcion
         self.__subcategorias = [] # Lista para almacenar subcategorías
-        Categoria._instancias.append(self)
+        # Solo agregar a _instancias si es una categoría principal
+        self.__esPrincipal = esPrincipal
+        if esPrincipal: 
+            Categoria._instancias.append(self)
 
     #getters
     def get_idCategoria(self):
@@ -166,6 +199,8 @@ class Categoria:
         return self.__descripcion
     def get_subcategorias(self):
         return self.__subcategorias.copy()  # Retorna una copia de la lista de subcategorías
+    def get_esPrincipal(self):
+        return self.__esPrincipal
     
     #setters
     def set_idCategoria(self,idCategoria):
@@ -260,7 +295,7 @@ class Categoria:
             print("Entrada inválida. Por favor, ingrese un número.")
 
     #methods
-    def crear():
+    def crear(esPrincipal=True):
         idCategoria=pedir_entero("Ingrese el ID de la categoria: ")
 
         while Categoria.buscar_categoria(idCategoria) != None:
@@ -270,7 +305,7 @@ class Categoria:
         nombre=input("Ingrese el nombre de la categoria: ")
         descripcion=input("Ingrese la descripcion de la categoria: ")
     
-        Categoria(idCategoria,nombre,descripcion)
+        Categoria(idCategoria,nombre,descripcion,esPrincipal)
         print("Categoria creada correctamente.")
 
     def consultar(self):
@@ -356,18 +391,28 @@ class Categoria:
 # -------------------- EJEMPLO DE USO SUBCATEGORÍAS --------------------
     
 # categoria_principal = Categoria(1, "Ciencia", "Libros de ciencia")
-# subcategoria_1 = Categoria(2, "Física", "Libros de física")
-# subcategoria_2 = Categoria(3, "Química", "Libros de química")
+# subcategoria_1 = Categoria(2, "Física", "Libros de física",esPrincipal=False)
+# subcategoria_2 = Categoria(3, "Química", "Libros de química",esPrincipal=False)
 
-# # Agregar subcategorías
+# # # Agregar subcategorías
 # categoria_principal.agregar_subcategoria(subcategoria_1)
 # categoria_principal.agregar_subcategoria(subcategoria_2)
 
-# # Consultar categoría principal
+# # # Consultar categoría principal
 # categoria_principal.consultar()
 
-# # Eliminar una subcategoría
+# # # Eliminar una subcategoría
 # categoria_principal.eliminar_subcategoria(subcategoria_1)
 
-# # Consultar nuevamente
+# # # Consultar nuevamente
 # categoria_principal.consultar()
+
+# print("Imprimiendo categorias:-------------")
+
+# for categoria in Categoria._instancias:     
+#     if(categoria.get_esPrincipal()):
+#         print(f"ID: {categoria.get_idCategoria()}, Nombre: {categoria.get_nombre()}, Descripción: {categoria.get_descripcion()}")
+#     if categoria.get_subcategorias():
+#         print("  Subcategorías:")
+#         for subcategoria in categoria.get_subcategorias():
+#             print(f"    ID: {subcategoria.get_idCategoria()}, Nombre: {subcategoria.get_nombre()}")
