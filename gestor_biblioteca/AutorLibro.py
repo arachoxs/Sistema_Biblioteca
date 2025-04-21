@@ -69,7 +69,7 @@ class AutorLibro:
         libros = []
         for autor_libro in AutorLibro._instancias:
             if autor_libro.get_autor() == autor:
-                print(autor_libro.get_libro().get_titulo())
+                libros.append(autor_libro.get_libro())
                 
         if len(libros) == 0:
             print("No hay libros registrados para este autor.")
@@ -82,7 +82,7 @@ class AutorLibro:
         autores = []
         for autor_libro in AutorLibro._instancias:
             if autor_libro.get_libro() == libro:
-                print(autor_libro.get_autor().get_nombre())
+                autores.append(autor_libro.get_autor())
         
         if len(autores) == 0:
             print("No hay autores registrados para este libro.")
