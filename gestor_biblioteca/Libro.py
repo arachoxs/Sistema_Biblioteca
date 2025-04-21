@@ -116,6 +116,9 @@ class Libro:
     def set_genero(self, genero):
         self.__genero = genero
 
+    def set_n_copias(self, n_copias):
+        self.__n_copias=n_copias
+
     def set_idioma(self, idioma):
         self.__idioma = idioma
 

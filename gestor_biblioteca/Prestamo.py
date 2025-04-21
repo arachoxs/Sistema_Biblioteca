@@ -1,8 +1,55 @@
 from gestor_biblioteca.share import *
 from gestor_biblioteca.Copia import Copia
+from gestor_biblioteca.ArticuloCientifico import ArticuloCientifico
+from gestor_biblioteca.Tesis import Tesis
 from gestor_biblioteca.Lector import Lector
 from gestor_biblioteca.Multa import Multa
 import random
+
+def menu_prestamo():
+    band=False
+    while(not band):
+        clear_console()
+        
+        opcion=pedir_entero("--- Menú Préstamo ---\n\n1) Registrar Préstamo\n2) Consultar Préstamo\n3) Devolución de Préstamo\n0) Salir\n\nSeleccione una opción: ", True)
+        clear_console()
+        
+        if(opcion==1):
+            # print("--- Registrar Préstamo ---\n")
+            Prestamo.registrar()
+            
+        elif(opcion==2):
+            opcion2=pedir_entero("--- Consultar Préstamo ---\n\n1) Ver lista de préstamos registrados\n2) Consultar préstamo por ID\n0) Salir\n\nSeleccione una opción: ", True)
+            clear_console()
+
+            if opcion2 == 1:
+                print("--- Lista de préstamos registrados ---\n")
+                Prestamo.mostrar_prestamos()
+
+            elif opcion2 == 2:
+                id=pedir_entero("--- Consultar Préstamo por ID ---\n\nIngrese el ID del préstamo a consultar: ", True)
+                prestamo=Prestamo.buscar_prestamo(id)
+                if prestamo == None:
+                    clear_console()
+                    print(f"No se encontró el préstamo con ID {id}.")
+                    esperar()
+                    continue
+                clear_console()
+                print("Préstamo seleccionado:\n")
+                Prestamo.consultar(prestamo)
+            
+        elif(opcion==3):
+            print("--- Devolución de Préstamo ---\n")
+            id_lector = pedir_entero("Ingrese el ID del lector que desea devolver un préstamo: ")
+            Prestamo.devolucion(id_lector)
+
+        elif(opcion==0):
+            band=True
+        
+        else:
+            clear_console()
+            print("Opción no válida. Por favor intente nuevamente.")
+            esperar()
 
 class Prestamo:
     _instancias = []
@@ -16,7 +63,8 @@ class Prestamo:
         self.fecha_entrega_estimada = fecha_entrega_estimada
         self.activo = activo
         # Atributos asociados a la copia y al lector
-        # Inicialmente no hay copia ni lector asociados
+        # Inicialmente no hay producto ni lector asociados
+        self.producto = None
         self.lector = None
         # Se agrega la instancia a la lista de préstamos
         Prestamo._instancias.append(self)
@@ -106,12 +154,12 @@ class Prestamo:
         # Se asocia el lector al préstamo
         self.lector = lector
 
-    def asociar_copia(self, copia):
-        # Se verifica que la copia sea una instancia de la clase Copia
-        if not isinstance(copia, Copia):
-            raise TypeError("El objeto asociado no es una copia.")
+    def asociar_producto(self, producto):
+        # Se verifica que el producto sea una copia, artículo científico o tesis
+        if not isinstance(producto, Copia) and not isinstance(producto, ArticuloCientifico) and not isinstance(producto, Tesis):
+            raise TypeError("El objeto asociado no es un producto.")
         # Se asocia la copia al préstamo
-        self.copia = copia
+        self.producto = producto
 
     # Getters
     def get_id_prestamo(self):
@@ -199,75 +247,141 @@ class Prestamo:
             return False
         
         return True
-
     
-    def registrar(self):
-        # Se busca el lector asociado al préstamo
-        lector = Lector.buscar_lector(input("Ingrese el ID del lector asociado: "))
-        
-        # Se verifica que el lector sea elegible para el préstamo
-        if not self.verificar_lector_elegible(lector):
-            print("No se pudo registrar el préstamo: Lector no elegible.")
-            return
-
-        # Se busca la copia asociada al préstamo        
-        copia = Copia.buscar_copia(input("Ingrese el ID de la copia asociada: "))
-        # Se verifica que la copia sea una instancia de la clase Copia
-        if copia is not None:
-            # Se verifica que la copia esté disponible
-            if copia.get_estado() != "Disponible":
-                print("No se pudo registrar el préstamo: La copia no está disponible.")
-                return
-        else:
-            print("No se pudo registrar el préstamo: Copia no encontrada.")
-            return
-        
-        # Se solicita al usuario la información del préstamo
+    def registrar():
         while True:
-            id_prestamo = input("Ingrese el ID del prestamo (deje en blanco para una asignación automática): ")
-            ids_existentes = {prestamo.get_id_prestamo() for prestamo in Prestamo._instancias} # Conjunto de IDs existentes para evitar duplicados
-            if id_prestamo == "":
-                while True:
-                    # Generar ID aleatorio de 7 dígitos
-                    id_prestamo = random.randint(1000000, 9999999)
-                    # Verificar si el ID ya existe
-                    if id_prestamo not in ids_existentes:
-                        break
+            clear_console()
+            print("--- Registrar Préstamo ---\n")
+            id_prestamo = pedir_entero("Ingrese el ID del préstamo (deje en blanco para una asignación automática): ", False, True)
+            if id_prestamo is None:
+                # Generar ID aleatorio de 7 dígitos
+                id_prestamo = random.randint(1000000, 9999999)
+                # Verificar si el ID ya existe
+                if Prestamo.buscar_prestamo(id_prestamo) is None:
+                    break
             else:
-                if id_prestamo in ids_existentes:
+                if Prestamo.buscar_prestamo(id_prestamo) is not None:
+                    clear_console()
                     print("ID ya registrado. Pruebe con otro valor.")
+                    esperar()
                 else:
                     break
         
-        # Se solicita el tipo de producto
-        opcion = input("Seleccione el tipo de producto:\n1. Copia de libro\n2. Artículo Científico\n3. Tesis")
-        while True:
-            if opcion in ["1", "2", "3"]:
-                break
-            else:
-                print("Opción no válida. Intente nuevamente.")
-                opcion = input("Seleccione el tipo de producto:\n1. Copia de libro\n2. Artículo Científico\n3. Tesis")
-        if opcion == "1":
-            tipo_producto = "Copia de libro"
-        elif opcion == "2":
-            tipo_producto = "Artículo Científico"
-        elif opcion == "3":
-            tipo_producto = "Tesis"
+        id_lector = input("Ingrese el ID del lector asociado: ")
+        lector = Lector.buscar_lector(id)
+        # Se verifica que el lector sea elegible para el préstamo
+        if not Prestamo.verificar_lector_elegible(lector):
+            clear_console()
+            print("No se pudo registrar el préstamo: Lector no elegible.")
+            esperar()
+            return
 
-        dias_prestamo = pedir_entero("Ingrese la cantidad de días de préstamo: ")
-        print("Ingrese la fecha de préstamo (DD/MM/AAAA): ")
+        if lector is None:
+            clear_console()
+            print(f"No se pudo registrar el préstamo: Lector con ID {id_lector} no encontrado.")
+            esperar()
+            return
+        
+        band = False
+        while band:
+            clear_console()
+            opcion = pedir_entero("\n--- ¿Qué tipo de producto desea asociar? ---\n\n1) Copia de libro\n2) Artículo científico\n3) Tesis\n\nSeleccione una opción: ", True)
+            clear_console()
+            if opcion == 1:
+                tipo_producto = "Copia de libro"
+                band = True
+            elif opcion == 2:
+                tipo_producto = "Artículo científico"
+                band = True
+            elif opcion == 3:
+                tipo_producto = "Tesis"
+                band = True
+           
+            else:
+                clear_console()
+                print("Opción no válida. Intente nuevamente.")
+                esperar()
+                
+        clear_console()
+        print(f"--- Registrar Préstamo ---\n\nId Préstamo: {id_prestamo}\nID Lector: {lector.get_id_lector()}\nTipo de producto: {opcion}\n")
+            
+        if opcion == 1:
+            id_prod = pedir_entero("Ingrese el ID de la copia asociada: ")
+            producto = Copia.buscar_copia(id_prod)
+            if producto is None:
+                clear_console
+                print(f"No se pudo registrar el préstamo: Copia con ID {id_prod} no encontrada.")
+                esperar()
+                return
+            else:
+                # Se verifica que la copia esté disponible
+                if producto.get_estado() != "Disponible":
+                    clear_console()
+                    print(f"No se pudo registrar el préstamo: La copia con ID {id_prod} no está disponible.")
+                    esperar()
+                    return
+                
+        elif opcion == 21:
+            id_prod = input("Ingrese el DOI del artículo científico asociado: ")
+            producto = ArticuloCientifico.buscar_articulo(id_prod)
+            if producto is None:
+                clear_console()
+                print(f"No se pudo registrar el préstamo: Artículo científico con DOI \"{id_prod}\" no encontrado.")
+                esperar()
+                return
+            else:
+                # Se verifica que el artículo esté disponible
+                if producto.get_estado() != "Disponible":
+                    clear_console()
+                    print(f"No se pudo registrar el préstamo: El artículo científico con DOI \"{id_prod}\" no está disponible.")
+                    esperar()
+                    return
+                
+        elif opcion == 3:
+            id_prod = pedir_entero("Ingrese el ID de la tesis asociada: ")
+            producto = Tesis.buscar_tesis(id_prod)
+            if producto is None:
+                clear_console()
+                print(f"No se pudo registrar el préstamo: Tesis con ID {id_prod} no encontrada.")
+                esperar()
+                return
+            else:
+                # Se verifica que la tesis esté disponible
+                if producto.get_estado() != "Disponible":
+                    clear_console()
+                    print(f"No se pudo registrar el préstamo: La tesis con ID {id_prod} no está disponible.")
+                    esperar()
+                    return
+        
+        clear_console()
+        if opcion == 1:
+            print(f"--- Registrar Préstamo ---\n\nId Préstamo: {id_prestamo}\nID Lector: {lector.get_id_lector()}\nID Copia: {articulo.get_doi()}\n")
+        elif opcion == 2:
+            print(f"--- Registrar Préstamo ---\n\nId Préstamo: {id_prestamo}\nID Lector: {lector.get_id_lector()}\DOI Artículo: \"{tesis.get_id_tesis()}\"\n")
+        elif opcion == 3: 
+            print(f"--- Registrar Préstamo ---\n\nId Préstamo: {id_prestamo}\nID Lector: {lector.get_id_lector()}\nID Tesis: {tesis.get_id_tesis()}\n")
+        
+        print("A continuación ingrese la fecha de préstamo.")
         fecha_prestamo = Date.registrar_fecha()
+        dias_prestamo = pedir_entero("Ingrese la cantidad de días de préstamo: ")
         fecha_entrega_estimada = fecha_prestamo.sumar_dias(dias_prestamo)
         activo = True
 
         # Se crea el préstamo y se asocian la copia y el lector
-        prestamo = Prestamo(id_prestamo, tipo_producto, dias_prestamo, fecha_prestamo, fecha_entrega_estimada, activo)
-        prestamo.asociar_copia(copia)
-        prestamo.asociar_lector(lector)
-        # Se cambia el estado de la copia a "Prestada"
-        self.copia.set_estado("Prestada")
+        prestamo = Prestamo(id_prestamo, tipo_producto, dias_prestamo, fecha_prestamo, fecha_entrega_estimada)
+        prestamo.asociar_lector(id_lector)
+        prestamo.asociar_producto(producto)
 
-        print(f"Préstamo con ID {id_prestamo} registrado con éxito.")
+        # Se actualiza el estado del producto
+        if
+
+
+
+
+            
+
+
+
 
     def calcular_fecha_entrega(self):
         """Calcula la fecha de entrega real del préstamo."""

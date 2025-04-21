@@ -72,6 +72,7 @@ def menu_lector():
             band=True
 
         else:
+            clear_console()
             print("Opción no válida. Por favor intente nuevamente.")
             esperar()
         
