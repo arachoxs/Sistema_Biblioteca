@@ -16,6 +16,10 @@ FALTANTES
 - FIX Menú Libro->Asociación con categoría; Falta mostrar todos los libros
 - FIX Menú categoría->consultar subcategoría (posible replanteamiento de subcategorías)
 - Borrar debug generar_copias
+- En todos los menús, poner la opcion "0) Salir" al final
+
+- Menú lector->Modificar lector->Estado: Error
+- Menú multa->Consultar: Falta un esperar()
 
 """
 def menu():
