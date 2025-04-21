@@ -3,8 +3,9 @@ from gestor_biblioteca.Copia import Copia
 from gestor_biblioteca.ArticuloCientifico import ArticuloCientifico
 from gestor_biblioteca.Tesis import Tesis
 from gestor_biblioteca.Lector import Lector
-from gestor_biblioteca.Multa import Multa
 import random
+
+# -NOTA 20/04/2025 23:02: Falta revisar e integrar correctamente la función de devolución en los menús
 
 def menu_prestamo():
     band=False
@@ -71,48 +72,50 @@ class Prestamo:
     
     def devolucion(id_lector):
         """
-    Realiza la devolución de un préstamo asociado a un lector.
+        Realiza la devolución de un préstamo asociado a un lector.
 
-    Parámetros:
-    -----------
-    id_lector : int
-        El ID del lector que desea devolver un préstamo.
+        Parámetros:
+        -----------
+        id_lector : int
+            El ID del lector que desea devolver un préstamo.
 
-    Descripción:
-    ------------
-    Esta función permite realizar la devolución de un préstamo activo asociado a un lector. 
-    Primero, busca al lector por su ID. Si el lector no existe, muestra un mensaje de error.
-    Luego, busca los préstamos activos asociados al lector. Si hay préstamos activos, 
-    muestra una lista de ellos y permite al usuario seleccionar cuál desea devolver.
+        Descripción:
+        ------------
+        Esta función permite realizar la devolución de un préstamo activo asociado a un lector. 
+        Primero, busca al lector por su ID. Si el lector no existe, muestra un mensaje de error.
+        Luego, busca los préstamos activos asociados al lector. Si hay préstamos activos, 
+        muestra una lista de ellos y permite al usuario seleccionar cuál desea devolver.
 
-    Durante la devolución:
-    - Se solicita la fecha de entrega real.
-    - Se genera una multa si la devolución se realiza después de la fecha estimada de entrega.
-    - Se finaliza el préstamo y se actualizan los estados correspondientes.
+        Durante la devolución:
+        - Se solicita la fecha de entrega real.
+        - Se genera una multa si la devolución se realiza después de la fecha estimada de entrega.
+        - Se finaliza el préstamo y se actualizan los estados correspondientes.
 
-    Si no hay préstamos activos asociados al lector, se muestra un mensaje informativo.
+        Si no hay préstamos activos asociados al lector, se muestra un mensaje informativo.
 
-    Flujo de la función:
-    --------------------
-    1. Buscar al lector por su ID.
-    2. Verificar si el lector tiene préstamos activos.
-    3. Mostrar una lista de préstamos activos y permitir al usuario seleccionar uno.
-    4. Solicitar la fecha de entrega real.
-    5. Generar una multa si corresponde.
-    6. Finalizar el préstamo y actualizar los estados.
-    7. Mostrar mensajes informativos en caso de errores o acciones completadas.
+        Flujo de la función:
+        --------------------
+        1. Buscar al lector por su ID.
+        2. Verificar si el lector tiene préstamos activos.
+        3. Mostrar una lista de préstamos activos y permitir al usuario seleccionar uno.
+        4. Solicitar la fecha de entrega real.
+        5. Generar una multa si corresponde.
+        6. Finalizar el préstamo y actualizar los estados.
+        7. Mostrar mensajes informativos en caso de errores o acciones completadas.
 
-    Excepciones:
-    ------------
-    - Si el lector no existe, se muestra "Lector no encontrado."
-    - Si no hay préstamos activos, se muestra "No hay préstamos activos asociados al lector."
-    - Si el usuario selecciona una opción inválida, se muestra "Opción no válida. Intente nuevamente."
+        Excepciones:
+        ------------
+        - Si el lector no existe, se muestra "Lector no encontrado."
+        - Si no hay préstamos activos, se muestra "No hay préstamos activos asociados al lector."
+        - Si el usuario selecciona una opción inválida, se muestra "Opción no válida. Intente nuevamente."
 
-    Ejemplo de uso:
-    ---------------
-    devolucion(12345)
-    """
-        """Realiza la devolución de un préstamo."""
+        Ejemplo de uso:
+        ---------------
+        devolucion(12345)
+        """
+        
+        from gestor_biblioteca.Multa import Multa
+    
         lector = Lector.buscar_lector(id_lector)
         if lector is None:
             print("Lector no encontrado.")
@@ -197,7 +200,27 @@ class Prestamo:
     def set_lector(self, lector):
         self.lector = lector
 
+    """"@classmethod
+    def mostrar_lectores(cls):
+        if len(cls._instancias) == 0:
+            print("No hay lectores registrados.")
+            esperar()
+        else:
+            for i in range(len(cls._instancias)):
+                print(f" - ID: \"{cls._instancias[i].get_id_lector()}\" - Nombre: \"{cls._instancias[i].get_nombre()}\"")
+            esperar()"""
     # Métodos de la clase
+    @classmethod
+    def mostrar_prestamos(cls):
+        """Muestra todos los préstamos registrados."""
+        if len(cls._instancias) == 0:
+            print("No hay préstamos registrados.")
+            esperar()
+        else:
+            for i in range(len(cls._instancias)):
+                print(f" - ID: {cls._instancias[i].get_id_prestamo()} - Nombre Lector: \"{cls._instancias[i].get_lector().get_nombre()}\" - Tipo de producto: \"{cls._instancias[i].get_tipo_producto()}\"")
+            esperar()
+
     @classmethod
     def buscar_prestamo(cls, id_prestamo):
         for prestamo in cls._instancias:
@@ -205,45 +228,47 @@ class Prestamo:
                 return prestamo
         return None
     
-    def obtener_prestamos_activos(lector):
+    @classmethod
+    def obtener_prestamos_activos(cls, lector):
         """Devuelve una lista de préstamos activos asociados a un lector."""
         prestamos_activos = []
-        for prestamo in Prestamo._instancias:
+        for prestamo in cls._instancias:
             if prestamo.get_lector() == lector and prestamo.get_activo():
                 prestamos_activos.append(prestamo)
         return prestamos_activos
     
-    def verificar_lector_elegible(self, lector):
+    @classmethod
+    def verificar_lector_elegible(cls, lector):
         """Verifica si un lector es elegible para un préstamo."""
         # Se verifica que el lector sea una instancia de la clase Lector
         if lector is None:
-            print("Lector no encontrado.")
-            return
+            # print("Lector no encontrado.")
+            return False
         
         # Se verifica que el lector no esté inactivo
         if lector.get_estado() == "Inactivo":
-            print("El lector está inactivo y no puede realizar préstamos.")
+            # print("El lector está inactivo y no puede realizar préstamos.")
             return False
         
         # Se verifica que el lector no esté suspendido
         if lector.get_estado() == "Suspendido":
-            print("El lector está suspendido y no puede realizar préstamos.")
+            # print("El lector está suspendido y no puede realizar préstamos.")
             return False
         
         # Se verifica que el lector no esté sancionado (con multa activa)
         if lector.get_estado() == "Sancionado":
-            print("El lector está sancionado y no puede realizar préstamos.")
+            # print("El lector está sancionado y no puede realizar préstamos.")
             return False
         
         # Se verifica que el lector no tenga más del máximo de préstamos activos permitido
-        prestamos_activos_lector = len(self.obtener_prestamos_activos(lector))
+        prestamos_activos_lector = len(cls.obtener_prestamos_activos(lector))
         
         # Se define el máximo de préstamos por lector
         # (Este valor puede ser ajustado según las políticas de la biblioteca)
         MAX_PRESTAMOS_POR_LECTOR = 3
         
         if prestamos_activos_lector >= MAX_PRESTAMOS_POR_LECTOR:
-            print(f"El lector ya tiene {MAX_PRESTAMOS_POR_LECTOR} préstamos activos.")
+            # print(f"El lector ya tiene {MAX_PRESTAMOS_POR_LECTOR} préstamos activos.")
             return False
         
         return True
@@ -268,9 +293,9 @@ class Prestamo:
                     break
         
         id_lector = input("Ingrese el ID del lector asociado: ")
-        lector = Lector.buscar_lector(id)
+        lector = Lector.buscar_lector(id_lector)
         # Se verifica que el lector sea elegible para el préstamo
-        if not Prestamo.verificar_lector_elegible(lector):
+        if not Prestamo.verificar_lector_elegible(lector) and lector is not None:
             clear_console()
             print("No se pudo registrar el préstamo: Lector no elegible.")
             esperar()
@@ -283,9 +308,9 @@ class Prestamo:
             return
         
         band = False
-        while band:
+        while band == False:
             clear_console()
-            opcion = pedir_entero("\n--- ¿Qué tipo de producto desea asociar? ---\n\n1) Copia de libro\n2) Artículo científico\n3) Tesis\n\nSeleccione una opción: ", True)
+            opcion = pedir_entero("--- ¿Qué tipo de producto desea asociar? ---\n\n1) Copia de libro\n2) Artículo científico\n3) Tesis\n\nSeleccione una opción: ", True)
             clear_console()
             if opcion == 1:
                 tipo_producto = "Copia de libro"
@@ -303,7 +328,7 @@ class Prestamo:
                 esperar()
                 
         clear_console()
-        print(f"--- Registrar Préstamo ---\n\nId Préstamo: {id_prestamo}\nID Lector: {lector.get_id_lector()}\nTipo de producto: {opcion}\n")
+        print(f"--- Registrar Préstamo ---\n\nId Préstamo: {id_prestamo}\nID Lector: {lector.get_id_lector()}\nTipo de producto: {tipo_producto}\n")
             
         if opcion == 1:
             id_prod = pedir_entero("Ingrese el ID de la copia asociada: ")
@@ -321,7 +346,7 @@ class Prestamo:
                     esperar()
                     return
                 
-        elif opcion == 21:
+        elif opcion == 2:
             id_prod = input("Ingrese el DOI del artículo científico asociado: ")
             producto = ArticuloCientifico.buscar_articulo(id_prod)
             if producto is None:
@@ -355,11 +380,11 @@ class Prestamo:
         
         clear_console()
         if opcion == 1:
-            print(f"--- Registrar Préstamo ---\n\nId Préstamo: {id_prestamo}\nID Lector: {lector.get_id_lector()}\nID Copia: {articulo.get_doi()}\n")
+            print(f"--- Registrar Préstamo ---\n\nId Préstamo: {id_prestamo}\nID Lector: {lector.get_id_lector()}\nID Copia: {producto.get_id_copia()}\n")
         elif opcion == 2:
-            print(f"--- Registrar Préstamo ---\n\nId Préstamo: {id_prestamo}\nID Lector: {lector.get_id_lector()}\DOI Artículo: \"{tesis.get_id_tesis()}\"\n")
+            print(f"--- Registrar Préstamo ---\n\nId Préstamo: {id_prestamo}\nID Lector: {lector.get_id_lector()}\DOI Artículo: \"{producto.get_doi()}\"\n")
         elif opcion == 3: 
-            print(f"--- Registrar Préstamo ---\n\nId Préstamo: {id_prestamo}\nID Lector: {lector.get_id_lector()}\nID Tesis: {tesis.get_id_tesis()}\n")
+            print(f"--- Registrar Préstamo ---\n\nId Préstamo: {id_prestamo}\nID Lector: {lector.get_id_lector()}\nID Tesis: {producto.get_idTesis()}\n")
         
         print("A continuación ingrese la fecha de préstamo.")
         fecha_prestamo = Date.registrar_fecha()
@@ -368,19 +393,19 @@ class Prestamo:
         activo = True
 
         # Se crea el préstamo y se asocian la copia y el lector
-        prestamo = Prestamo(id_prestamo, tipo_producto, dias_prestamo, fecha_prestamo, fecha_entrega_estimada)
-        prestamo.asociar_lector(id_lector)
+        prestamo = Prestamo(id_prestamo, tipo_producto, dias_prestamo, fecha_prestamo, fecha_entrega_estimada, activo)
+        prestamo.asociar_lector(lector)
         prestamo.asociar_producto(producto)
 
         # Se actualiza el estado del producto
-        if
-
-
-
-
-            
-
-
+        if isinstance(producto, Copia):
+            producto.set_estado("Prestada")
+        else:
+            producto.set_estado("Prestado")
+        
+        clear_console()
+        print(f"Préstamo con ID {prestamo.get_id_prestamo()} registrado con éxito.")
+        esperar()
 
 
     def calcular_fecha_entrega(self):
@@ -394,13 +419,18 @@ class Prestamo:
         print(f"Fecha de préstamo: {self.fecha_prestamo.get_dia()}/{self.fecha_prestamo.get_mes()}/{self.fecha_prestamo.get_año()}")
         print(f"Fecha de entrega estimada: {self.fecha_entrega_estimada.get_dia()}/{self.fecha_entrega_estimada.get_mes()}/{self.fecha_entrega_estimada.get_año()}")
         print(f"Estado activo: {self.activo}")
-        if self.copia is not None:
-            print(f"ID de copia asociada: {self.copia.get_id_copia()}")
+        if self.producto is not None:
+            if self.tipo_producto == "Copia de libro":
+                print(f"ID de copia asociada: {self.producto.get_id_copia()}")
+            elif self.tipo_producto == "Artículo científico":
+                print(f"DOI de artículo asociado: \"{self.producto.get_doi()}\"")
+            elif self.tipo_producto == "Tesis":
+                print(f"ID de tesis asociada: {self.producto.get_idTesis()}")
         if self.lector is not None:
             print(f"ID de lector asociado: {self.lector.get_id_lector()}")
-        print(f"Estado del lector: {self.lector.get_estado() if self.lector else 'No asociado'}")
-        print(f"Estado de la copia: {self.copia.get_estado() if self.copia else 'No asociado'}")
-        
+
+        esperar()
+
     def cancelar(self):
         """Cancela el préstamo y actualiza el estado de la copia y el lector."""
         if self.copia is not None:

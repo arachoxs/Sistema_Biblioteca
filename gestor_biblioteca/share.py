@@ -133,7 +133,7 @@ class Date:
 
         if dias_a_sumar > 0:
             for _ in range(dias_a_sumar):
-                dias_mes_actual = self._dias_en_mes(nueva_fecha.mes, nueva_fecha.año)
+                dias_mes_actual = nueva_fecha._dias_en_mes()
 
                 if nueva_fecha.dia < dias_mes_actual:
                     nueva_fecha.dia += 1
