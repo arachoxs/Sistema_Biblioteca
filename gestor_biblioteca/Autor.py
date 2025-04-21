@@ -19,6 +19,7 @@ def menu_autor():
             if opcion2 == 1:
                 print("--- Lista de autores registrados ---\n")
                 Autor.mostrar_autores()
+                esperar()
 
             elif opcion2 == 2:
                 id=pedir_entero("--- Consultar Autor por ID ---\n\nIngrese el ID del autor a consultar: ", True)
@@ -93,8 +94,7 @@ class Autor:
             esperar()
         else:
             for i in range(len(Autor._instancias)):
-                print(f" - ID: {Autor._instancias[i].get_id_autor()} - Nombre: \"{Autor._instancias[i].get_nombre()}\"")
-            esperar()
+                print(f"{i+1}. - ID: {Autor._instancias[i].get_id_autor()} - Nombre: \"{Autor._instancias[i].get_nombre()}\"")
     
     def get_instancia_index(index):
         return Autor._instancias[index]
