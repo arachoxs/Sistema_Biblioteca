@@ -29,6 +29,7 @@ def menu_multa():
         elif opcion == 2:
             id_lector = pedir_entero("Ingrese el ID del lector: ", True)
             Multa.consultar_multas(id_lector)
+            esperar()
 
         elif opcion == 3:
             print("---Ingrese la fecha actual---")

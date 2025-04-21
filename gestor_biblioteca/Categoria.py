@@ -181,7 +181,7 @@ class Categoria:
             if categoria.get_idCategoria() == idCategoria:
                 return categoria
         return None
-
+    
     # Métodos para manejar subcategorías
     def agregar_subcategoria(self, subcategoria):
         if isinstance(subcategoria, Categoria): 

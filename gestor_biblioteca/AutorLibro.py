@@ -1,5 +1,6 @@
 from gestor_biblioteca.share import pedir_entero
 from gestor_biblioteca.Autor import Autor
+from gestor_biblioteca.share import *
 
 class AutorLibro:
     _instancias = []
@@ -26,6 +27,7 @@ class AutorLibro:
         
     def relacionar_autor_libro(libro):
         from gestor_biblioteca.Libro import Libro
+        clear_console()
         
         while True:
             print("\n--- Autores disponibles ---")
@@ -75,8 +77,8 @@ class AutorLibro:
             print("No hay libros registrados para este autor.")
         else:
             print("Libros registrados para este autor:")
-            for libro in libros:
-                print(libro.get_titulo())
+            for i in range(len(libros)):
+                print(f"{i+1}) - ID: {libros[i].get_id_libro()} - Título: \"{libros[i].get_titulo()}\"")
 
     def buscar_autores(libro):
         autores = []
@@ -88,6 +90,6 @@ class AutorLibro:
             print("No hay autores registrados para este libro.")
         else:
             print("Autores registrados para este libro:")
-            for autor in autores:
-                print(autor.get_nombre())
+            for i in range(len(autores)):
+                print(f"{i+1}) - ID: {autores[i].get_id_autor()} - Nombre: \"{autores[i].get_nombre()}\"")
     

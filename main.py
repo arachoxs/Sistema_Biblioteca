@@ -19,7 +19,6 @@ FALTANTES
 - En todos los menús, poner la opcion "0) Salir" al final
 
 - Menú lector->Modificar lector->Estado: Error
-- Menú multa->Consultar: Falta un esperar()
 
 """
 def menu():
@@ -55,6 +54,7 @@ def menu():
 
 if __name__=="__main__":
     libro = Libro("1",1,1,1,1,1,1,1)
+    Categoria("1", "1", "1")
     Copia.generar_copias(5, libro)
     menu()
     
