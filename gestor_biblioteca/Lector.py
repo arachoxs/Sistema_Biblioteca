@@ -102,6 +102,8 @@ class Lector:
         return self.direccion
     def get_estado(self):
         return self.estado
+    def get_estado_previo(self):
+        return self.estado_previo
     
     # Setters
     def set_id_lector(self, id_lector):
@@ -114,6 +116,8 @@ class Lector:
         self.direccion = direccion
     def set_estado(self, estado):
         self.estado = estado
+    def set_estado_previo(self, estado_previo):
+        self.estado_previo = estado_previo
 
     # Métodos de la clase
     @classmethod
@@ -194,11 +198,11 @@ class Lector:
             elif opcion == 4:
                 print("\n--- Selección de Estado ---\n1) Normal\n2) Sancionado\n3) Suspendido\n")
                 estado = pedir_entero(f"Seleccione una opción: ")
-                if estado == "1":
+                if estado == 1:
                     estado = "Normal"
-                elif estado == "2":
+                elif estado == 2:
                     estado = "Sancionado"
-                elif estado == "3":
+                elif estado == 3:
                     estado = "Suspendido"
                 else:
                     print("\nOpción no válida. Intente nuevamente.")

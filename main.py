@@ -20,6 +20,8 @@ FALTANTES
 
 - Menú lector->Modificar lector->Estado: Error
 
+- Menú libro->Registrar libro->añadir autores: Se pueden asociar los autores  y no se valida si ya están asociados.
+
 """
 def menu():
     band = True

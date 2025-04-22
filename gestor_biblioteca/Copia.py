@@ -244,8 +244,8 @@ class Copia:
             nueva_copia = cls(id_copia) # El estado por defecto es "Disponible"
             # Asociar el libro a la nueva copia
             nueva_copia.asociar_libro(libro)
-            print(f"Copia con ID {id_copia} generada y asociada al libro '{libro.get_titulo()}'.")
-            esperar()
+            # print(f"Copia con ID {id_copia} generada y asociada al libro '{libro.get_titulo()}'.")
+            # esperar()
 
         clear_console()
         if n_copias == 1:
