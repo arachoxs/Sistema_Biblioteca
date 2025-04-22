@@ -8,11 +8,11 @@ def menu_tesis():
     while band:
         clear_console()
         print("--- Menu Tesis ---")
-        print("0. Salir")
-        print("1. Registrar Tesis")
-        print("2. Consultar Tesis")
-        print("3. Modificar Tesis")
-        print("4. Eliminar Tesis")
+        print("1) Registrar Tesis")
+        print("2) Consultar Tesis")
+        print("3) Modificar Tesis")
+        print("4) Eliminar Tesis")
+        print("0) Salir")
 
         opcion = pedir_entero("Seleccione una opción: ")
 
@@ -21,13 +21,25 @@ def menu_tesis():
             print("--- Registrar Tesis ---")
             Tesis.registrar()
         elif opcion == 2:
-            print("--- Consultar Tesis ---")
-            idTesis = pedir_entero("Ingrese el id de la tesis: ")
-            tesis = Tesis.buscar_tesis(idTesis)
-            if tesis != None:
+            opcion2=pedir_entero("--- Consultar Tesis ---\n\n1) Ver lista de Tesis\n2) Consultar Tesis por ID\n0) Salir\n\nSeleccione una opción: ", True)
+            clear_console()
+
+            if opcion2 == 1:
+                print("--- Lista de Tesis registrados ---\n")
+                Tesis.mostrar_articulos()
+                esperar()
+
+            elif opcion2 == 2:
+                id=input("--- Consultar Tesis por ID ---\n\nIngrese la ID de la Tesis a consultar: ")
+                tesis = Tesis.buscar_tesis(id)
+                if tesis == None:
+                    clear_console()
+                    print(f"No se encontró la tesis con ID \"{id}\".")
+                    esperar()
+                    continue
+                clear_console()
+                print("Tesis seleccionado:\n")
                 tesis.consultar()
-            else:
-                print("No se encontró la tesis.")
                 esperar()
         elif opcion == 3:
             print("--- Modificar Tesis ---")
@@ -40,7 +52,7 @@ def menu_tesis():
                 esperar()
         elif opcion == 4:
             print("--- Eliminar Tesis ---")
-            idTesis = pedir_entero("Ingrese el id de la tesis: ")
+            idTesis = pedir_entero("Ingrese la ID de la tesis a eliminar: ")
             tesis = Tesis.buscar_tesis(idTesis)
             if tesis != None:
                 tesis.eliminar()
@@ -53,7 +65,6 @@ def menu_tesis():
         else:
             print("Opcion no valida, intente nuevamente")
             esperar()
-    esperar()
 
 
 class Tesis:
@@ -118,6 +129,14 @@ class Tesis:
                 return tesis
         return None
 
+    def mostrar_tesis():
+        if len(Tesis._instancias) == 0:
+            print("No hay tesis registrados.")
+            esperar()
+        else:
+            for i in range(len(Tesis._instancias)):
+                print(f"{i+1}) - ID: {Tesis._instancias[i].get_idtesis()} - Título: \"{Tesis._instancias[i].get_titulo()}\"")
+
     #metodos
     def registrar():
         idTesis = pedir_entero("Ingrese el id de la tesis: ")
@@ -140,6 +159,7 @@ class Tesis:
 
         AutorTesis.relacionar_autor_tesis(tesis) # Relacionar autor con la tesis
         print("Tesis registrada con exito.")
+        esperar()
     
     def consultar(self):
         print("ID Tesis: ", self.__idTesis)

@@ -8,11 +8,11 @@ def menu_articulo():
     while band:
         clear_console()
         print("--- Menu Articulo ---")
-        print("0. Salir")
-        print("1. Registrar Articulo")
-        print("2. Consultar Articulo")
-        print("3. Modificar Articulo")
-        print("4. Eliminar Articulo")
+        print("1) Registrar Articulo")
+        print("2) Consultar Articulo")
+        print("3) Modificar Articulo")
+        print("4) Eliminar Articulo")
+        print("0) Salir")
 
         opcion = pedir_entero("Seleccione una opción: ")
 
@@ -20,16 +20,27 @@ def menu_articulo():
         if (opcion == 1):
             print("--- Registrar Articulo ---")
             ArticuloCientifico.registrar()
-            esperar()
         elif (opcion == 2):
-            print("--- Consultar Articulo ---")
-            doi = input("Ingrese el DOI del articulo a consultar: ")
-            articulo = ArticuloCientifico.buscar_articulo(doi)
-            if articulo != None:
+            opcion2=pedir_entero("--- Consultar Artículo ---\n\n1) Ver lista de articulos\n2) Consultar artículo por ID\n0) Salir\n\nSeleccione una opción: ", True)
+            clear_console()
+
+            if opcion2 == 1:
+                print("--- Lista de artículos registrados ---\n")
+                ArticuloCientifico.mostrar_articulos()
+                esperar()
+
+            elif opcion2 == 2:
+                id=input("--- Consultar artículo por DOI ---\n\nIngrese el DOI del libro a consultar: ")
+                articulo = ArticuloCientifico.buscar_articulo(id)
+                if articulo == None:
+                    clear_console()
+                    print(f"No se encontró el artículo con ID \"{id}\".")
+                    esperar()
+                    continue
+                clear_console()
+                print("Tesis seleccionado:\n")
                 articulo.consultar()
-            else:
-                print("No se encontró el artículo.")
-            esperar()
+                esperar()
         elif (opcion == 3):
             print("--- Modificar Articulo ---")
             doi = input("Ingrese el DOI del articulo a modificar: ")
@@ -54,7 +65,6 @@ def menu_articulo():
         else:
             print("Opcion no valida, intente nuevamente")
             esperar()
-    esperar()
 
 # --- Clase ArticuloCientifico ---
 class ArticuloCientifico:
@@ -125,6 +135,14 @@ class ArticuloCientifico:
                 return articulo
         return None
 
+    def mostrar_articulos():
+        if len(ArticuloCientifico._instancias) == 0:
+            print("No hay libros registrados.")
+            esperar()
+        else:
+            for i in range(len(ArticuloCientifico._instancias)):
+                print(f"{i+1}) - DOI: {ArticuloCientifico._instancias[i].get_doi()} - Título: \"{ArticuloCientifico._instancias[i].get_titulo()}\"")
+
     #metodos
     def registrar():
         doi = input("Ingrese el DOI del articulo: ")
@@ -148,7 +166,7 @@ class ArticuloCientifico:
             articulo.asignar_categoria()
         AutorArticulo.relacionar_autor_articulo(articulo)
         print("Artículo registrado correctamente.")
-        
+        esperar()
 
 
     def consultar(self):

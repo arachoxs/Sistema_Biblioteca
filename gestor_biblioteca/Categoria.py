@@ -5,11 +5,11 @@ def menu_categoria():
     while band:
         clear_console()
         print("--- MENÚ CATEGORÍA ---")
-        print("1. Crear categoría")
-        print("2. Consultar categoría")
-        print("3. Modificar categoría")
-        print("4. Eliminar categoría")
-        print("0. Salir")
+        print("1) Crear categoría")
+        print("2) Consultar categoría")
+        print("3) Modificar categoría")
+        print("4) Eliminar categoría")
+        print("0) Salir")
 
         opcion = pedir_entero("Seleccione una opción: ")
         clear_console()
@@ -18,9 +18,9 @@ def menu_categoria():
 
             while True:
                 print("---- Crear Categoría ----")
-                print("1. Crear categoria")
-                print("2. Crear subcategoria")
-                print("0. Salir")
+                print("1) Crear categoria")
+                print("2) Crear subcategoria")
+                print("0) Salir")
 
                 opcion = pedir_entero("Seleccione una opción: ")
                 if opcion == 1:
@@ -41,21 +41,30 @@ def menu_categoria():
                     break
         elif opcion == 2:
             while True:
-                print("---- Consultar Categoría ----")
-                print("1. Consultar categoría")
-                print("2. Consultar subcategoría")
-                print("0. Salir")
-                opcion = pedir_entero("Seleccione una opción: ")
-                if opcion == 1:
-                    idCategoria = pedir_entero("Ingrese el ID de la categoría a consultar: ")
-                    categoria = Categoria.buscar_categoria(idCategoria)
-                    if categoria is not None:
-                        categoria.consultar()
-                        esperar()
-                    else:
-                        print("Categoría no encontrada.")
-                        esperar()
-                    break
+                opcion2=pedir_entero("--- Consultar Categoría ---\n\n1) Ver lista de Categorías\n2) Consultar Categoría por ID\n0) Salir\n\nSeleccione una opción: ", True)
+                clear_console()
+
+                if opcion2 == 1:
+                    print("--- Lista de Tesis registrados ---\n")
+                    Categoria.mostrar_categorias()
+                    esperar()
+
+                elif opcion2 == 2:
+                    print("1) Consultar categoría")
+                    print("2) Consultar subcategoría")
+                    print("0) Salir")
+                    opcion = pedir_entero("Seleccione una opción: ")
+                    if opcion == 1:
+                        idCategoria = pedir_entero("Ingrese el ID de la categoría a consultar: ")
+                        categoria = Categoria.buscar_categoria(idCategoria)
+                        if categoria is not None:
+                            categoria.consultar()
+                            esperar()
+                        else:
+                            print("Categoría no encontrada.")
+                            esperar()
+                        break
+                
                 elif opcion == 2:
                     Categoria.mostrar_instancias()
                     op = pedir_entero("Seleccione la categoría para consultar sus subcategorías: ")
@@ -86,9 +95,9 @@ def menu_categoria():
         elif opcion == 3:
             while True: 
                 print ("---- Modificar Categoría ----")
-                print ("1. Modificar categoría")
-                print ("2. Modificar subcategoría")
-                print ("0. Salir")
+                print ("1) Modificar categoría")
+                print ("2) Modificar subcategoría")
+                print ("0) Salir")
                 op = pedir_entero("Seleccione una opción: ")
                 if op == 1:
                     clear_console()
@@ -128,9 +137,9 @@ def menu_categoria():
                     break
         elif opcion == 4:
             print("---- Eliminar Categoría ----")
-            print("1. Eliminar categoría")
-            print("2. Eliminar subcategoría")
-            print("0. Salir")
+            print("1) Eliminar categoría")
+            print("2) Eliminar subcategoría")
+            print("0) Salir")
             opcion = pedir_entero("Seleccione una opción: ")
             if opcion == 1:
                 idCategoria = pedir_entero("Ingrese el ID de la categoría a eliminar: ")
@@ -207,6 +216,21 @@ class Categoria:
                 return categoria
         return None
     
+    def mostrar_categorias():
+        if len(Categoria._instancias) == 0:
+            print("No hay categorías registradas.")
+            esperar()
+            return
+        print("Categorías registradas:")
+
+        for categoria in Categoria._instancias:     
+            if(categoria.get_esPrincipal()):
+                print(f" ID: {categoria.get_idCategoria()}, Nombre: {categoria.get_nombre()}, Descripción: {categoria.get_descripcion()}")
+            if categoria.get_subcategorias():
+                print("   Subcategorías:")
+                for subcategoria in categoria.get_subcategorias():
+                    print(f"    ID: {subcategoria.get_idCategoria()}, Nombre: {subcategoria.get_nombre()}")
+        
     def get_instancia_index(index):
         return Categoria._instancias[index] 
     
@@ -401,13 +425,3 @@ class Categoria:
 
 # # # Consultar nuevamente
 # categoria_principal.consultar()
-
-def imprimir_categoria():
-    print("------Imprimiendo categorias:-------------")
-    for categoria in Categoria._instancias:     
-        if(categoria.get_esPrincipal()):
-            print(f"ID: {categoria.get_idCategoria()}, Nombre: {categoria.get_nombre()}, Descripción: {categoria.get_descripcion()}")
-        if categoria.get_subcategorias():
-            print("  Subcategorías:")
-            for subcategoria in categoria.get_subcategorias():
-                print(f"    ID: {subcategoria.get_idCategoria()}, Nombre: {subcategoria.get_nombre()}")
