@@ -183,7 +183,7 @@ class Multa:
             esperar()
             return 
         
-        for i in len(Multa._instancias):
+        for i in range(len(Multa._instancias)):
             print(f"{1})-ID Multa: {Multa._instancias[i].get_id_multa()} -ID Prestamo: {Multa._instancias[i].get_prestamo().get_id_prestamo()} - Nombre Lector: {Multa._instancias[i].get_lector().get_nombre()} - Fecha de entrega real: {Multa._instancias[i].get_fecha_entrega_real()} - fecha de entrega estimada: {Multa._instancias[i].get_prestamo().get_fecha_entrega_estimada()} - Activa: {Multa._instancias[i].get_activa()}")
 
     def buscar_multa(id):

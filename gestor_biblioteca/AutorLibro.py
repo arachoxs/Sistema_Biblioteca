@@ -48,7 +48,15 @@ class AutorLibro:
                 print("Opción no válida, intente nuevamente.")
                 continue
 
+            #verificar si el libro ya tiene un autor relacionado
+            for autor_libro in AutorLibro._instancias:
+                if autor_libro.get_libro() == libro and autor_libro.get_autor() == autor_sel:
+                    print(f"El libro «{libro.get_titulo()}» ya tiene el autor «{autor_sel.get_nombre()}» relacionado.")
+                    break
+            
             # Crear la relación autor–libro
+            
+            
             AutorLibro(libro,autor_sel)
             print(f"Autor «{autor_sel.get_nombre()}» relacionado correctamente con «{libro.get_titulo()}».")
             
