@@ -43,7 +43,7 @@ def menu_multa():
 
             elif opcion2 == 2:
                 id=input("--- Consultar multa por ID ---\n\nIngrese el ID de la multa a consultar: ")
-                multa = multa.buscar_multa(id)
+                multa = Multa.buscar_multa(id)
                 if multa == None:
                     clear_console()
                     print(f"No se encontró la multa con ID \"{id}\".")
