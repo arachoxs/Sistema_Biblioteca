@@ -42,7 +42,7 @@ def menu_multa():
                 esperar()
 
             elif opcion2 == 2:
-                id=input("--- Consultar multa por ID ---\n\nIngrese el ID de la multa a consultar: ")
+                id=pedir_entero("--- Consultar multa por ID ---\n\nIngrese el ID de la multa a consultar: ")
                 multa = Multa.buscar_multa(id)
                 if multa == None:
                     clear_console()

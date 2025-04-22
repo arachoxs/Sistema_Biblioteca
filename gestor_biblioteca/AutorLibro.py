@@ -49,16 +49,18 @@ class AutorLibro:
                 continue
 
             #verificar si el libro ya tiene un autor relacionado
+            band = False
             for autor_libro in AutorLibro._instancias:
                 if autor_libro.get_libro() == libro and autor_libro.get_autor() == autor_sel:
                     print(f"El libro «{libro.get_titulo()}» ya tiene el autor «{autor_sel.get_nombre()}» relacionado.")
+                    band = True
                     break
             
             # Crear la relación autor–libro
             
-            
-            AutorLibro(libro,autor_sel)
-            print(f"Autor «{autor_sel.get_nombre()}» relacionado correctamente con «{libro.get_titulo()}».")
+            if(not band):
+                AutorLibro(libro,autor_sel)
+                print(f"Autor «{autor_sel.get_nombre()}» relacionado correctamente con «{libro.get_titulo()}».")
             
             while True:
                 print("\n¿Desea relacionar otro autor?")

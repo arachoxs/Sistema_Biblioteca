@@ -91,7 +91,6 @@ class Autor:
     def mostrar_autores():
         if len(Autor._instancias) == 0:
             print("No hay autores registrados.")
-            esperar()
         else:
             for i in range(len(Autor._instancias)):
                 print(f"{i+1}) - ID: {Autor._instancias[i].get_id_autor()} - Nombre: \"{Autor._instancias[i].get_nombre()}\"")
