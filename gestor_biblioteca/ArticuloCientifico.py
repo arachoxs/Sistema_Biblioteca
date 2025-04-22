@@ -20,6 +20,7 @@ def menu_articulo():
         if (opcion == 1):
             print("--- Registrar Articulo ---")
             ArticuloCientifico.registrar()
+            esperar()
         elif (opcion == 2):
             print("--- Consultar Articulo ---")
             doi = input("Ingrese el DOI del articulo a consultar: ")
@@ -28,7 +29,7 @@ def menu_articulo():
                 articulo.consultar()
             else:
                 print("No se encontró el artículo.")
-                esperar()
+            esperar()
         elif (opcion == 3):
             print("--- Modificar Articulo ---")
             doi = input("Ingrese el DOI del articulo a modificar: ")
@@ -37,7 +38,7 @@ def menu_articulo():
                 articulo.modificar()
             else:
                 print("No se encontró el artículo.")
-                esperar()
+            esperar()
         elif (opcion == 4):
             print("--- Eliminar Articulo ---")
             doi = input("Ingrese el DOI del articulo a eliminar: ")
@@ -143,7 +144,8 @@ class ArticuloCientifico:
         campoInteres = input("Ingrese el campo de interes del articulo: ")
 
         articulo = ArticuloCientifico(doi, titulo, editor, fechaPublicacion, revista, periodicidad, nVolumen, campoInteres)
-        articulo.asignar_categoria()
+        if len(Categoria._instancias) > 0:
+            articulo.asignar_categoria()
         AutorArticulo.relacionar_autor_articulo(articulo)
         print("Artículo registrado correctamente.")
         
@@ -189,7 +191,6 @@ class ArticuloCientifico:
             print("9. Estado")
             print("10. Categoría")
             print("11. Agregar nuevo autor")
-
 
             opcion = pedir_entero("Seleccione una opción: ")
 
@@ -273,49 +274,48 @@ class ArticuloCientifico:
         else:
             print("Eliminación cancelada.")
 
+    def asignar_categoria(self):
+        band = True
+        if self.__categoria_articulo != None:
+            print("El articulo ya tiene una categoria asignada.")
+            return
+        if len(Categoria._instancias) == 0:
+            print("No hay categorias disponibles.")
+            return
+        while band:
+            print("\n--- Categorias disponibles ---")
+            Categoria.mostrar_instancias()
+            print("0. Salir")
+            opcion = pedir_entero("Seleccione una categoria: ")
+            opcion -= 1
 
-def asignar_categoria(self):
-    band = True
-    if self.__categoria_articulo != None:
-        print("La tesis ya tiene una categoria asignada.")
-        return
-    if len(Categoria._instancias) == 0:
-        print("No hay categorias disponibles.")
-        return
-    while band:
-        print("\n--- Categorias disponibles ---")
-        Categoria.mostrar_instancias()
-        print("0. Salir")
-        opcion = pedir_entero("Seleccione una categoria: ")
-        opcion -= 1
-
-        if (opcion>=0 and opcion < len(Categoria._instancias)):
-            categoria_seleccionada = Categoria.get_instancia_index(opcion)
-            if len(categoria_seleccionada.get_subcategorias()) > 0:
-                print("La categoria seleccionada tiene subcategorias asociadas.")
-                print("¿Desea asignar una subcategoria?")
-                print("1. Si")
-                print("2. No")
-                opcion_subcategoria = pedir_entero("Seleccione una opcion: ")
-                if opcion_subcategoria == 1:
-                    categoria_seleccionada.listar_subcategorias()
-                    opcion_sub = pedir_entero("Selecciona una opcion: ") - 1
-                    if 0 <= opcion_sub < len(categoria_seleccionada.get_subcategorias()):
-                        self.__categoria_articulo = categoria_seleccionada.get_subcategoria_index(opcion_sub)
-                        print(f"Subcategoría '{self.__categoria_articulo.get_nombre()}' asignada correctamente.")
+            if (opcion>=0 and opcion < len(Categoria._instancias)):
+                categoria_seleccionada = Categoria.get_instancia_index(opcion)
+                if len(categoria_seleccionada.get_subcategorias()) > 0:
+                    print("La categoria seleccionada tiene subcategorias asociadas.")
+                    print("¿Desea asignar una subcategoria?")
+                    print("1. Si")
+                    print("2. No")
+                    opcion_subcategoria = pedir_entero("Seleccione una opcion: ")
+                    if opcion_subcategoria == 1:
+                        categoria_seleccionada.listar_subcategorias()
+                        opcion_sub = pedir_entero("Selecciona una opcion: ") - 1
+                        if 0 <= opcion_sub < len(categoria_seleccionada.get_subcategorias()):
+                            self.__categoria_articulo = categoria_seleccionada.get_subcategoria_index(opcion_sub)
+                            print(f"Subcategoría '{self.__categoria_articulo.get_nombre()}' asignada correctamente.")
+                        else:
+                            print("Índice de subcategoría inválido. Intente nuevamente.")
+                    elif opcion_subcategoria == 2:
+                        self.__categoria_articulo = categoria_seleccionada
+                        print(f"Categoría '{categoria_seleccionada.get_nombre()}' asignada correctamente.")
                     else:
-                        print("Índice de subcategoría inválido. Intente nuevamente.")
-                elif opcion_subcategoria == 2:
-                    self.__categoria_articulo = categoria_seleccionada
-                    print(f"Categoría '{categoria_seleccionada.get_nombre()}' asignada correctamente.")
+                        print("Opción inválida. Intente nuevamente.")
                 else:
-                    print("Opción inválida. Intente nuevamente.")
+                    self.__categoria_articulo = categoria_seleccionada
+                    print(f"Categoria ' { categoria_seleccionada.get_nombre()} ' agregada correctamente")
+                band = False
+            elif opcion == -1:
+                print("Saliendo de la asignacion de categoría...")
+                band = False
             else:
-                self.__categoria_articulo = categoria_seleccionada
-                print(f"Categoria ' { categoria_seleccionada.get_nombre()} ' agregada correctamente")
-            band = False
-        elif opcion == -1:
-            print("Saliendo de la asignacion de categoría...")
-            band = False
-        else:
-            print("Opcion no valida, intente nuevamente.")
+                print("Opcion no valida, intente nuevamente.")
