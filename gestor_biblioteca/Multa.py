@@ -33,12 +33,12 @@ def menu_multa():
             Multa.generar_multa(id_prestamo, fecha_entrega_estimada, fecha_entrega_real)
 
         elif opcion == 2:
-            opcion2=pedir_entero("--- Consultar multas lectores ---\n\n1) Ver lista de lectores\n2) Consultar lector por ID\n0) Salir\n\nSeleccione una opción: ", True)
+            opcion2=pedir_entero("--- Consultar multas lectores ---\n\n1) Ver lista de multas\n2) Consultar multa por ID\n0) Salir\n\nSeleccione una opción: ", True)
             clear_console()
 
             if opcion2 == 1:
-                print("--- Lista de libros registrados ---\n")
-                Multa.consultar_multas()
+                print("--- Lista de multas registradas ---\n")
+                Multa.mostrar_multas()
                 esperar()
 
             elif opcion2 == 2:
