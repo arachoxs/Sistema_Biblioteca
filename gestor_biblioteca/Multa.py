@@ -20,6 +20,12 @@ def menu_multa():
                 print(f"No se encontró el préstamo con ID {id_prestamo}.")
                 esperar()
                 continue
+            
+            if prestamo.get_activo() == False:
+                clear_console()
+                print(f"El préstamo con ID {id_prestamo} ya fue entregado.")
+                esperar()
+                continue
 
             fecha_entrega_estimada = prestamo.get_fecha_entrega_estimada()
             print("---Ingrese la fecha de entrega real---")
@@ -27,9 +33,26 @@ def menu_multa():
             Multa.generar_multa(id_prestamo, fecha_entrega_estimada, fecha_entrega_real)
 
         elif opcion == 2:
-            id_lector = pedir_entero("Ingrese el ID del lector: ", True)
-            Multa.consultar_multas(id_lector)
-            esperar()
+            opcion2=pedir_entero("--- Consultar multas lectores ---\n\n1) Ver lista de lectores\n2) Consultar lector por ID\n0) Salir\n\nSeleccione una opción: ", True)
+            clear_console()
+
+            if opcion2 == 1:
+                print("--- Lista de libros registrados ---\n")
+                Multa.consultar_multas()
+                esperar()
+
+            elif opcion2 == 2:
+                id=input("--- Consultar multa por ID ---\n\nIngrese el ID de la multa a consultar: ")
+                multa = multa.buscar_multa(id)
+                if multa == None:
+                    clear_console()
+                    print(f"No se encontró la multa con ID \"{id}\".")
+                    esperar()
+                    continue
+                clear_console()
+                print("Multa seleccionada:\n")
+                multa.consultar()
+                esperar()
 
         elif opcion == 3:
             print("---Ingrese la fecha actual---")
@@ -154,6 +177,33 @@ class Multa:
         for multa in Multa._instancias:
             if multa.get_activa() and fecha_actual >= multa.get_fecha_final_multa():
                 multa.levantar_multa()
+    def mostrar_multas():
+        if len(Multa._instancias) == 0:
+            print("No hay multas registradas.")
+            esperar()
+            return 
+        
+        for i in len(Multa._instancias):
+            print(f"{1})-ID Multa: {Multa._instancias[i].get_id_multa()} -ID Prestamo: {Multa._instancias[i].get_prestamo().get_id_prestamo()} - Nombre Lector: {Multa._instancias[i].get_lector().get_nombre()} - Fecha de entrega real: {Multa._instancias[i].get_fecha_entrega_real()} - fecha de entrega estimada: {Multa._instancias[i].get_prestamo().get_fecha_entrega_estimada()} - Activa: {Multa._instancias[i].get_activa()}")
+
+    def buscar_multa(id):
+        for multa in Multa._instancias:
+            if multa.get_id_multa() == id:
+                return multa
+        return None 
+    
+    def consultar(self):
+        """Consulta los detalles de la multa."""
+        print(f"ID Multa: {self.get_id_multa()}")
+        print(f"ID Préstamo: {self.get_prestamo().get_id_prestamo()}")
+        print(f"ID Lector: {self.get_lector().get_id_lector()}")
+        print(f"Nombre Lector: {self.get_lector().get_nombre()}")
+        print(f"Fecha de entrega real: {self.get_fecha_entrega_real()}")
+        print(f"Días de retraso: {self.get_dias_retraso()}")
+        print(f"Días de multa: {self.get_dias_multa()}")
+        print(f"Fecha inicio multa: {self.get_fecha_inicio_multa()}")
+        print(f"Fecha fin multa: {self.get_fecha_final_multa()}")
+        print(f"Activa: {'Sí' if self.get_activa() else 'No'}")
 
     @staticmethod
     def consultar_multas(id_lector):
